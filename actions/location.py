@@ -4,6 +4,8 @@ import json
 
 
 class Location(Resource):
+    children = {}
+
     def __init__(self, output='JSON'):
         self.output = output
 
@@ -11,3 +13,6 @@ class Location(Resource):
         if self.output == 'JSON':
             return json.dumps(self.__dict__)
         return NoResource()
+
+    def getChild(self, name, request):
+        return self
