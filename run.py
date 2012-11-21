@@ -7,7 +7,7 @@ from pymongo import Connection
 import actions
 
 
-log_format = '%(asctime)s %(levelname)s [%(module)s %(lineno)d %(funcName)s] %(message)s'
+log_format = '%(asctime)s %(levelname)7s [%(module)s %(lineno)d %(funcName)s] %(message)s'
 logging.basicConfig(level='DEBUG', format=log_format)
 
 mongo = Connection()

@@ -5,46 +5,46 @@ import json
 import util
 
 
-class Action(Resource):
+def get_output_type_from_request(request):
+    try:
+        return str(request.args['output'][0]).upper()
+    except KeyError:
+        return 'HTML'
+
+
+class Renderer(object):
     renderers = {}
 
-    def __init__(self):
-        Resource.__init__(self)
-
-    def render_data(self, request, data):
-        logging.info('GET REQUEST: %s', request)
-        logging.debug('HEADERS: %s', request.getAllHeaders())
-        logging.debug('GET ARGS: %s', request.args)
+    def get_output(self, type_key, data):
         try:
-            try:
-                type_key = str(request.args['output'][0]).upper()
-            except KeyError:
-                type_key = 'HTML'
             render = self.renderers[type_key]
-            logging.info('Returning %s string as a result', type_key)
             return render(data)
         except KeyError:
             logging.exception('Cannot find renderer for type %s', type_key)
-        return 'Cannot render data in type %s' % type_key
+            return None
 
 
-class Location(Action):
+class Location(Resource):
+    renderer = Renderer()
+
     def __init__(self, mongodb):
-        Action.__init__(self)
+        Resource.__init__(self)
         self.locations = mongodb.locations
         self.players = mongodb.players
-        self.renderers['HTML'] = lambda data: str(data)
-        self.renderers['JSON'] = json.dumps
+        self.renderer.renderers['HTML'] = lambda data: str(data)
+        self.renderer.renderers['JSON'] = json.dumps
 
     def render_GET(self, request):
+        type_key = get_output_type_from_request(request)
         login = util.User(request.getSession()).login
         if login is None:
             logging.warn('User not logged in!')
-            return self.render_data(request, util.NOT_LOGGED_IN)
+            return self.renderer.get_output(type_key, util.NOT_LOGGED_IN)
         logging.info('Logged user: %s', login)
         player = self.players.find_one({'login': login})
         location = self.locations.find_one({'_id': player['location_id']})
-        return self.render_data(request, data=location)
+        logging.debug('Trying to render %s string as a result', type_key)
+        return self.renderer.get_output(type_key, data=location)
 
     def getChild(self, name, request):
         logging.warn('No children to this page')
