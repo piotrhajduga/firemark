@@ -5,18 +5,18 @@ from twisted.web.server import Site
 from twisted.internet import reactor
 from pymongo import Connection
 import actions
+import config as cfg
 
 
-log_format = '%(asctime)s %(levelname)7s [%(module)s %(lineno)d %(funcName)s] %(message)s'
-logging.basicConfig(level='DEBUG', format=log_format)
+logging.basicConfig(level=cfg.log_level, format=cfg.log_format)
 
 mongo = Connection()
-mdb = mongo.firemark
+mdb = mongo[cfg.mdb_name]
 
 root = Resource()
 root.putChild('action', actions.get_resource(mdb))
 
-logging.info('Listening on the port %d', 8880)
-reactor.listenTCP(8880, Site(root))
+logging.info('Listening on the port %d', cfg.http_port)
+reactor.listenTCP(cfg.http_port, Site(root))
 logging.info('Running the instance')
 reactor.run()
