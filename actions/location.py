@@ -35,6 +35,7 @@ class Location(Resource):
             data = {'location': location, 'player': player}
         except UserWarning:
             data = {'errno': 11, 'error': 'Not logged in!'}
+        request.setHeader("Content-Type", "text/html; charset=utf-8")
         return self.template_HTML.render(**data).encode('utf-8')
 
     def render_JSON(self, request):
@@ -44,7 +45,8 @@ class Location(Resource):
             data = {'location': location}
         except UserWarning:
             data = {'errno': 11, 'error': 'Not logged in!'}
-        return json.dumps(data)
+        request.setHeader("Content-Type", "text/plain; charset=utf-8")
+        return json.dumps(data).encode('utf-8')
 
     def get_player(self, request):
         login = util.User(request.getSession()).login
