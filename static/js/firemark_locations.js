@@ -13,7 +13,7 @@ function showCurrentLocation(data) {
         return;
     }
     mainContent.addClass('location current_location');
-    mainContent.html('<h2 class="title">' + data.title + '</h2>');
+    mainContent.html('<h2 class="title">' + data.name + '</h2>');
     mainContent.append('<div class="bricks"></div>');
     var bricks = $('#MainContent .bricks');
     data.bricks.each(function(brick) {
