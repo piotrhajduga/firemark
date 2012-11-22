@@ -1,6 +1,5 @@
 import logging
 from twisted.web.resource import Resource
-from twisted.web.error import NoResource
 from mako.template import Template
 import json
 import util
@@ -14,6 +13,7 @@ def get_output_type_from_request(request):
 
 
 class Location(Resource):
+    isLeaf = True
     template_HTML = Template(filename='templates/location.html')
 
     def __init__(self, mongodb):
@@ -46,10 +46,6 @@ class Location(Resource):
             data = {'errno': 11, 'error': 'Not logged in!'}
         return json.dumps(data)
 
-    def getChild(self, name, request):
-        logging.warn('No children to this page')
-        return NoResource()
-
     def get_player(self, request):
         login = util.User(request.getSession()).login
         if login is None:
@@ -60,10 +56,3 @@ class Location(Resource):
 
     def get_location(self, player):
         return self.locations.find_one({'_id': player['location_id']})
-
-
-# actions resources resource
-def get_resource(mongodb):
-    resource = Resource()
-    resource.putChild('location', Location(mongodb))
-    return resource
