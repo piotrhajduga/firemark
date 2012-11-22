@@ -1,12 +1,33 @@
-<html>
-<body>
-  <div id="content">
-    % if errno:
-        ${error}
-    % endif
-    % if location:
-        ${location}
-    % endif
-  </div>
-</body>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>Firemark JQuery test</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/desktop.css" />
+        <script type="text/javascript" src="/static/js/jquery-1.8.0.js"></script>
+        <script type="text/javascript" src="/static/js/firemark_global.js"></script>
+        <script type="text/javascript" src="/static/js/firemark_locations.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#ActionIndicator').html('Loading current location...');
+                $('#ActionIndicator').fadeIn();
+                $.get('/location?output=JSON', function(data) {
+                    showCurrentLocation(JSON.parse(data));
+                    $('#ActionIndicator').fadeOut();
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <h1>Project Firemark&trade;</h1>
+        <div id="ActionIndicator"></div>
+        <div id="MainContent">
+            % if errno:
+                ${error}
+            % endif
+            % if location:
+                ${location}
+            % endif
+        </div>
+    </body>
 </html>
