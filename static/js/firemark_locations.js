@@ -5,6 +5,11 @@ function showCurrentLocation(data) {
         mainContent.addClass('error');
         mainContent.html('<h2 class="title">Error ' + data.errno + '</h2>');
         mainContent.append('<p>' + data.error + '</p>');
+        $('#ActionIndicator').html('Error loading current location...');
+        $(document).bind('click', function() {
+            $('#ActionIndicator').unbind('click');
+            $('#ActionIndicator').fadeOut();
+        });
         return;
     }
     mainContent.addClass('location current_location');
@@ -26,6 +31,7 @@ function showCurrentLocation(data) {
                 console.log('Unknown brick type.');
         }
     });
+    $('#ActionIndicator').fadeOut();
 }
 function exitCurrentLocation(exit) {
     $('#ActionIndicator').html('Changing location...');

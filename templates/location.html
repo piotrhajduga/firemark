@@ -14,7 +14,6 @@
                 $('#ActionIndicator').fadeIn();
                 $.get('/location?output=JSON', function(data) {
                     showCurrentLocation(JSON.parse(data));
-                    $('#ActionIndicator').fadeOut();
                 });
             });
         </script>
@@ -24,7 +23,8 @@
         <div id="ActionIndicator"></div>
         % if errno:
         <div id="MainContent">
-            ${error}
+            <h2 class="title">Error ${errno}</h2>
+            <p>${error}</p>
         </div>
         % endif
         % if location:
