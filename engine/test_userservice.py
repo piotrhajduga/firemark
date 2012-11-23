@@ -58,9 +58,9 @@ class TestUserService(TestCase):
             'login': 'test2',
             'password_hash': 'testtesttest'
             })
-        self.assertRaises(usrs.UserExists, self.service.register,
+        self.assertRaises(usrs.EmailRegistered, self.service.register,
                 email='test2@gmail.com', login='test3', password='test')
-        self.assertRaises(usrs.UserExists, self.service.register,
+        self.assertRaises(usrs.LoginRegistered, self.service.register,
                 email='test3@gmail.com', login='test2', password='test')
 
     def test_get_password_hash(self):

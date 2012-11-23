@@ -2,9 +2,12 @@ from md5 import md5
 from random import random
 
 
-class UserExists(Exception):
+class EmailRegistered(Exception):
     pass
 
+
+class LoginRegistered(Exception):
+    pass
 
 class UserNotFound(Exception):
     pass
@@ -33,8 +36,10 @@ class UserService(object):
             })
 
     def register(self, email, login, password):
-        if self.users.find({'$or': [{'email': email}, {'login': login}]}).count():
-            raise UserExists('Found matching user(s)')
+        if self.users.find({'email': email}).count():
+            raise EmailRegistered('Found matching user(s)')
+        if self.users.find({'login': login}).count():
+            raise LoginRegistered('Found matching user(s)')
         salt = md5('%f%f%f' % (random(), random(), random())).hexdigest()
         return self.users.insert({
             'email': email,

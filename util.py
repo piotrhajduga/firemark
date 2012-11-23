@@ -1,20 +1,20 @@
-from zope.interface import Interface
-from zope.interface import Attribute
-from zope.interface import implements
+from zope.interface import Interface, Attribute, implements
 from twisted.python.components import registerAdapter
-from twisted.web.server import Session
+from twisted.web.server import Session as TwistedSession
 from mako.lookup import TemplateLookup
 
 
-class User(Interface):
+class Session(Interface):
     login = Attribute('Login of logged in user')
 
 
-class UserImpl(object):
-    implements(User)
+class SessionImpl(object):
+    implements(Session)
 
     def __init__(self, session):
         self.login = None
+        self.errno = 0
+        self.error = None
 
 
 def get_output_type_from_request(request):
@@ -23,10 +23,14 @@ def get_output_type_from_request(request):
     except KeyError:
         return 'HTML'
 
-registerAdapter(UserImpl, Session, User)
+registerAdapter(SessionImpl, TwistedSession, Session)
 
 tpl_lookup = TemplateLookup(directories=['templates'],
         output_encoding='utf-8', encoding_errors='replace')
 
 # errors
-NOT_LOGGED_IN = {'errno': 11, 'message': 'Not logged in!'}
+#NOT_LOGGED_IN = {'errno': 11}
+#WRONG_PASSWORD = {'errno': 12}
+#EMAIL_REGISTERED = {'errno': 13}
+#LOGIN_REGISTERED = {'errno': 14}
+#PASSWORD_MISMATCH = {'errno': 15}
