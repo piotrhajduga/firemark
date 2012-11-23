@@ -1,16 +1,14 @@
 from unittest import TestCase
 from pymongo import Connection
 from md5 import md5
-import userservice
+import userservice as usrs
 
 
-class TestUser(TestCase):
-    mdb = None
+class TestUserService(TestCase):
+    mdb = Connection().unittests
 
     def setUp(self):
-        mongo = Connection()
-        self.mdb = mongo.unittests
-        self.service = userservice.UserService(self.mdb)
+        self.service = usrs.UserService(self.mdb)
 
     def tearDown(self):
         self.mdb.users.drop()
