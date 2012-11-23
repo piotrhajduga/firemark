@@ -53,25 +53,55 @@ class TestUserService(TestCase):
         self.assertIsNotNone(actual)
 
     def test_register_unique(self):
-        self.service.register(
-                email='test2@gmail.com',
-                login='test2',
-                password='test'
-                )
-        actual = self.mdb.users.find(
-                {'email': 'test2@gmail.com'},
-                {'login': 'test2'}
-                ).count()
-        self.assertEquals(1, actual)
-
-    def test_register_starting_location(self):
-        self.service.register(
-                email='test2@gmail.com',
-                login='test2',
-                password='test'
-                )
-        location = self.mdb.users.find_one({
+        self.mdb.users.insert({
             'email': 'test2@gmail.com',
             'login': 'test2',
-            })['location_id']
-        self.assertNotNone(location)
+            'password_hash': 'testtesttest'
+            })
+        self.assertRaises(usrs.UserExists, self.service.register,
+                email='test2@gmail.com', login='test3', password='test')
+        self.assertRaises(usrs.UserExists, self.service.register,
+                email='test3@gmail.com', login='test2', password='test')
+
+    def test_get_password_hash(self):
+        password = 'test123'
+        salt = 'salt123'
+        actual = self.service.get_password_hash(password, salt)
+        self.assertEquals(actual,
+                md5(md5(password).hexdigest() + salt).hexdigest())
+
+    def test_register_salted(self):
+        password = 'test'
+        uid = self.service.register(
+                email='test2@gmail.com',
+                login='test2',
+                password=password
+                )
+        user = self.mdb.users.find_one({'_id': uid})
+        self.assertIsNotNone(user['password_salt'])
+        expected_hash = self.service.get_password_hash(
+                password, user['password_salt'])
+        self.assertEquals(user['password_hash'], expected_hash)
+
+    def test_sign_in(self):
+        self.mdb.users.insert({
+            'email': 'test2@gmail.com',
+            'login': 'test2',
+            'password_hash': self.service.get_password_hash('test', 'salt'),
+            'password_salt': 'salt',
+            })
+        user = self.service.sign_in(email='test2@gmail.com', password='test')
+        self.assertIsNotNone(user)
+        self.assertEquals(user['login'], 'test2')
+
+    def test_sign_in_bad(self):
+        self.mdb.users.insert({
+            'email': 'test2@gmail.com',
+            'login': 'test2',
+            'password_hash': self.service.get_password_hash('test', 'salt'),
+            'password_salt': 'salt',
+            })
+        self.assertRaises(usrs.IncorrectPassword, self.service.sign_in,
+                email='test2@gmail.com', password='test2')
+        self.assertRaises(usrs.UserNotFound, self.service.sign_in,
+                email='notfound@gmail.com', password='test2')

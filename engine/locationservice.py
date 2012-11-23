@@ -10,6 +10,6 @@ class LocationService(object):
         return self.locs.find_one({key: value})
 
     def add_exit_to(self, location_id, exit_name, destination_id):
-        exits = self.get_by_field('_id', location_id)['exits']
+        exits = self.locs.find_one({'_id': location_id})['exits']
         exits[exit_name] = destination_id
         self.locs.update({'_id': location_id}, {'$set': {'exits': exits}})

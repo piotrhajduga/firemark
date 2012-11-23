@@ -34,6 +34,6 @@ class TestLocationService(TestCase):
             })
         # add_exit_to(location_id, exit_name, destination_id)
         self.service.add_exit_to(locid, 'InfLoop', locid)
-        loc = self.mdb.locations.find_one({'_id': locid})
-        self.assertIn('InfLoop', loc['exits'])
-        self.assertEquals(loc['exits']['InfLoop'], locid)
+        exits = self.mdb.locations.find_one({'_id': locid})['exits']
+        self.assertIn('InfLoop', exits)
+        self.assertEquals(exits['InfLoop'], locid)
