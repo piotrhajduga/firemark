@@ -1,0 +1,12 @@
+<%inherit file="base.html"/>
+
+<%block name="page_title">Firemark - sign in</%block>
+
+<%block name="main_content">
+    <h2 class="title">Sign in</h2>
+    <form method="POST" action="/user/signin">
+        <input type="text" value="" name="email" />
+        <input type="password" value="" name="password" />
+        <input type="submit" value="Sign in" />
+    </form>
+</%block>

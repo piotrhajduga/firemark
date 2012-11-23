@@ -1,39 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-    <head>
-        <% page_title = 'location %s' % location['name'] if location else 'ERROR' %>
-        <title>Firemark ${page_title}</title>
-        <link rel="stylesheet" type="text/css" href="/static/css/desktop.css" />
-        <script type="text/javascript" src="/static/js/jquery-1.8.0.js"></script>
-        <script type="text/javascript" src="/static/js/firemark_global.js"></script>
-        <script type="text/javascript" src="/static/js/firemark_locations.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $('#ActionIndicator').html('Loading current location...');
-                $('#ActionIndicator').fadeIn();
-                $.get('/location?output=JSON', function(data) {
-                    showCurrentLocation(JSON.parse(data));
-                });
+<%inherit file="base.html"/>
+
+<%!
+try:
+    title_suffix = 'location %s' % location['name']
+except NameError:
+    title_suffix = 'error'
+%>
+<%block name="page_title">Firemark - ${self.attr.title_suffix}</%block>
+
+<%block name="javascript">
+    <script type="text/javascript" src="/static/js/firemark_locations.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#ActionIndicator').html('Loading current location...');
+            $('#ActionIndicator').fadeIn();
+            $.get('/location?output=JSON', function(data) {
+                showCurrentLocation(JSON.parse(data));
             });
-        </script>
-    </head>
-    <body>
-        <h1>Project Firemark&trade;</h1>
-        <div id="ActionIndicator"></div>
-        % if errno:
-        <div id="MainContent">
-            <h2 class="title">Error ${errno}</h2>
-            <p>${error}</p>
+        });
+    </script>
+</%block>
+
+<%block name="main_content">
+    % if errno:
+        <h2 class="title">Error ${errno}</h2>
+        <p>${error}</p>
+    % endif
+    % if location:
+        <h2 class="title">${location['name']}</h2>
+        <div class="bricks">
+            <!-- -->
         </div>
-        % endif
-        % if location:
-        <div id="MainContent">
-            <h2 class="title">${location['name']}</h2>
-            <div class="bricks">
-                <!-- -->
-            </div>
-        </div>
-        % endif
-    </body>
-</html>
+    % endif
+</%block>

@@ -1,8 +1,6 @@
 function showCurrentLocation(data) {
     var mainContent = $('#MainContent');
-    mainContent.removeClass();
     if (data.errno > 0) {
-        mainContent.addClass('error');
         mainContent.html('<h2 class="title">Error ' + data.errno + '</h2>');
         mainContent.append('<p>' + data.error + '</p>');
         $('#ActionIndicator').html('Error loading current location...');
@@ -12,7 +10,6 @@ function showCurrentLocation(data) {
         });
         return;
     }
-    mainContent.addClass('location current_location');
     mainContent.html('<h2 class="title">' + data.name + '</h2>');
     mainContent.append('<div class="bricks"></div>');
     var bricks = $('#MainContent .bricks');
