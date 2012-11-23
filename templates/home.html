@@ -1,0 +1,21 @@
+<%inherit file="base.html"/>
+
+<%block name="page_title">Firemark - sign in</%block>
+
+<%block name="main_content">
+    % if session.login:
+    <h2 class="title">Welcome!</h2>
+    <p>Thanks for logging in! :)</p>
+    % else:
+    <h2>Sign in</h2>
+    <form method="POST" action="/user/signin">
+    <table>
+        <tr><td><label for="email">E-mail</label></td><td><input type="text" value="" name="email" id="email" /></td></tr>
+        <tr><td><label for="password">Password</label></td><td><input type="password" value="" name="password" id="password" /></td></tr>
+        <tr><td colspan="2"><input type="submit" value="Sign in" /></td></tr>
+    </table>
+    </form>
+    <p>Don't have an account?
+    <a href="/user/signup" name="Free registration">Sign up for free!</a></p>
+    % endif
+</%block>

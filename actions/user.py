@@ -21,7 +21,7 @@ class SignIn(Resource):
     def render_GET(self, request):
         session = util.Session(request.getSession())
         if session.login:
-            return redirectTo('/')
+            return redirectTo('/', request)
         request.setHeader("Content-Type", "text/html; charset=utf-8")
         return self.template_HTML.render(session=session)
 
@@ -35,7 +35,7 @@ class SignIn(Resource):
             session.login = user['login']
             if type_key == 'JSON':
                 return json.dumps({'errno': 0, 'error': ''})
-            return redirectTo('/')
+            return redirectTo('/', request)
         except UserNotFound:
             logging.warn('User not found, probably bad email address')
             if type_key == 'JSON':
