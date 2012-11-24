@@ -39,9 +39,7 @@ class TestLocationService(TestCase):
         self.assertEquals(exits['InfLoop'], locid)
 
     def test_get_for_user(self):
-        locid = self.mdb.locations.insert({
-            'name': 'Test',
-            })
+        locid = self.mdb.locations.insert({'name': 'Test'})
         uid = self.mdb.users.insert({
             'email': 'a@a.a',
             'login': 'test',
@@ -64,3 +62,13 @@ class TestLocationService(TestCase):
             'location_id': 1,
             })
         self.assertRaises(locs.LocationNotFound, self.service.get_for_user, uid)
+
+    def test_get_starting_location(self):
+        self.mdb.locations.insert({'name': 'Test'})
+        self.mdb.locations.insert({'name': 'Test'})
+        self.mdb.locations.insert({'name': 'Test', 'starting': 1})
+        self.mdb.locations.insert({'name': 'Test', 'starting': 1})
+        self.mdb.locations.insert({'name': 'Test', 'starting': 1})
+        loc = self.service.get_starting_location()
+        self.assertIsNotNone(loc)
+        self.assertEquals(len(loc['exits']), 3)
