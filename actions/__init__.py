@@ -1,19 +1,16 @@
 from twisted.web.resource import Resource
 from twisted.web.static import File
 from location import Location
-from user import SignIn, SignUp
+from user import User
 from home import HomePage
 from engine import userservice as usrs
+from engine import locationservice as locs
 
 
 def get_app_resource(mongodb):
     resource = Resource()
-    resource.putChild('location', Location(mongodb))
-    resource.putChild('location', Location(mongodb))
-    resource.putChild('static', File('static'))
     resource.putChild('', HomePage())
-    user_resource = Resource()
-    user_resource.putChild('signin', SignIn(usrs.UserService(mongodb)))
-    user_resource.putChild('signup', SignUp(usrs.UserService(mongodb)))
-    resource.putChild('user', user_resource)
+    resource.putChild('location', Location(locs.LocationService(mongodb)))
+    resource.putChild('static', File('static'))
+    resource.putChild('user', User(usrs.UserService(mongodb)))
     return resource

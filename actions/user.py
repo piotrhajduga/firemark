@@ -1,7 +1,7 @@
 import logging
 import json
 from twisted.web.resource import Resource
-from twisted.web.util import redirectTo
+from twisted.web.util import redirectTo, Redirect
 import util
 from engine.userservice import UserNotFound, EmailRegistered, LoginRegistered
 
@@ -20,7 +20,7 @@ class SignIn(Resource):
 
     def render_GET(self, request):
         session = util.Session(request.getSession())
-        if session.login:
+        if session.user:
             return redirectTo('/', request)
         request.setHeader("Content-Type", "text/html; charset=utf-8")
         return self.template_HTML.render(session=session)
@@ -32,7 +32,9 @@ class SignIn(Resource):
             email = str(request.args['email'][0])
             password = str(request.args['password'][0])
             user = self.usrs.sign_in(email, password)
-            session.login = user['login']
+            del(user['password_hash'])
+            del(user['password_salt'])
+            session.user = user
             if type_key == 'JSON':
                 return json.dumps({'errno': 0, 'error': ''})
             return redirectTo('/', request)
@@ -45,6 +47,19 @@ class SignIn(Resource):
             return redirectTo('/user/signin', request)
 
 
+class Logout(Resource):
+    isLeaf = True
+
+    def render_POST(self, request):
+        session = util.Session(request.getSession())
+        session.user = None
+        type_key = util.get_output_type_from_request(request)
+        if type_key == 'JSON':
+            request.setHeader("Content-Type", "text/html; charset=utf-8")
+            return json.dumps({'error': 0})
+        return redirectTo('/', request)
+
+
 class SignUp(Resource):
     isLeaf = True
     template_HTML = util.tpl_lookup.get_template('user_signup.html')
@@ -55,7 +70,7 @@ class SignUp(Resource):
 
     def render_GET(self, request):
         session = util.Session(request.getSession())
-        if session.login:
+        if session.user:
             return redirectTo('/', request)
         request.setHeader("Content-Type", "text/html; charset=utf-8")
         return self.template_HTML.render(session=session)
@@ -63,6 +78,7 @@ class SignUp(Resource):
     def render_POST(self, request):
         type_key = util.get_output_type_from_request(request)
         session = util.Session(request.getSession())
+        errinfo = {'errno': 0, 'error': None}
         try:
             email = str(request.args['email'][0])
             password = str(request.args['password'][0])
@@ -71,17 +87,31 @@ class SignUp(Resource):
                 raise PasswordMismatch()
             login = str(request.args['login'][0])
             self.usrs.register(email, login, password)
-            return redirectTo('/', request)
         except EmailRegistered:
             logging.warn('Given email is already registered')
-            session.errno = 13
-            session.error = 'Given email is already registered'
+            errinfo['errno'], errinfo['error'] = 13, 'Given email is already registered'
         except LoginRegistered:
             logging.warn('Given login already registered')
-            session.errno = 14
-            session.error = 'Given login is already registered'
+            errinfo['errno'], errinfo['error'] = 14, 'Given login is already registered'
         except PasswordMismatch:
             logging.warn('Passwords don\'t match')
-            session.errno = 15
-            session.error = 'Passwords don\'t match'
+            errinfo['errno'], errinfo['error'] = 15, 'Passwords don\'t match'
+        if type_key == 'JSON':
+            request.setHeader("Content-Type", "text/html; charset=utf-8")
+            return json.dumps(errinfo)
+        if errinfo['errno']:
+            session.errno, session.error = errinfo['errno'], errinfo['error']
+            return redirectTo('/', request)
         return redirectTo('/user/signup', request)
+
+
+class User(Resource):
+    def __init__(self, user_service):
+        Resource.__init__(self)
+        self.putChild('signin', SignIn(user_service))
+        self.putChild('signup', SignUp(user_service))
+        self.putChild('logout', Logout())
+        self.putChild('', Redirect('/'))
+
+    def render_GET(self, request):
+        return redirectTo('/', request)

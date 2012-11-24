@@ -5,14 +5,16 @@ from mako.lookup import TemplateLookup
 
 
 class Session(Interface):
-    login = Attribute('Login of logged in user')
+    user = Attribute('Login of logged in user')
+    errno = Attribute('Error code or 0 if no error')
+    error = Attribute('Error message if error occured')
 
 
 class SessionImpl(object):
     implements(Session)
 
     def __init__(self, session):
-        self.login = None
+        self.user = None
         self.errno = 0
         self.error = None
 
@@ -34,3 +36,5 @@ tpl_lookup = TemplateLookup(directories=['templates'],
 #EMAIL_REGISTERED = {'errno': 13}
 #LOGIN_REGISTERED = {'errno': 14}
 #PASSWORD_MISMATCH = {'errno': 15}
+#USER_NOT_IN_LOCATION = {'errno': 16}
+#LOCATION_NOT_FOUND = {'errno': 17}
