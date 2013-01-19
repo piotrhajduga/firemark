@@ -10,7 +10,7 @@ from engine import locationservice as locs
 def get_app_resource(mongodb):
     resource = Resource()
     resource.putChild('', HomePage())
-    resource.putChild('location', Location(locs.LocationService(mongodb)))
+    resource.putChild('play', Location(locs.LocationService(mongodb)))
     resource.putChild('static', File('static'))
     resource.putChild('user', User(usrs.UserService(mongodb)))
     return resource

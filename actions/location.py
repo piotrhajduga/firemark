@@ -35,11 +35,10 @@ class Location(Resource):
             location = self.locs.get_starting_location()
         request.setHeader("Content-Type", "text/html; charset=utf-8")
         if type_key == 'JSON':
-            if errno:
-                return json.dumps({'errno': errno, 'error': error})
-            return json.dumps(location)
+            return json.dumps(
+                    {'location': location, 'errno': errno, 'error': error})
         # type_key == 'HTML'
-        session.errno, session.error = errno, error
         if errno == 11:
+            session.errno, session.error = errno, error
             return redirectTo('/', request)
         return self.template_HTML.render(**location)

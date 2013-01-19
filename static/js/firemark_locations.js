@@ -10,10 +10,11 @@ function showCurrentLocation(data) {
         });
         return;
     }
-    mainContent.html('<h2 class="title">' + data.name + '</h2>');
+    var loc = data.location;
+    mainContent.html('<h2 class="title">' + loc.name + '</h2>');
     mainContent.append('<div class="bricks"></div>');
     var bricks = $('#MainContent .bricks');
-    data.bricks.each(function(brick) {
+    loc.bricks.each(function(brick) {
         switch (brick.type) {
             case 'exit':
                 bricks.append('<div class="brick exit" onclick="exitCurrentLocation(' + brick.content + ')">EXIT ' + brick.content + '</div>');
@@ -33,7 +34,7 @@ function showCurrentLocation(data) {
 function exitCurrentLocation(exit) {
     $('#ActionIndicator').html('Changing location...');
     $('#ActionIndicator').fadeIn();
-    $.post('getLocation.php', { "exit": exit }, function(data) {
+    $.post('/play?output=JSON', { "exit": exit }, function(data) {
         $('#ActionIndicator').stop();
         $('#ActionIndicator').fadeOut();
         showCurrentLocation(JSON.parse(data));
