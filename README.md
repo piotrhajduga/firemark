@@ -10,4 +10,10 @@
     * **/static/css** - css stylesheets
     * **/static/misc** - miscellanous static content
 
+* **/templates** - page templates written using Mako
+
 * **/bricks** - directory containing bricks - a small units of which every location is made
+
+* **/actions** - python package with controllers for specific urls
+
+* **/engine** - utilities used by controllers
