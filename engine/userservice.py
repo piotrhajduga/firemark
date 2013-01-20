@@ -44,6 +44,7 @@ class UserService(object):
         return self.users.insert({
             'email': email,
             'login': login,
+            'roles': [],
             'password_hash': self.get_password_hash(password, salt),
             'password_salt': salt
             })

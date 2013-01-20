@@ -17,7 +17,7 @@ class Location(Resource):
     def render_GET(self, request):
         type_key = util.get_output_type_from_request(request)
         session = util.Session(request.getSession())
-        errno, error = 0, None
+        errno, error = 0, 'OK'
         try:
             if session.user is None:
                 raise UserWarning('Not logged in!')

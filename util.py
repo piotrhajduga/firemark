@@ -38,3 +38,4 @@ tpl_lookup = TemplateLookup(directories=['templates'],
 #PASSWORD_MISMATCH = {'errno': 15}
 #USER_NOT_IN_LOCATION = {'errno': 16}
 #LOCATION_NOT_FOUND = {'errno': 17}
+#ACCESS_DENIED = {'errno': 18}
