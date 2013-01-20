@@ -142,4 +142,7 @@ div#MainContent table tbody {
     padding:.5em 5em;
     border:1px #222 solid;
 }
+#LocationEditorTabs .active {
+    background:#222;
+}
 .clear { clear:both; }

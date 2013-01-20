@@ -35,13 +35,13 @@
             <div class="tab" id="LocationEditorTabBricks">Bricks</div>
             <div class="clear"></div>
         </div>
-        <form>
+        <form action="#" method="POST" id="LocationEditorForm">
         <table class="tab" id="LocationEditorData">
             <tbody>
                 <tr><th><label for="EditLocationName">Name</label></th>
                     <td><input type="text" name="name" id="EditLocationName"/></td></tr>
                 <tr><th><label for="EditLocationTags">Tags</label></th>
-                    <td><input type="text" name="name" id="EditLocationTags"/></td></tr>
+                    <td><input type="text" name="tags" id="EditLocationTags"/></td></tr>
             </tbody>
         </table>
         <table class="tab" id="LocationEditorExits" style="display:none;">
@@ -69,30 +69,37 @@
                 </td></tr>
             </tfoot>
         </table>
-        <input type="submit" class="button" value="Save location"/>
+        <input type="submit" id="LocationEditorSubmit" class="button" value="Save location"/>
         </form>
     </div>
 </%block>
 <%block name="javascript">
     <script type="text/javascript">
         function switchTab(selector) {
-            $("#LocationEditor table.tab").hide();
-            $(selector).show();
+            $('#LocationEditorTabs .tab').removeClass('active');
+            $('#LocationEditorTab'+selector).addClass('active');
+            $('#LocationEditor table.tab').hide();
+            $('table#LocationEditor'+selector).show();
         }
         $(document).ready(function() {
-            $('a#AddLocation').unbind('click');
-            $('a#AddLocation').click(function() {
+            $('a#AddLocation').click(function(eventObject) {
+                eventObject.preventDefault();
                 $('#LocationEditor h2#LocationEditorAction').html('Add location');
                 $('#LocationEditor').show();
             });
             $('#LocationEditorTabData').click(function() {
-                switchTab("table#LocationEditorData");
+                switchTab('Data');
             });
             $('#LocationEditorTabExits').click(function() {
-                switchTab("table#LocationEditorExits");
+                switchTab('Exits');
             });
             $('#LocationEditorTabBricks').click(function() {
-                switchTab("table#LocationEditorBricks");
+                switchTab('Bricks');
+            });
+            $('form#LocationEditorForm').submit(function(eventObject) {
+                eventObject.preventDefault();
+                console.log($('input#EditLocationName').val());
+                return false;
             });
         });
     </script>
