@@ -22,17 +22,24 @@
             </tbody>
             <tfoot>
                 <tr><td colspan="4">
-                    <a href="#" class="button">Add location</a>
+                    <a href="#" class="button" id="AddLocation">Add location</a>
                 </td></tr>
             </tfoot>
         </table>
     </div>
-    <div id="LocationEditor">
+    <div id="LocationEditor" style="display:none;">
+        <h2 id="LocationEditorAction">Edit location</h2>
+        <form>
         <table>
-            <tr><th><label for="EditLocationName">Name</label></th>
-                <td><input type="text" name="name" id="EditLocationName"/></td></tr>
-            <tr><th><label for="EditLocationTags">Tags</label></th>
-                <td><input type="text" name="name" id="EditLocationTags"/></td></tr>
+            <thead>
+                <tr><th colspan="2">Location data</th></tr>
+            </thead>
+            <tbody>
+                <tr><th><label for="EditLocationName">Name</label></th>
+                    <td><input type="text" name="name" id="EditLocationName"/></td></tr>
+                <tr><th><label for="EditLocationTags">Tags</label></th>
+                    <td><input type="text" name="name" id="EditLocationTags"/></td></tr>
+            </tbody>
         </table>
         <table>
             <thead>
@@ -61,5 +68,18 @@
                 </td></tr>
             </tfoot>
         </table>
+        <input type="submit" class="button"/>
+        </form>
     </div>
+</%block>
+<%block name="javascript">
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('a#AddLocation').unbind('click');
+            $('a#AddLocation').click(function() {
+                $('#LocationEditor h2#LocationEditorAction').html('Add location');
+                $('#LocationEditor').show();
+            });
+        });
+    </script>
 </%block>
