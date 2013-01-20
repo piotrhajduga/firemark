@@ -1,0 +1,65 @@
+<%inherit file="base_onecolumn.html"/>
+
+<%block name="page_title">Firemark - location builder</%block>
+
+<%block name="main_content">
+    <div id="LocationSearch">
+        <form>
+            <input type="text" name="LocationSearch" value="" id="LocationSearchInput" />
+            <input type="submit" value="Search" style="display:none;" />
+        </form>
+    </div>
+    <div id="LocationList">
+        <table>
+            <thead>
+                <tr><th colspan="4">Locations</th></tr>
+                <tr>
+                    <td>Name</td><td>Tags</td>
+                    <td>ObjectId</td><td>Actions</td>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr><td colspan="4">
+                    <a href="#" class="button">Add location</a>
+                </td></tr>
+            </tfoot>
+        </table>
+    </div>
+    <div id="LocationEditor">
+        <table>
+            <tr><th><label for="EditLocationName">Name</label></th>
+                <td><input type="text" name="name" id="EditLocationName"/></td></tr>
+            <tr><th><label for="EditLocationTags">Tags</label></th>
+                <td><input type="text" name="name" id="EditLocationTags"/></td></tr>
+        </table>
+        <table>
+            <thead>
+                <tr><th colspan="3">Exits</th></tr>
+                <tr><td>Id</td><td>Name</td>
+                    <td>Destination location</td></tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr><td colspan="3">
+                    <a href="#" class="button">Add exit</a>
+                </td></tr>
+            </tfoot>
+        </table>
+        <table>
+            <thead>
+                <tr><th colspan="3">Bricks</th></tr>
+                <tr><td>Order</td><td>Brick</td><td>Actions</td></tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr><td colspan="3">
+                    <a href="#" class="button">Add brick</a>
+                </td></tr>
+            </tfoot>
+        </table>
+    </div>
+</%block>

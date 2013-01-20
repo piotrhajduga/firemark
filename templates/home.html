@@ -6,7 +6,10 @@
     % if session.user:
     <h2 class="title">Welcome!</h2>
     <p>Thanks for logging in! :)</p>
-    <a href="/play" name="Play now">Play now!</a></p>
+    <a href="/play" name="Play now" class="button special_button">Play now!</a></p>
+        % if 'builder' in session.user['roles']:
+    <a href="/builder" name="Location builder" class="button">Location builder</a></p>
+        % endif
     % else:
     <h2>Sign in</h2>
     <form method="POST" action="/user/signin">

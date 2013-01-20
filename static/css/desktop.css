@@ -54,6 +54,7 @@ h2.title {
     color: #010240;
     font-weight: bold;
     font-size: 1.1em;
+    text-decoration:none;
     padding: 2px 5px;
     -moz-border-radius: .2em;
     -webkit-border-radius: .2em;
@@ -83,4 +84,50 @@ h2.title {
     -moz-box-shadow: 0 0 .2em #288fff, inset 0 0 .4em #010208;
     -webkit-box-shadow: 0 0 .2em #238aff, inset 0 0 .4em #010208;
     box-shadow: 0 0 .2em #238aff, inset 0 0 .4em #010208;
+}
+.button {
+    background: #238aff;
+    color: #010240;
+    font-weight: bold;
+    text-decoration:none;
+    font-size: 1.1em;
+    padding: 2px 5px;
+    -moz-border-radius: .2em;
+    -webkit-border-radius: .2em;
+    border-radius: .2em;
+    -moz-box-shadow: 0 0 .2em #288fff, 0 0 .4em #010208;
+    -webkit-box-shadow: 0 0 .2em #238aff, 0 0 .4em #010208;
+    box-shadow: 0 0 .2em #238aff, 0 0 .4em #010208;
+}
+.button:hover {
+    background: #53baff;
+    border: .2em solid #53baff;
+    -moz-box-shadow: 0 0 .2em #58bfff, inset 0 0 .1em #53baff;
+    -webkit-box-shadow: 0 0 .2em #53baff, inset 0 0 .1em #53baff;
+    box-shadow: 0 0 .2em #53baff, inset 0 0 .1em #53baff;
+}
+
+div#MainContent table {
+    width:100%;
+    margin:5px auto;
+}
+div#MainContent table thead th {
+    background:#333;
+    border:1px #555 solid;
+    text-align:center;
+}
+div#MainContent table thead td {
+    background:#111;
+    border:1px #222 solid;
+    text-align:center;
+}
+div#MainContent table tfoot td {
+    background:#111;
+    border:1px #222 solid;
+    text-align:center;
+}
+input#LocationSearchInput {
+    width:100%;
+    border:none;
+    background:#eee;
 }

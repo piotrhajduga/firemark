@@ -36,7 +36,8 @@ class SignIn(Resource):
             del(user['password_salt'])
             session.user = user
             if type_key == 'JSON':
-                return json.dumps({'errno': 0, 'error': ''})
+                return json.dumps({'errno': 0, 'error': 'OK'})
+            logging.info('Logged user: %s', session.user)
             return redirectTo('/', request)
         except UserNotFound:
             logging.warn('User not found, probably bad email address')
