@@ -111,7 +111,7 @@ div#MainContent table {
     width:100%;
     margin:5px auto;
 }
-div#MainContent table thead th {
+div#MainContent table.tab thead th {
     background:#333;
     border:1px #555 solid;
     text-align:center;
@@ -131,3 +131,15 @@ input#LocationSearchInput {
     border:none;
     background:#eee;
 }
+div#MainContent table tbody {
+    min-height:20px;
+}
+#LocationEditor table.tab { display:none; }
+#LocationEditorTabs .tab {
+    cursor:pointer;
+    display:inline-block;
+    font-size:1.1em;
+    padding:.5em 5em;
+    border:1px #222 solid;
+}
+.clear { clear:both; }
