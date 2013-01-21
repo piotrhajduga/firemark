@@ -3,101 +3,98 @@
 <%block name="page_title">Firemark - location builder</%block>
 
 <%block name="main_content">
+    <h2>Location search</h2>
     <div id="LocationSearch">
         <form>
             <input type="text" name="LocationSearch" value="" id="LocationSearchInput" />
             <input type="submit" value="Search" style="display:none;" />
         </form>
     </div>
+    <div class="header">
+        <div class="left"><h2>Locations</h2></div>
+        <div class="right"><a href="#" class="button" id="AddLocation">Add new location</a></div>
+        <div class="clear"></div>
+    </div>
     <div id="LocationList">
-        <table>
-            <thead>
-                <tr><th colspan="4">Locations</th></tr>
-                <tr>
-                    <td>Name</td><td>Tags</td>
-                    <td>ObjectId</td><td>Actions</td>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-            <tfoot>
-                <tr><td colspan="4">
-                    <a href="#" class="button" id="AddLocation">Add location</a>
-                </td></tr>
-            </tfoot>
-        </table>
+        <div class="location">
+            <span class="name">Location name</span>
+            <span class="tags">tag1, tag2</span>
+            <span class="actions">
+                <a href="#">Entrance2Exit</a>
+                <a href="#">Edit</a>
+                <a href="#">Delete</a>
+            </span>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
     </div>
     <div id="LocationEditor" style="display:none;">
         <h2 id="LocationEditorAction">Edit location</h2>
         <div id="LocationEditorTabs">
-            <div class="tab" id="LocationEditorTabData">Location data</div>
-            <div class="tab" id="LocationEditorTabExits">Exits</div>
-            <div class="tab" id="LocationEditorTabBricks">Bricks</div>
+            <div class="tab" id="LocationEditorTab_Data">Location data</div>
+            <div class="tab" id="LocationEditorTab_Exits">Exits</div>
+            <div class="tab" id="LocationEditorTab_Bricks">Bricks</div>
             <div class="clear"></div>
         </div>
         <form action="#" method="POST" id="LocationEditorForm">
-        <table class="tab" id="LocationEditorData">
-            <tbody>
+        <div class="tabpage" id="LocationEditorData">
+            <table>
                 <tr><th><label for="EditLocationName">Name</label></th>
                     <td><input type="text" name="name" id="EditLocationName"/></td></tr>
                 <tr><th><label for="EditLocationTags">Tags</label></th>
                     <td><input type="text" name="tags" id="EditLocationTags"/></td></tr>
-            </tbody>
-        </table>
-        <table class="tab" id="LocationEditorExits" style="display:none;">
-            <thead>
-                <tr><td>Id</td><td>Name</td>
-                    <td>Destination location</td></tr>
-            </thead>
-            <tbody>
-            </tbody>
-            <tfoot>
-                <tr><td colspan="3">
-                    <a href="#" class="button">Add exit</a>
-                </td></tr>
-            </tfoot>
-        </table>
-        <table class="tab" id="LocationEditorBricks" style="display:none;">
-            <thead>
-                <tr><td>Order</td><td>Brick</td><td>Actions</td></tr>
-            </thead>
-            <tbody>
-            </tbody>
-            <tfoot>
-                <tr><td colspan="3">
-                    <a href="#" class="button">Add brick</a>
-                </td></tr>
-            </tfoot>
-        </table>
+            </table>
+        </div>
+        <div class="tabpage" id="LocationEditorExits" style="display:none;">
+            <table>
+                <thead>
+                    <tr><td>Id</td><td>Name</td>
+                        <td>Destination location</td></tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr><td colspan="3">
+                        <a href="#" class="button">Add exit</a>
+                    </td></tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="tabpage" id="LocationEditorBricks" style="display:none;">
+            <table>
+                <thead>
+                    <tr><td>Order</td><td>Brick</td><td>Actions</td></tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr><td colspan="3">
+                        <a href="#" class="button">Add brick</a>
+                    </td></tr>
+                </tfoot>
+            </table>
+        </div>
         <input type="submit" id="LocationEditorSubmit" class="button" value="Save location"/>
         </form>
     </div>
 </%block>
 <%block name="javascript">
     <script type="text/javascript">
-        function switchTab(selector) {
-            $('#LocationEditorTabs .tab').removeClass('active');
-            $('#LocationEditorTab'+selector).addClass('active');
-            $('#LocationEditor table.tab').hide();
-            $('table#LocationEditor'+selector).show();
-        }
         $(document).ready(function() {
-            $('a#AddLocation').click(function(eventObject) {
-                eventObject.preventDefault();
+            $('a#AddLocation').click(function(evt) {
+                evt.preventDefault();
                 $('#LocationEditor h2#LocationEditorAction').html('Add location');
                 $('#LocationEditor').show();
             });
-            $('#LocationEditorTabData').click(function() {
-                switchTab('Data');
+            $('#LocationEditorTabs .tab').click(function(evt) {
+                var selector = evt.target.id.split('_')[1];
+                $('#LocationEditorTabs .tab').removeClass('active');
+                $('#LocationEditorTab'+selector).addClass('active');
+                $('#LocationEditor .tabpage').hide();
+                $('#LocationEditor'+selector).show();
             });
-            $('#LocationEditorTabExits').click(function() {
-                switchTab('Exits');
-            });
-            $('#LocationEditorTabBricks').click(function() {
-                switchTab('Bricks');
-            });
-            $('form#LocationEditorForm').submit(function(eventObject) {
-                eventObject.preventDefault();
+            $('form#LocationEditorForm').submit(function(evt) {
+                evt.preventDefault();
                 console.log($('input#EditLocationName').val());
                 return false;
             });

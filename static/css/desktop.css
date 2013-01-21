@@ -95,18 +95,37 @@ h2.title {
     -moz-border-radius: .2em;
     -webkit-border-radius: .2em;
     border-radius: .2em;
-    -moz-box-shadow: 0 0 .2em #288fff, 0 0 .4em #010208;
-    -webkit-box-shadow: 0 0 .2em #238aff, 0 0 .4em #010208;
-    box-shadow: 0 0 .2em #238aff, 0 0 .4em #010208;
+    -moz-box-shadow: 0 0 .2em #238aff;
+    -webkit-box-shadow: 0 0 .2em #238aff;
+    box-shadow: 0 0 .2em #238aff;
 }
 .button:hover {
     background: #53baff;
     border: .2em solid #53baff;
-    -moz-box-shadow: 0 0 .2em #58bfff, inset 0 0 .1em #53baff;
-    -webkit-box-shadow: 0 0 .2em #53baff, inset 0 0 .1em #53baff;
-    box-shadow: 0 0 .2em #53baff, inset 0 0 .1em #53baff;
+    -moz-box-shadow: 0 0 .2em #53baff;
+    -webkit-box-shadow: 0 0 .2em #53baff;
+    box-shadow: 0 0 .2em #53baff;
 }
 
+div#MainContent .header {
+    display: block;
+    margin:1em 0;
+}
+div#MainContent .header h2, 
+div#MainContent .header h3, 
+div#MainContent .header h4, 
+div#MainContent .header h5, 
+div#MainContent .header h6 {
+    margin:0; padding:0;
+}
+div#MainContent .header .left {
+    display: inline;
+    float: left;
+}
+div#MainContent .header .right {
+    display: inline;
+    float: right;
+}
 div#MainContent table {
     width:100%;
     margin:5px auto;
@@ -126,21 +145,58 @@ div#MainContent table tfoot td {
     border:1px #222 solid;
     text-align:center;
 }
-input#LocationSearchInput {
-    width:100%;
-    border:none;
-    background:#eee;
-}
 div#MainContent table tbody {
     min-height:20px;
 }
-#LocationEditor table.tab { display:none; }
+input#LocationSearchInput {
+    width:80%;
+    border:none;
+    background:#eee;
+}
+div#LocationList {
+    display:block;
+    max-height:10em;
+    overflow:auto;
+    border:1px solid #111;
+}
+div#LocationList .location {
+    display:block;
+    background:#222;
+    border:1px #333 solid;
+}
+div#LocationList .location .name {
+    display:inline;
+    float:left;
+    width:50%;
+    font-weight:bold;
+    font-size:1.1em;
+}
+div#LocationList .location .tags {
+    display:inline;
+    float:left;
+    width:24%;
+    font-size:1em;
+    color:#eee;
+}
+div#LocationList .location .actions {
+    display:inline;
+    float:right;
+    text-align:right;
+    width:24%;
+    font-size:1em;
+}
 #LocationEditorTabs .tab {
     cursor:pointer;
     display:inline-block;
     font-size:1.1em;
     padding:.5em 5em;
     border:1px #222 solid;
+    -moz-border-radius: .2em;
+    -webkit-border-radius: .2em;
+    border-radius: .2em;
+    -moz-box-shadow: inset 0 0 .2em #53baff;
+    -webkit-box-shadow: inset  0 0 .2em #53baff;
+    box-shadow: inset  0 0 .2em #53baff;
 }
 #LocationEditorTabs .active {
     background:#222;
