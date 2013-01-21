@@ -1,3 +1,4 @@
+.clear { clear:both; }
 html {
     background: #12141b;
     font-size:normal;
@@ -45,32 +46,7 @@ h1 {
 h2.title {
     margin-top:0;
 }
-.brick {
-    margin-top: 1em;
-}
-.exit {
-    cursor:pointer;
-    background: #238aff;
-    color: #010240;
-    font-weight: bold;
-    font-size: 1.1em;
-    text-decoration:none;
-    padding: 2px 5px;
-    -moz-border-radius: .2em;
-    -webkit-border-radius: .2em;
-    border-radius: .2em;
-    border: .2em solid #238aff;
-    -moz-box-shadow: 0 0 .2em #288fff, inset 0 0 .1em #238aff;
-    -webkit-box-shadow: 0 0 .2em #238aff, inset 0 0 .1em #238aff;
-    box-shadow: 0 0 .2em #238aff, inset 0 0 .1em #238aff;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-.exit:hover {
+a.exit:hover {
     background: #53baff;
     border: .2em solid #53baff;
     -moz-box-shadow: 0 0 .2em #58bfff, inset 0 0 .1em #53baff;
@@ -92,6 +68,7 @@ h2.title {
     text-decoration:none;
     font-size: 1.1em;
     padding: 2px 5px;
+    border:none;
     -moz-border-radius: .2em;
     -webkit-border-radius: .2em;
     border-radius: .2em;
@@ -100,8 +77,9 @@ h2.title {
     box-shadow: 0 0 .2em #238aff;
 }
 .button:hover {
+    cursor:pointer;
     background: #53baff;
-    border: .2em solid #53baff;
+    /*border: .2em solid #53baff;*/
     -moz-box-shadow: 0 0 .2em #53baff;
     -webkit-box-shadow: 0 0 .2em #53baff;
     box-shadow: 0 0 .2em #53baff;
@@ -126,64 +104,42 @@ div#MainContent .header .right {
     display: inline;
     float: right;
 }
-div#MainContent table {
-    width:100%;
-    margin:5px auto;
-}
-div#MainContent table.tab thead th {
-    background:#333;
-    border:1px #555 solid;
-    text-align:center;
-}
-div#MainContent table thead td {
-    background:#111;
-    border:1px #222 solid;
-    text-align:center;
-}
-div#MainContent table tfoot td {
-    background:#111;
-    border:1px #222 solid;
-    text-align:center;
-}
-div#MainContent table tbody {
-    min-height:20px;
-}
 input#LocationSearchInput {
-    width:80%;
+    margin:0;
+    padding:.1em;
     border:none;
     background:#eee;
 }
-div#LocationList {
+.listholder {
     display:block;
-    max-height:10em;
+    max-height:15em;
     overflow:auto;
     border:1px solid #111;
 }
-div#LocationList .location {
+.listholder .listitem {
     display:block;
     background:#222;
     border:1px #333 solid;
 }
-div#LocationList .location .name {
+.listholder .listitem .actions {
+    display:inline;
+    float:right;
+    text-align:right;
+    font-size:1em;
+}
+.listholder .location .name {
     display:inline;
     float:left;
     width:50%;
     font-weight:bold;
     font-size:1.1em;
 }
-div#LocationList .location .tags {
+.listholder .location .tags {
     display:inline;
     float:left;
     width:24%;
     font-size:1em;
     color:#eee;
-}
-div#LocationList .location .actions {
-    display:inline;
-    float:right;
-    text-align:right;
-    width:24%;
-    font-size:1em;
 }
 #LocationEditorTabs .tab {
     cursor:pointer;
@@ -194,11 +150,43 @@ div#LocationList .location .actions {
     -moz-border-radius: .2em;
     -webkit-border-radius: .2em;
     border-radius: .2em;
+}
+#LocationEditorTabs .tab:hover {
+    background:#222;
+}
+#LocationEditorTabs .active {
+    background:#222;
     -moz-box-shadow: inset 0 0 .2em #53baff;
     -webkit-box-shadow: inset  0 0 .2em #53baff;
     box-shadow: inset  0 0 .2em #53baff;
 }
-#LocationEditorTabs .active {
-    background:#222;
+#LocationEditor .tabpage {
+    margin-bottom:1em;
 }
-.clear { clear:both; }
+.listholder .exit .id {
+    display:inline;
+    float:left;
+    font-size:1em;
+    width:3em;
+}
+.listholder .exit .name {
+    display:inline;
+    float:left;
+    font-weight:bold;
+    font-size:1.1em;
+    padding-right:2em;
+}
+.listholder .exit .destination {
+    display:inline;
+    float:left;
+    font-size:1em;
+}
+.listholder .brick .order {
+    display:inline;
+    float:left;
+    font-size:1em;
+}
+.listholder .brick .brick_content {
+    display:block;
+    margin:.1em .2em;
+}
