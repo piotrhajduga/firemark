@@ -3,7 +3,7 @@ from twisted.web.resource import Resource
 from twisted.web.util import redirectTo
 import json
 import util
-from engine.locationservice import UserNotInLocation, LocationNotFound
+from engine.location import UserNotInLocation, LocationNotFound
 
 
 class Location(Resource):
