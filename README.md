@@ -20,3 +20,11 @@
 
 * **/tests** - tests invoked from the root directory using trial, e.g.:    
     ```$ trial tests.engine.user```
+
+## Dependencies
+
+* **SQLAlchemy** 0.8.0b2
+
+* **Mako** 0.7.3
+
+* **Twisted Web** 12.1.0
