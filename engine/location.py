@@ -1,4 +1,4 @@
-from model import Exit, Player
+from model import Exit, Player, Location
 
 
 class PlayerNotInLocation(Exception):
@@ -33,14 +33,8 @@ class LocationService(object):
             raise LocationNotFound()
 
     def get_starting_location(self):
-        location = {}
-        location['_id'] = 0
-        location['name'] = 'Start the adventure!'
-        location['exits'] = {}
-        starting = self.locs.find({'starting': 1})
-        for loc in starting:
-            location['exits'][loc['_id']] = loc
-        return location
+        query = self.db.query(Location).filter(Location.tags.like('%starting%'))
+        return query.one()
 
     def get_exit_for_user(self, exit_name, user_id):
         loc = self.get_for_user(user_id)

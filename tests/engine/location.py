@@ -74,11 +74,13 @@ class TestLocationService(TestCase):
                 self.service.get_for_user, user.user_id)
 
     def test_get_starting_location(self):
-        self.mdb.locations.insert({'name': 'Test'})
-        self.mdb.locations.insert({'name': 'Test'})
-        self.mdb.locations.insert({'name': 'Test', 'starting': 1})
-        self.mdb.locations.insert({'name': 'Test', 'starting': 1})
-        self.mdb.locations.insert({'name': 'Test', 'starting': 1})
+        locations = []
+        locations.append(Location('Test 1'))
+        locations.append(Location('Test 2', 'startling'))
+        locations.append(Location('Test 3', 'starting'))
+        locations.append(Location('Test 4'))
+        locations.append(Location('Test 5'))
+        self.db.add_all(locations)
+        self.db.commit()
         loc = self.service.get_starting_location()
-        self.assertIsNotNone(loc)
-        self.assertEquals(len(loc['exits']), 3)
+        self.assertTrue('starting' in loc.tags)
