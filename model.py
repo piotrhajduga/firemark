@@ -32,7 +32,7 @@ class Location(Base):
     name = Column(String(100), nullable=False)
     tags = Column(String(500), default='')
 
-    def __init__(self, name, tags):
+    def __init__(self, name, tags=None):
         self.name = name
         self.tags = tags
 

@@ -1,42 +1,40 @@
 from unittest import TestCase
-from pymongo import Connection
-import locationservice as locs
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from model import Base, Location, Exit, Brick
+from engine.location import LocationService
 
 
 class TestLocationService(TestCase):
-    mdb = Connection().unittests
+    session = None
+    service = None
 
     def setUp(self):
-        self.service = locs.LocationService(self.mdb)
+        db_engine = create_engine('sqlite:///:memory:')
+        Base.metadata.create_all(db_engine)
+        Session = sessionmaker(bind=db_engine)
+        self.session = Session()
+        self.service = LocationService(Session())
 
     def tearDown(self):
-        self.mdb.locations.drop()
-
-    def test_get_by_field(self):
-        self.mdb.locations.insert({
-            'name': 'Test',
-            'exits': {},
-            'bricks': [],
-            'tags': ['test'],
-            })
-        actual = self.service.get_by_field('name', 'Test')
-        self.assertEquals('Test', actual['name'])
-        self.assertEquals({}, actual['exits'])
-        self.assertEquals([], actual['bricks'])
-        self.assertEquals(['test'], actual['tags'])
+        self.session.close()
 
     def test_add_exit_to(self):
-        locid = self.mdb.locations.insert({
-            'name': 'Test',
-            'exits': {},
-            'bricks': [],
-            'tags': ['test'],
-            })
+        loc = Location('TestLoc')
+        self.session.add(loc)
+        self.session.commit()
         # add_exit_to(location_id, exit_name, destination_id)
-        self.service.add_exit_to(locid, 'InfLoop', locid)
-        exits = self.mdb.locations.find_one({'_id': locid})['exits']
-        self.assertIn('InfLoop', exits)
-        self.assertEquals(exits['InfLoop'], locid)
+        exit = self.service.add_exit_to(
+                loc.location_id,
+                'InfLoop',
+                loc.location_id
+                )
+        self.assertIsNotNone(exit)
+        query = self.session.query(Exit)
+        query = query.filter(Exit.location_id == loc.location_id)
+        query = query.filter(Exit.dest_location_id == loc.location_id)
+        query = query.filter(Exit.name == 'InfLoop')
+        self.assertIsNotNone(query.one())
 
     def test_get_for_user(self):
         locid = self.mdb.locations.insert({'name': 'Test'})

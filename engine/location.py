@@ -16,9 +16,12 @@ class LocationService(object):
         self.db = db
 
     def add_exit_to(self, location_id, exit_name, destination_id):
-        exits = self.locs.find_one({'_id': location_id})['exits']
-        exits[exit_name] = destination_id
-        self.locs.update({'_id': location_id}, {'$set': {'exits': exits}})
+        exit = Exit(exit_name)
+        exit.location_id = location_id
+        exit.dest_location_id = destination_id
+        self.db.add(exit)
+        self.db.commit()
+        return exit
 
     def get_for_user(self, user_id):
         try:

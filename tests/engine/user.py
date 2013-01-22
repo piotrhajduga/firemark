@@ -19,7 +19,7 @@ class TestUserService(TestCase):
         self.service = UserService(Session(), salt=self.salt)
 
     def tearDown(self):
-        pass
+        self.session.close()
 
     def test_sign_in_good(self):
         self.service.register('test1', 'test1@test.com', 'bandooo')
