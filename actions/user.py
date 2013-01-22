@@ -3,7 +3,6 @@ import json
 from twisted.web.resource import Resource
 from twisted.web.util import redirectTo, Redirect
 import util
-from engine.userservice import UserNotFound, EmailRegistered, LoginRegistered
 
 
 class PasswordMismatch(Exception):
@@ -32,15 +31,13 @@ class SignIn(Resource):
             email = str(request.args['email'][0])
             password = str(request.args['password'][0])
             user = self.usrs.sign_in(email, password)
-            del(user['password_hash'])
-            del(user['password_salt'])
             session.user = user
             if type_key == 'JSON':
                 return json.dumps({'errno': 0, 'error': 'OK'})
             logging.info('Logged user: %s', session.user)
             return redirectTo('/', request)
-        except UserNotFound:
-            logging.warn('User not found, probably bad email address')
+        except Exception:
+            logging.error('Couldn\'t log in')
             if type_key == 'JSON':
                 return json.dumps({'errno': 12, 'error': 'User not found'})
             session.errno = 12
@@ -88,12 +85,6 @@ class SignUp(Resource):
                 raise PasswordMismatch()
             login = str(request.args['login'][0])
             self.usrs.register(email, login, password)
-        except EmailRegistered:
-            logging.warn('Given email is already registered')
-            errinfo['errno'], errinfo['error'] = 13, 'Given email is already registered'
-        except LoginRegistered:
-            logging.warn('Given login already registered')
-            errinfo['errno'], errinfo['error'] = 14, 'Given login is already registered'
         except PasswordMismatch:
             logging.warn('Passwords don\'t match')
             errinfo['errno'], errinfo['error'] = 15, 'Passwords don\'t match'

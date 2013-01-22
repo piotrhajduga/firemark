@@ -1,62 +1,30 @@
 from md5 import md5
 from random import random
-
-
-class EmailRegistered(Exception):
-    pass
-
-
-class LoginRegistered(Exception):
-    pass
-
-class UserNotFound(Exception):
-    pass
-
-
-class IncorrectPassword(Exception):
-    pass
+from model import User, Player
+from config import password_salt
+from sqlalchemy import or_
 
 
 class UserService(object):
-    _mdb = None
-    users = None
+    db = None
 
-    def __init__(self, mongodb):
-        self._mdb = mongodb
-        self.users = self._mdb.users
-
-    def get_user_by_field(self, key, value=''):
-        return self.users.find_one({key: value})
-
-    def authenticate(self, email, password):
-        password_hash = md5(password).hexdigest()
-        return self.users.find_one({
-            'email': email,
-            'password_hash': password_hash,
-            })
+    def __init__(self, db):
+        self.db = db
 
     def register(self, email, login, password):
-        if self.users.find({'email': email}).count():
-            raise EmailRegistered('Found matching user(s)')
-        if self.users.find({'login': login}).count():
-            raise LoginRegistered('Found matching user(s)')
-        salt = md5('%f%f%f' % (random(), random(), random())).hexdigest()
-        return self.users.insert({
-            'email': email,
-            'login': login,
-            'roles': [],
-            'password_hash': self.get_password_hash(password, salt),
-            'password_salt': salt
-            })
+        user = User(login, email, self.get_password_hash(password))
+        self.db.add(user)
+        self.db.commit()
+        player = Player()
+        player.user_id = user.user_id
+        self.db.add(player)
+        self.db.commit()
 
-    def sign_in(self, email, password):
-        user = self.users.find_one({'email': email})
-        if not user:
-            raise UserNotFound()
-        pass_hash = self.get_password_hash(password, user['password_salt'])
-        if pass_hash != user['password_hash']:
-            raise IncorrectPassword()
-        return user
+    def sign_in(self, login, password):
+        query = self.db.query(User)
+        query = query.filter(or_(User.email == login, User.login == login))
+        query = query.filter(User.password == self.get_password_hash(password))
+        return query.one()
 
-    def get_password_hash(self, password, salt):
-        return md5(md5(password).hexdigest() + salt).hexdigest()
+    def get_password_hash(self, password):
+        return md5(password+password_salt).hexdigest()

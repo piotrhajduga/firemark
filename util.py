@@ -3,14 +3,16 @@ from twisted.python.components import registerAdapter
 from twisted.web.server import Session as TwistedSession
 from mako.lookup import TemplateLookup
 
+
 def enum(*sequential, **named):
     enums = dict(zip(sequential, range(len(sequential))), **named)
     reverse = dict((value, key) for key, value in enums.iteritems())
     enums['reverse_mapping'] = reverse
     return type('Enum', (), enums)
 
+
 class Session(Interface):
-    user = Attribute('Login of logged in user')
+    user = Attribute('Logged in user')
     errno = Attribute('Error code or 0 if no error')
     error = Attribute('Error message if error occured')
 
@@ -34,8 +36,6 @@ registerAdapter(SessionImpl, TwistedSession, Session)
 
 tpl_lookup = TemplateLookup(directories=['templates'],
         output_encoding='utf-8', encoding_errors='replace')
-
-config_field = enum('TEXTAREA')
 
 # errors
 #NOT_LOGGED_IN = {'errno': 11}
