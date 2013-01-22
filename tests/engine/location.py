@@ -2,7 +2,7 @@ from unittest import TestCase
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from model import Base, Location, Exit, Brick, User, Player
-from engine.location import LocationService
+from engine.location import LocationService, PlayerNotInLocation, LocationNotFound
 
 
 class TestLocationService(TestCase):
@@ -51,19 +51,27 @@ class TestLocationService(TestCase):
         self.assertEquals(loc.location_id, location.location_id)
 
     def test_get_for_user_not_in_location(self):
-        uid = self.mdb.users.insert({
-            'email': 'a@a.a',
-            'login': 'test',
-            })
-        self.assertRaises(locs.UserNotInLocation, self.service.get_for_user, uid)
+        user = User('test', 'test@test.com', 'test')
+        self.db.add(user)
+        self.db.commit()
+        player = Player()
+        player.user_id = user.user_id
+        self.db.add(player)
+        self.db.commit()
+        self.assertRaises(PlayerNotInLocation,
+                self.service.get_for_user, user.user_id)
 
     def test_get_for_user_location_not_found(self):
-        uid = self.mdb.users.insert({
-            'email': 'a@a.a',
-            'login': 'test',
-            'location_id': 1,
-            })
-        self.assertRaises(locs.LocationNotFound, self.service.get_for_user, uid)
+        user = User('test', 'test@test.com', 'test')
+        self.db.add(user)
+        self.db.commit()
+        player = Player()
+        player.user_id = user.user_id
+        player.location_id = 100
+        self.db.add(player)
+        self.db.commit()
+        self.assertRaises(LocationNotFound,
+                self.service.get_for_user, user.user_id)
 
     def test_get_starting_location(self):
         self.mdb.locations.insert({'name': 'Test'})

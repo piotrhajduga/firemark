@@ -1,7 +1,7 @@
 from model import Exit, Player
 
 
-class UserNotInLocation(Exception):
+class PlayerNotInLocation(Exception):
     pass
 
 
@@ -25,7 +25,12 @@ class LocationService(object):
 
     def get_for_user(self, user_id):
         player = self.db.query(Player).filter(Player.user_id == user_id).one()
-        return player.location
+        if not player.location_id:
+            raise PlayerNotInLocation()
+        if player.location:
+            return player.location
+        else:
+            raise LocationNotFound()
 
     def get_starting_location(self):
         location = {}
