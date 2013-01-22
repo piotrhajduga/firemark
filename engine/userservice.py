@@ -8,8 +8,9 @@ from sqlalchemy import or_
 class UserService(object):
     db = None
 
-    def __init__(self, db):
+    def __init__(self, db, salt):
         self.db = db
+        self.salt = salt
 
     def register(self, email, login, password):
         user = User(login, email, self.get_password_hash(password))
@@ -27,4 +28,4 @@ class UserService(object):
         return query.one()
 
     def get_password_hash(self, password):
-        return md5(password+password_salt).hexdigest()
+        return md5(password + self.salt).hexdigest()

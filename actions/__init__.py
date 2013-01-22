@@ -8,11 +8,11 @@ from engine import userservice as usrs
 from engine import locationservice as locs
 
 
-def get_app_resource(mongodb):
+def get_app_resource(db, config):
     resource = Resource()
     resource.putChild('', HomePage())
-    resource.putChild('play', Location(locs.LocationService(mongodb)))
+    resource.putChild('play', Location(locs.LocationService(db)))
     resource.putChild('static', File('static'))
-    resource.putChild('user', User(usrs.UserService(mongodb)))
+    resource.putChild('user', User(usrs.UserService(db, config.password_salt)))
     resource.putChild('builder', Builder())
     return resource
