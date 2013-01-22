@@ -8,18 +8,18 @@ from engine.userservice import UserService, AlreadyRegistered
 
 class TestUserService(TestCase):
     salt = ''
-    session = None
+    db = None
     service = None
 
     def setUp(self):
         db_engine = create_engine('sqlite:///:memory:')
         Base.metadata.create_all(db_engine)
         Session = sessionmaker(bind=db_engine)
-        self.session = Session()
+        self.db = Session()
         self.service = UserService(Session(), salt=self.salt)
 
     def tearDown(self):
-        self.session.close()
+        self.db.close()
 
     def test_sign_in_good(self):
         self.service.register('test1', 'test1@test.com', 'bandooo')
@@ -41,10 +41,10 @@ class TestUserService(TestCase):
                 login='test2',
                 password='test'
             )
-        query = self.session.query(User).filter(User.login == 'test2')
+        query = self.db.query(User).filter(User.login == 'test2')
         user = query.one()
         self.assertIsNotNone(user)
-        query = self.session.query(Player).filter(Player.user_id == user.user_id)
+        query = self.db.query(Player).filter(Player.user_id == user.user_id)
         player = query.one()
         self.assertIsNotNone(player)
 

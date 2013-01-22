@@ -3,7 +3,7 @@ from twisted.web.resource import Resource
 from twisted.web.util import redirectTo
 import json
 import util
-from engine.location import UserNotInLocation, LocationNotFound
+from engine.location import PlayerNotInLocation, LocationNotFound
 
 
 class Location(Resource):
@@ -25,7 +25,7 @@ class Location(Resource):
         except UserWarning:
             logging.warn('User not logged in!')
             errno, error = 11, 'Not logged in!'
-        except UserNotInLocation:
+        except PlayerNotInLocation:
             logging.warn('User is not in location')
             errno, error = 16, 'User is not in location'
             location = self.locs.get_starting_location()
