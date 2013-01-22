@@ -6,7 +6,7 @@
     <div class="header">
         <div class="left"><h2>Location search</h2></div>
         <div class="right">
-            <form>
+            <form id="LocationSearchForm">
                 <input type="text" name="LocationSearch" value="" id="LocationSearchInput" />
                 <input type="submit" value="Search" style="display:none;" />
             </form>
@@ -18,7 +18,7 @@
         <div class="right"><a href="#" class="button" id="AddLocation">Add new location</a></div>
         <div class="clear"></div>
     </div>
-    <div class="listholder">
+    <div class="listholder" id="Locations">
         <div class="listitem location">
             <span class="name">Location name</span>
             <span class="tags">tag1, tag2</span>
@@ -150,6 +150,25 @@
             $('form#LocationEditorForm').submit(function(evt) {
                 evt.preventDefault();
                 console.log($('input#EditLocationName').val());
+                return false;
+            });
+            $('form#LocationSearchForm').submit(function(evt) {
+                evt.preventDefault();
+                var searchword = $('input#LocationSearchInput').val();
+                $.post('/builder/searchlocation', {LocationSearch: searchword}, function(data) {
+                    $('#Locations').html('');
+                    if (data.locations) {
+                        data.locations.each(function(item) {
+                            $('#Locations').append('<div class="listitem location">' +
+                                '<span class="name">' + item.name + '</span>' +
+                                '<span class="tags">' + item.tags + '</span>' +
+                                '<span class="actions"><a href="#">Entrance2Exit</a><a href="#">Edit</a><a href="#">Delete</a></span>' +
+                                '<div class="clear"></div>' +
+                                '</div>'
+                            );
+                        });
+                    }
+                });
                 return false;
             });
         });

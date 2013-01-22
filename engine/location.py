@@ -39,3 +39,7 @@ class LocationService(object):
     def get_exit_for_user(self, exit_name, user_id):
         loc = self.get_for_user(user_id)
         return loc['exits'][exit_name]
+
+    def get_for_tag(self, tag):
+        query = self.db.query(Location).filter(Location.tags.like('%' + tag + '%'))
+        return query.all()

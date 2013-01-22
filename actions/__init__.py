@@ -14,5 +14,5 @@ def get_app_resource(db, config):
     resource.putChild('play', Location(LocationService(db)))
     resource.putChild('static', File('static'))
     resource.putChild('user', User(UserService(db, config.password_salt)))
-    resource.putChild('builder', Builder())
+    resource.putChild('builder', Builder(LocationService(db)))
     return resource

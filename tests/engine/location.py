@@ -84,3 +84,17 @@ class TestLocationService(TestCase):
         self.db.commit()
         loc = self.service.get_starting_location()
         self.assertTrue('starting' in loc.tags)
+
+    def test_get_for_tag(self):
+        locations = []
+        locations.append(Location('Test 1', 'startling'))
+        locations.append(Location('Test 2', 'awesome, startling'))
+        locations.append(Location('Test 3', 'awesome'))
+        locations.append(Location('Test 4', 'test'))
+        locations.append(Location('Test 5', 'test,awesome, startling'))
+        locations.append(Location('Test 6', 'startling,test'))
+        locations.append(Location('Test 7', 'startling,test2'))
+        self.db.add_all(locations)
+        self.db.commit()
+        locations_actual = self.service.get_for_tag('test')
+        self.assertTrue(set(locations_actual).difference(set(locations)))
