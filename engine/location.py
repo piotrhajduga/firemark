@@ -1,4 +1,4 @@
-from model import Exit
+from model import Exit, Player
 
 
 class UserNotInLocation(Exception):
@@ -24,16 +24,8 @@ class LocationService(object):
         return exit
 
     def get_for_user(self, user_id):
-        try:
-            locid = self._mdb.users.find_one({'_id': user_id})['location_id']
-        except KeyError:
-            locid = None
-        if not locid:
-            raise UserNotInLocation()
-        loc = self.locs.find_one({'_id': locid})
-        if not loc:
-            raise LocationNotFound()
-        return loc
+        player = self.db.query(Player).filter(Player.user_id == user_id).one()
+        return player.location
 
     def get_starting_location(self):
         location = {}
