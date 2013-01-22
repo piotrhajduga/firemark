@@ -59,6 +59,27 @@ class Location(Base):
     def __repr__(self):
         return '<Location %s (%x)' % (self.name, id)
 
+    def get_tags(self):
+        tags = set(filter(lambda tag: tag,
+                map(lambda tag: tag.strip(),
+                    self.tags.split(','))))
+        return tags
+
+    def add_tag(self, tag):
+        tags = set(filter(lambda tag: tag,
+                map(lambda tag: tag.strip(),
+                    self.tags.split(','))))
+        tags.add(tag)
+        self.tags = ','.join(tags)
+
+    def remove_tag(self, tag):
+        tags = set(filter(lambda tag: tag,
+                map(lambda tag: tag.strip(),
+                    self.tags.split(','))))
+        tags.remove(tag)
+        self.tags = ','.join(tags)
+
+
 
 class Player(Base):
     __tablename__ = 'players'
