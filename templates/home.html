@@ -7,7 +7,7 @@
     <h2 class="title">Welcome!</h2>
     <p>Thanks for logging in! :)</p>
     <a href="/play" name="Play now" class="button special_button">Play now!</a></p>
-        % if 'builder' in str(session.user.roles).split(", "):
+        % if 'builder' in session.user.get_roles():
     <a href="/builder" name="Location builder" class="button">Location builder</a></p>
         % endif
     % else:
