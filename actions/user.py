@@ -26,6 +26,7 @@ class SignIn(Resource):
 
     def render_POST(self, request):
         type_key = util.get_output_type_from_request(request)
+        logging.info('SESSID: %s', request.getSession().uid)
         session = util.Session(request.getSession())
         try:
             email = str(request.args['email'][0])
@@ -49,7 +50,8 @@ class Logout(Resource):
     isLeaf = True
 
     def render_POST(self, request):
-        session = util.Session(request.getSession())
+        request.getSession().expire()
+        sessiot = util.Session(request.getSession())
         session.user = None
         type_key = util.get_output_type_from_request(request)
         if type_key == 'JSON':

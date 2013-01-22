@@ -76,8 +76,8 @@ class TestLocationService(TestCase):
     def test_get_starting_location(self):
         locations = []
         locations.append(Location('Test 1'))
-        locations.append(Location('Test 2', 'startling'))
-        locations.append(Location('Test 3', 'starting'))
+        locations.append(Location('Test 2', ['startling']))
+        locations.append(Location('Test 3', ['starting']))
         locations.append(Location('Test 4'))
         locations.append(Location('Test 5'))
         self.db.add_all(locations)
@@ -87,13 +87,13 @@ class TestLocationService(TestCase):
 
     def test_get_for_tag(self):
         locations = []
-        locations.append(Location('Test 1', 'startling'))
-        locations.append(Location('Test 2', 'awesome, startling'))
-        locations.append(Location('Test 3', 'awesome'))
-        locations.append(Location('Test 4', 'test'))
-        locations.append(Location('Test 5', 'test,awesome, startling'))
-        locations.append(Location('Test 6', 'startling,test'))
-        locations.append(Location('Test 7', 'startling,test2'))
+        locations.append(Location('Test 1', ['startling']))
+        locations.append(Location('Test 2', ['awesome', 'startling']))
+        locations.append(Location('Test 3', ['awesome']))
+        locations.append(Location('Test 4', ['test']))
+        locations.append(Location('Test 5', ['test,awesome', 'startling']))
+        locations.append(Location('Test 6', ['startling', 'test']))
+        locations.append(Location('Test 7', ['startling', 'test2']))
         self.db.add_all(locations)
         self.db.commit()
         locations_actual = self.service.get_for_tag('test')

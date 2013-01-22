@@ -54,7 +54,8 @@ class Location(Base):
 
     def __init__(self, name, tags=None):
         self.name = name
-        self.tags = tags
+        if tags:
+            self.tags = ','.join(tags)
 
     def __repr__(self):
         return '<Location %s (%x)' % (self.name, id)
