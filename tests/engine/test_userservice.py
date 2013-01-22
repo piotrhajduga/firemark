@@ -3,7 +3,7 @@ from md5 import md5
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from model import Base, User, Player
-from engine.userservice import UserService
+from engine.userservice import UserService, AlreadyRegistered
 
 
 class TestUserService(TestCase):
@@ -21,15 +21,18 @@ class TestUserService(TestCase):
     def tearDown(self):
         pass
 
-    def test_sign_in(self):
+    def test_sign_in_good(self):
         self.service.register('test1', 'test1@test.com', 'bandooo')
         actual = self.service.sign_in('test1@test.com', 'bandooo')
         self.assertTrue(actual)
-        actual = self.service.sign_in('test1@test.com', 'ha')
-        self.assertFalse(actual)
         actual = self.service.sign_in('test1', 'bandooo')
         self.assertTrue(actual)
+
+    def test_sign_in_bad(self):
+        self.service.register('test1', 'test1@test.com', 'bandooo')
         actual = self.service.sign_in('test1', 'asd')
+        self.assertFalse(actual)
+        actual = self.service.sign_in('test1@test.com', 'ha')
         self.assertFalse(actual)
 
     def test_register(self):
@@ -46,7 +49,21 @@ class TestUserService(TestCase):
         self.assertIsNotNone(player)
 
     def test_register_unique(self):
-        self.fail('Not implemented')
+        self.service.register(
+                email='test2@gmail.com',
+                login='test2',
+                password='test'
+            )
+        self.assertRaises(AlreadyRegistered, self.service.register,
+                email='test3@gmail.com',
+                login='test2',
+                password='test'
+            )
+        self.assertRaises(AlreadyRegistered, self.service.register,
+                email='test2@gmail.com',
+                login='test3',
+                password='test'
+            )
 
     def test_get_password_hash(self):
         password = 'test123'
