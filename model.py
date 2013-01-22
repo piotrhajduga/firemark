@@ -24,6 +24,26 @@ class User(Base):
     def __repr__(self):
         return '<User %s (%s)>' % (self.login, self.email)
 
+    def get_roles(self):
+        roles = set(filter(lambda role: role,
+                map(lambda role: role.strip(),
+                    self.roles.split(','))))
+        return roles
+
+    def add_role(self, role):
+        roles = set(filter(lambda role: role,
+                map(lambda role: role.strip(),
+                    self.roles.split(','))))
+        roles.add(role)
+        self.roles = ','.join(roles)
+
+    def remove_role(self, role):
+        roles = set(filter(lambda role: role,
+                map(lambda role: role.strip(),
+                    self.roles.split(','))))
+        roles.remove(role)
+        self.roles = ','.join(roles)
+
 
 class Location(Base):
     __tablename__ = 'locations'
