@@ -14,7 +14,7 @@ except NameError:
         $(document).ready(function() {
             $('#ActionIndicator').html('Loading current location...');
             $('#ActionIndicator').fadeIn();
-            $.get('/play?output=JSON', function(data) {
+            $.get('/json/play', function(data) {
                 showCurrentLocation(JSON.parse(data));
             });
         });

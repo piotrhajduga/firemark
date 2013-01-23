@@ -26,12 +26,6 @@ class SessionImpl(object):
         self.error = None
 
 
-def get_output_type_from_request(request):
-    try:
-        return str(request.args['output'][0]).upper()
-    except KeyError:
-        return 'HTML'
-
 registerAdapter(SessionImpl, TwistedSession, Session)
 
 tpl_lookup = TemplateLookup(directories=['templates'],

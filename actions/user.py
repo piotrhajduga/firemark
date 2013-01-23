@@ -1,5 +1,4 @@
 import logging
-import json
 from twisted.web.resource import Resource
 from twisted.web.util import redirectTo, Redirect
 import util
@@ -20,30 +19,19 @@ class SignIn(Resource):
     def render_GET(self, request):
         session = util.Session(request.getSession())
         if session.user:
+            logging.info('User already signed in. Redirecting to homepage.')
             return redirectTo('/', request)
         request.setHeader("Content-Type", "text/html; charset=utf-8")
         return self.template_HTML.render(session=session)
 
     def render_POST(self, request):
-        type_key = util.get_output_type_from_request(request)
-        logging.info('SESSID: %s', request.getSession().uid)
         session = util.Session(request.getSession())
-        try:
-            email = str(request.args['email'][0])
-            password = str(request.args['password'][0])
-            user = self.usrs.sign_in(email, password)
-            session.user = user
-            if type_key == 'JSON':
-                return json.dumps({'errno': 0, 'error': 'OK'})
-            logging.info('Logged user: %s', session.user)
-            return redirectTo('/', request)
-        except Exception:
-            logging.error('Couldn\'t log in')
-            if type_key == 'JSON':
-                return json.dumps({'errno': 12, 'error': 'User not found'})
-            session.errno = 12
-            session.error = 'User not found'
-            return redirectTo('/user/signin', request)
+        email = str(request.args['email'][0])
+        password = str(request.args['password'][0])
+        user = self.usrs.sign_in(email, password)
+        session.user = user
+        logging.info('Logged user: %s', session.user)
+        return redirectTo('/', request)
 
 
 class Logout(Resource):
@@ -53,10 +41,6 @@ class Logout(Resource):
         request.getSession().expire()
         sessiot = util.Session(request.getSession())
         session.user = None
-        type_key = util.get_output_type_from_request(request)
-        if type_key == 'JSON':
-            request.setHeader("Content-Type", "text/html; charset=utf-8")
-            return json.dumps({'error': 0})
         return redirectTo('/', request)
 
 

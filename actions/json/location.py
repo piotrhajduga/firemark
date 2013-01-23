@@ -1,13 +1,12 @@
 import logging
 from twisted.web.resource import Resource
-from twisted.web.util import redirectTo
+import json
 import util
 from engine.location import PlayerNotInLocation, LocationNotFound
 
 
 class Location(Resource):
     isLeaf = True
-    template_HTML = util.tpl_lookup.get_template('location.html')
 
     def __init__(self, locationservice):
         Resource.__init__(self)
@@ -31,7 +30,5 @@ class Location(Resource):
             logging.error('Location not found')
             errno, error = 17, 'Location not found'
             location = self.locs.get_starting_location()
-        if errno == 11:
-            session.errno, session.error = errno, error
-            return redirectTo('/', request)
-        return self.template_HTML.render(location)
+        request.setHeader("Content-Type", "text/html; charset=utf-8")
+        return json.dumps({'location': location, 'errno': errno, 'error': error})

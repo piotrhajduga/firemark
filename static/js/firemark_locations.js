@@ -34,7 +34,7 @@ function showCurrentLocation(data) {
 function exitCurrentLocation(exit) {
     $('#ActionIndicator').html('Changing location...');
     $('#ActionIndicator').fadeIn();
-    $.post('/play?output=JSON', { "exit": exit }, function(data) {
+    $.post('/json/play', { "exit": exit }, function(data) {
         $('#ActionIndicator').stop();
         $('#ActionIndicator').fadeOut();
         showCurrentLocation(JSON.parse(data));

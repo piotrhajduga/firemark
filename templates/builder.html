@@ -155,7 +155,7 @@
             $('form#LocationSearchForm').submit(function(evt) {
                 evt.preventDefault();
                 var searchword = $('input#LocationSearchInput').val();
-                $.post('/builder/searchlocation', {LocationSearch: searchword}, function(data) {
+                $.post('/json/builder/searchlocation', {LocationSearch: searchword}, function(data) {
                     $('#Locations').html('');
                     if (data.locations) {
                         data.locations.each(function(item) {
