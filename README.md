@@ -18,10 +18,11 @@
 
 * **/engine** - utilities used by controllers
 
-* **/tests** - tests invoked from the root directory using trial, e.g.:    
-    ```
+* **/tests** - tests invoked using trial, e.g.:    
+
+    $ trial tests
+    $ trial tests.engine
     $ trial tests.engine.user
-    ```
 
 ## Dependencies
 
