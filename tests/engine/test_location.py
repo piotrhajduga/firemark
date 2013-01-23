@@ -102,4 +102,6 @@ class TestLocationService(TestCase):
         self.db.add_all(locations)
         self.db.commit()
         locations_actual = self.service.get_for_tag('test')
-        self.assertItemsEqual(locations_actual, locations)
+        self.assertItemsEqual(
+                map(lambda loc: loc.location_id, locations_actual),
+                map(lambda loc: loc.location_id, locations))

@@ -42,4 +42,4 @@ class LocationService(object):
 
     def get_for_tag(self, tag):
         query = self.db.query(Location).filter(Location.tags.like('%' + tag + '%'))
-        return query.all()
+        return filter(lambda loc: tag in loc.get_tags(), query.all())
