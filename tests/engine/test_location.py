@@ -86,15 +86,20 @@ class TestLocationService(TestCase):
         self.assertTrue('starting' in loc.tags)
 
     def test_get_for_tag(self):
-        locations = []
-        locations.append(Location('Test 1', ['startling']))
-        locations.append(Location('Test 2', ['awesome', 'startling']))
-        locations.append(Location('Test 3', ['awesome']))
-        locations.append(Location('Test 4', ['test']))
-        locations.append(Location('Test 5', ['test,awesome', 'startling']))
-        locations.append(Location('Test 6', ['startling', 'test']))
-        locations.append(Location('Test 7', ['startling', 'test2']))
+        locations = [
+            Location('Test 1', ['startling']),
+            Location('Test 2', ['awesome', 'startling']),
+            Location('Test 3', ['awesome']),
+            Location('Test 7', ['startling', 'test2'])
+        ]
+        self.db.add_all(locations)
+        self.db.commit()
+        locations = [
+            Location('Test 4', ['test']),
+            Location('Test 5', ['test', 'awesome', 'startling']),
+            Location('Test 6', ['startling', 'test'])
+        ]
         self.db.add_all(locations)
         self.db.commit()
         locations_actual = self.service.get_for_tag('test')
-        self.assertTrue(set(locations_actual).difference(set(locations)))
+        self.assertItemsEqual(locations_actual, locations)
