@@ -18,7 +18,9 @@
 
 * **/engine** - utilities used by controllers
 
-* **/tests** - tests invoked using trial, e.g.: `$ trial tests`
+* **/tests** - tests invoked using trial, e.g.:
+
+    $ trial tests
 
 ## Dependencies
 
