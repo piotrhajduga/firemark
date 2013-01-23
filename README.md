@@ -18,9 +18,7 @@
 
 * **/engine** - utilities used by controllers
 
-* **/tests** - tests invoked using trial, e.g.:
-
-    $ trial tests
+* **/tests** - tests invoked using trial, e.g.: `$ trial tests`
 
 ## Dependencies
 
@@ -33,9 +31,7 @@
 ## Running
 
 For now if all dependencies are met development app server can be started by
-getting into virtual environment and running:
-
-    $ ./run.py
+getting into virtual environment and running `$ ./run.py`
 
 And everything should go smoothly.
 Report any issues on a
