@@ -58,7 +58,7 @@ class Location(Base):
             self.tags = ','.join(tags)
 
     def __repr__(self):
-        return '<Location %s (%x)' % (self.name, id)
+        return '<Location %s (%x)>' % (self.name, self.location_id)
 
     def get_tags(self):
         tags = set(filter(lambda tag: tag,
