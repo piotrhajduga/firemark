@@ -27,3 +27,15 @@
 * **Mako** 0.7.3
 
 * **Twisted Web** 12.1.0
+
+## Running
+
+For now if all dependencies are met development app server can be started by
+getting into virtual environment and running:
+
+    $ ./run.py
+
+And everything should go smoothly.
+Report any issues on a
+[bugtracker at Bitbucket](https://bitbucket.org/kosarock/firemark/issues)
+
