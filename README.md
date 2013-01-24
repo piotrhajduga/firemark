@@ -6,10 +6,9 @@
 
 * **/static** - directory containing all the static content for the website
     * **/static/desktop** - desktop page static files
-        * **/static/js** - javascripts
-        * **/static/img** - images
-        * **/static/css** - css stylesheets
-        * **/static/misc** - miscellanous static content
+        * **/static/desktop/js** - javascripts
+        * **/static/desktop/img** - images
+        * **/static/desktop/css** - css stylesheets
     * **/static/common** - common static files
 
 * **/templates** - page templates written using Mako
