@@ -6,9 +6,13 @@ html {
 body {
     background: #12141b;
 }
-h1 {
+h1.page_header {
     color: #238aff;
     text-shadow: 0 0 .1em #000;
+    text-align:center;
+}
+h1.page_header img.logo {
+    margin:0 auto;
 }
 #ActionIndicator{
     position:absolute;
