@@ -6,6 +6,6 @@ import actions.desktop
 
 def get_app_resource(db, config):
     resource = actions.desktop.get_app_resource(db, config)
-    resource.putChild('static', File('static'))
+    resource.putChild('static', File('static/desktop'))
     resource.putChild('json', actions.json.get_app_resource(db, config))
     return resource

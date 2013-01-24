@@ -5,16 +5,21 @@
 * **/py2.7** - virtualenv configured to run the project
 
 * **/static** - directory containing all the static content for the website
-    * **/static/js** - javascripts
-    * **/static/img** - images
-    * **/static/css** - css stylesheets
-    * **/static/misc** - miscellanous static content
+    * **/static/desktop** - desktop page static files
+        * **/static/js** - javascripts
+        * **/static/img** - images
+        * **/static/css** - css stylesheets
+        * **/static/misc** - miscellanous static content
+    * **/static/common** - common static files
 
 * **/templates** - page templates written using Mako
+    * **/templates/desktop** - desktop page templates
 
 * **/bricks** - directory containing bricks - building blocks of every location
 
-* **/actions** - python package with controllers for specific urls
+* **/actions** - python package with controllers
+    * **/actions/json** - JSON API controllers (package)
+    * **/actions/desktop** - desktop page controllers (package)
 
 * **/engine** - utilities used by controllers
 
