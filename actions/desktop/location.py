@@ -3,6 +3,7 @@ from twisted.web.resource import Resource
 from twisted.web.util import redirectTo
 from engine.location import PlayerNotInLocation, LocationNotFound
 from actions.desktop import tpl_lookup
+from util import Session
 
 
 class Location(Resource):
@@ -14,12 +15,12 @@ class Location(Resource):
         self.locs = locationservice
 
     def render_GET(self, request):
-        session = util.Session(request.getSession())
+        session = Session(request.getSession())
         errno, error = 0, 'OK'
         try:
             if session.user is None:
                 raise UserWarning('Not logged in!')
-            location = self.locs.get_for_user(session.user['_id'])
+            location = self.locs.get_for_user(session.user.user_id)
         except UserWarning:
             logging.warn('User not logged in!')
             errno, error = 11, 'Not logged in!'

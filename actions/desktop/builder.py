@@ -2,6 +2,7 @@ import logging
 from twisted.web.resource import Resource
 from twisted.web.util import redirectTo, Redirect
 from actions.desktop import tpl_lookup
+from util import Session
 
 
 class Builder(Resource):
@@ -12,7 +13,7 @@ class Builder(Resource):
         self.putChild('', Redirect('/'))
 
     def render_GET(self, request):
-        session = util.Session(request.getSession())
+        session = Session(request.getSession())
         errno, error = 0, 'OK'
         if session.user is None:
             logging.warn('User not logged in!')

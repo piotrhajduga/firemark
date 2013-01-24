@@ -2,6 +2,7 @@ import logging
 from twisted.web.resource import Resource
 from twisted.web.util import redirectTo, Redirect
 from actions.desktop import tpl_lookup
+from util import Session
 
 
 class PasswordMismatch(Exception):
@@ -17,7 +18,7 @@ class SignIn(Resource):
         self.usrs = user_service
 
     def render_GET(self, request):
-        session = util.Session(request.getSession())
+        session = Session(request.getSession())
         if session.user:
             logging.info('User already signed in. Redirecting to homepage.')
             return redirectTo('/', request)
@@ -25,7 +26,7 @@ class SignIn(Resource):
         return self.template_HTML.render(session=session)
 
     def render_POST(self, request):
-        session = util.Session(request.getSession())
+        session = Session(request.getSession())
         email = str(request.args['email'][0])
         password = str(request.args['password'][0])
         user = self.usrs.sign_in(email, password)
@@ -53,7 +54,7 @@ class SignUp(Resource):
         self.usrs = user_service
 
     def render_GET(self, request):
-        session = util.Session(request.getSession())
+        session = Session(request.getSession())
         if session.user:
             return redirectTo('/', request)
         request.setHeader("Content-Type", "text/html; charset=utf-8")
@@ -61,7 +62,7 @@ class SignUp(Resource):
 
     def render_POST(self, request):
         type_key = util.get_output_type_from_request(request)
-        session = util.Session(request.getSession())
+        session = Session(request.getSession())
         errinfo = {'errno': 0, 'error': None}
         try:
             email = str(request.args['email'][0])
