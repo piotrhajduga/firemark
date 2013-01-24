@@ -28,7 +28,7 @@ class SessionImpl(object):
 
 registerAdapter(SessionImpl, TwistedSession, Session)
 
-tpl_lookup = TemplateLookup(directories=['templates'],
+tpl_lookup = TemplateLookup(directories=['templates/desktop'],
         output_encoding='utf-8', encoding_errors='replace')
 
 # errors
