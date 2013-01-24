@@ -1,9 +1,9 @@
 from twisted.web.resource import Resource
-import util
+from actions.desktop import tpl_lookup
 
 
 class HomePage(Resource):
-    template_HTML = util.tpl_lookup.get_template('home.html')
+    template_HTML = tpl_lookup.get_template('home.html')
 
     def render_GET(self, request):
         session = util.Session(request.getSession())

@@ -5,8 +5,6 @@ import util
 
 
 class Builder(Resource):
-    template_HTML = util.tpl_lookup.get_template('builder.html')
-
     def __init__(self, location_service):
         Resource.__init__(self)
         self.putChild('searchlocation', LocationSearch(location_service))

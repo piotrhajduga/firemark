@@ -1,13 +1,13 @@
 import logging
 from twisted.web.resource import Resource
 from twisted.web.util import redirectTo
-import util
 from engine.location import PlayerNotInLocation, LocationNotFound
+from actions.desktop import tpl_lookup
 
 
 class Location(Resource):
     isLeaf = True
-    template_HTML = util.tpl_lookup.get_template('location.html')
+    template_HTML = tpl_lookup.get_template('location.html')
 
     def __init__(self, locationservice):
         Resource.__init__(self)

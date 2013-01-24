@@ -1,7 +1,6 @@
 from zope.interface import Interface, Attribute, implements
 from twisted.python.components import registerAdapter
 from twisted.web.server import Session as TwistedSession
-from mako.lookup import TemplateLookup
 
 
 class Session(Interface):
@@ -22,9 +21,6 @@ class SessionImpl(object):
 
 
 registerAdapter(SessionImpl, TwistedSession, Session)
-
-tpl_lookup = TemplateLookup(directories=['templates/desktop'],
-        output_encoding='utf-8', encoding_errors='replace')
 
 # errors
 #NOT_LOGGED_IN = {'errno': 11}

@@ -1,7 +1,7 @@
 import logging
 from twisted.web.resource import Resource
 from twisted.web.util import redirectTo, Redirect
-import util
+from actions.desktop import tpl_lookup
 
 
 class PasswordMismatch(Exception):
@@ -10,7 +10,7 @@ class PasswordMismatch(Exception):
 
 class SignIn(Resource):
     isLeaf = True
-    template_HTML = util.tpl_lookup.get_template('user_signin.html')
+    template_HTML = tpl_lookup.get_template('user_signin.html')
 
     def __init__(self, user_service):
         Resource.__init__(self)
@@ -46,7 +46,7 @@ class Logout(Resource):
 
 class SignUp(Resource):
     isLeaf = True
-    template_HTML = util.tpl_lookup.get_template('user_signup.html')
+    template_HTML = tpl_lookup.get_template('user_signup.html')
 
     def __init__(self, user_service):
         Resource.__init__(self)

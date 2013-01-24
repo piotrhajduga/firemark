@@ -1,11 +1,11 @@
 import logging
 from twisted.web.resource import Resource
 from twisted.web.util import redirectTo, Redirect
-import util
+from actions.desktop import tpl_lookup
 
 
 class Builder(Resource):
-    template_HTML = util.tpl_lookup.get_template('builder.html')
+    template_HTML = tpl_lookup.get_template('builder.html')
 
     def __init__(self, location_service):
         Resource.__init__(self)
