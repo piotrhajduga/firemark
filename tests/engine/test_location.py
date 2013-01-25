@@ -1,7 +1,7 @@
 from unittest import TestCase
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from model import Base, Location, Exit, Brick, User, Player
+from model import Base, Location, Exit, User, Player
 from engine.location import LocationService, PlayerNotInLocation, LocationNotFound
 
 
@@ -24,11 +24,8 @@ class TestLocationService(TestCase):
         self.db.add(loc)
         self.db.commit()
         # add_exit_to(location_id, exit_name, destination_id)
-        exit = self.service.add_exit_to(
-                loc.location_id,
-                'InfLoop',
-                loc.location_id
-                )
+        exit = self.service.add_exit_to(loc.location_id, 'InfLoop',
+                                        loc.location_id)
         self.assertIsNotNone(exit)
         query = self.db.query(Exit)
         query = query.filter(Exit.location_id == loc.location_id)
@@ -59,7 +56,7 @@ class TestLocationService(TestCase):
         self.db.add(player)
         self.db.commit()
         self.assertRaises(PlayerNotInLocation,
-                self.service.get_for_user, user.user_id)
+                          self.service.get_for_user, user.user_id)
 
     def test_get_for_user_location_not_found(self):
         user = User('test', 'test@test.com', 'test')
@@ -71,7 +68,7 @@ class TestLocationService(TestCase):
         self.db.add(player)
         self.db.commit()
         self.assertRaises(LocationNotFound,
-                self.service.get_for_user, user.user_id)
+                          self.service.get_for_user, user.user_id)
 
     def test_get_starting_location(self):
         locations = []
@@ -102,6 +99,5 @@ class TestLocationService(TestCase):
         self.db.add_all(locations)
         self.db.commit()
         locations_actual = self.service.get_for_tag('test')
-        self.assertItemsEqual(
-                map(lambda loc: loc.location_id, locations_actual),
-                map(lambda loc: loc.location_id, locations))
+        self.assertItemsEqual(map(lambda loc: loc.location_id, locations_actual),
+                              map(lambda loc: loc.location_id, locations))
