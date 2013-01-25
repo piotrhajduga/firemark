@@ -9,6 +9,7 @@ class Builder(Resource):
         Resource.__init__(self)
         self.putChild('searchlocation', LocationSearch(location_service))
 
+
 class LocationSearch(Resource):
     def __init__(self, location_service):
         self.locs = location_service
@@ -27,4 +28,4 @@ class LocationSearch(Resource):
             word = str(request.args['LocationSearch'][0])
             locations = self.locs.get_for_tag(word)
         return json.dumps({'locations': locations,
-            'errno': errno, 'error': error})
+                           'errno': errno, 'error': error})

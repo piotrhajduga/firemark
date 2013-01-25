@@ -13,8 +13,8 @@ logging.basicConfig(level=cfg.log_level, format=cfg.log_format)
 logging.getLogger('sqlalchemy.engine').setLevel(logging.WARN)
 logging.getLogger('sqlalchemy.orm').setLevel(logging.WARN)
 
-db_engine = create_engine(cfg.db_url,
-        echo=cfg.db_echo, encoding=cfg.db_encoding)
+db_engine = create_engine(cfg.db_url, echo=cfg.db_echo,
+                          encoding=cfg.db_encoding)
 Base.metadata.create_all(db_engine)
 Session = sessionmaker(bind=db_engine)
 

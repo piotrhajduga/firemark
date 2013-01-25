@@ -1,4 +1,3 @@
-from twisted.web.resource import Resource
 from twisted.web.static import File
 import actions.json
 import actions.desktop

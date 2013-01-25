@@ -1,7 +1,5 @@
 from md5 import md5
-from random import random
 from model import User, Player
-from config import password_salt
 from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound

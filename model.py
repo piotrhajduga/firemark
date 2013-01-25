@@ -10,7 +10,7 @@ class User(Base):
     __tablename__ = 'users'
 
     user_id = Column(Integer, Sequence('user_id_seq'),
-            primary_key=True, autoincrement=True)
+                     primary_key=True, autoincrement=True)
     login = Column(String(30), unique=True, nullable=False)
     email = Column(String(100), unique=True, nullable=False)
     password = Column(String(40), nullable=False)
@@ -25,22 +25,17 @@ class User(Base):
         return '<User %s (%s)>' % (self.login, self.email)
 
     def get_roles(self):
-        roles = set(filter(lambda role: role,
-                map(lambda role: role.strip(),
-                    self.roles.split(','))))
-        return roles
+        return set(filter(lambda role: role,
+                          map(lambda role: role.strip(),
+                              self.roles.split(','))))
 
     def add_role(self, role):
-        roles = set(filter(lambda role: role,
-                map(lambda role: role.strip(),
-                    self.roles.split(','))))
+        roles = self.get_roles()
         roles.add(role)
         self.roles = ','.join(roles)
 
     def remove_role(self, role):
-        roles = set(filter(lambda role: role,
-                map(lambda role: role.strip(),
-                    self.roles.split(','))))
+        roles = self.get_roles()
         roles.remove(role)
         self.roles = ','.join(roles)
 
@@ -61,25 +56,19 @@ class Location(Base):
         return '<Location %s (%x)>' % (self.name, self.location_id)
 
     def get_tags(self):
-        tags = set(filter(lambda tag: tag,
-                map(lambda tag: tag.strip(),
-                    self.tags.split(','))))
-        return tags
+        return set(filter(lambda tag: tag,
+                          map(lambda tag: tag.strip(),
+                              self.tags.split(','))))
 
     def add_tag(self, tag):
-        tags = set(filter(lambda tag: tag,
-                map(lambda tag: tag.strip(),
-                    self.tags.split(','))))
+        tags = self.get_tags()
         tags.add(tag)
         self.tags = ','.join(tags)
 
     def remove_tag(self, tag):
-        tags = set(filter(lambda tag: tag,
-                map(lambda tag: tag.strip(),
-                    self.tags.split(','))))
+        tags = self.get_tags()
         tags.remove(tag)
         self.tags = ','.join(tags)
-
 
 
 class Player(Base):
