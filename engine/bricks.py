@@ -58,11 +58,27 @@ class SimpleExit(Brick):
         self.db.commit()
 
 
-class BrickFactory(object):
+class Description(Brick):
+    def get_looks(self, brick, player):
+        data = json.loads(brick.data)
+        return data['content']
+
+    def set_config(self, brick, **kwargs):
+        data = {}
+        data['content'] = kwargs['content']
+        brick.data = json.dumps(data)
+        self.db.commit()
+
+
+class BrickService(object):
     bricks = {}
 
     def __init__(self, db):
         self.bricks['simple_exit'] = SimpleExit(db)
+        self.bricks['description'] = Description(db)
+
+    def get_brick_types(self):
+        return self.bricks.keys()
 
     def get_looks(self, brick, player):
         return self.bricks[brick.type].get_looks(brick, player)

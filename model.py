@@ -95,7 +95,6 @@ class Exit(Base):
     exit_id = Column(Integer, Sequence('exit_id_seq'), primary_key=True)
     location_id = Column(Integer, ForeignKey('locations.location_id'),
                          primary_key=True)
-    name = Column(String(100))
     dest_location_id = Column(Integer, ForeignKey('locations.location_id'))
 
     def __init__(self, name):
