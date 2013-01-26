@@ -7,19 +7,37 @@ class Brick(object):
         self.db = db
 
     def get_looks(self, brick, player):
+        """Get initial data to display brick.
+
+        brick -- model.Brick instance that is shown
+        player -- model.Player instance for current player
+        """
         raise NotImplemented()
 
     def process_and_exit(self, brick, player, input_data):
+        """Process input data from the user and set player's new location.
+
+        The implementation should call SQLAlchemy's session.commit() itself
+        if it's needed.
+
+        brick -- model.Brick instance that performs the processing
+        player -- model.Player instance for current player
+        input_data -- input data taken from user
+        """
         raise NotImplemented()
 
     def set_config(self, brick, **kwargs):
+        """Apply configuration to brick model.
+
+        The implementation should call SQLAlchemy's session.commit() itself.
+
+        brick -- model.Brick instance to change
+        **kwargs -- configuration parameters for the brick
+        """
         raise NotImplemented()
 
 
 class SimpleExit(Brick):
-    def __init__(self, db):
-        Brick.__init__(self, db)
-
     def get_looks(self, brick, player):
         data = json.loads(brick.data)
         return data['description']
@@ -37,6 +55,7 @@ class SimpleExit(Brick):
         data['description'] = kwargs['description']
         data['exit_id'] = kwargs['exit_id']
         brick.data = json.dumps(data)
+        self.db.commit()
 
 
 class BrickFactory(object):
