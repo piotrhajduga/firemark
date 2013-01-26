@@ -12,6 +12,9 @@ class Brick(object):
     def process_and_exit(self, brick, player, input_data):
         pass
 
+    def set_config(self, brick, **kwargs):
+        pass
+
 
 class SimpleExit(Brick):
     def __init__(self, db):
@@ -29,6 +32,12 @@ class SimpleExit(Brick):
         player.location_id = exit.dest_location_id
         self.db.commit()
 
+    def set_config(self, brick, **kwargs):
+        data = {}
+        data['description'] = kwargs['description']
+        data['exit_id'] = kwargs['exit_id']
+        brick.data = json.dumps(data)
+
 
 class BrickFactory(object):
     bricks = {}
@@ -41,3 +50,6 @@ class BrickFactory(object):
 
     def process_input(self, brick, player, input_data):
         return self.bricks[brick.type].process_input(brick, player, input_data)
+
+    def set_config(self, brick, **kwargs):
+        return self.bricks[brick.type].set_config(brick, **kwargs)
