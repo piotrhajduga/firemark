@@ -7,13 +7,13 @@ class Brick(object):
         self.db = db
 
     def get_looks(self, brick, player):
-        pass
+        raise NotImplemented()
 
     def process_and_exit(self, brick, player, input_data):
-        pass
+        raise NotImplemented()
 
     def set_config(self, brick, **kwargs):
-        pass
+        raise NotImplemented()
 
 
 class SimpleExit(Brick):
