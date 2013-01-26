@@ -1,2 +1,6 @@
 ~*
 *.pyc
+py2.7/
+build/
+_trial_temp/
+.ropeproject/
