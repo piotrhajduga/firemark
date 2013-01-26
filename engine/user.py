@@ -18,7 +18,10 @@ class UserService(object):
 
     def register(self, email, login, password):
         try:
+            user_count = self.db.query(User).count()
             user = User(login, email, self.get_password_hash(password))
+            if user_count == 0:
+                user.add_role('builder')
             self.db.add(user)
             self.db.commit()
             player = Player()

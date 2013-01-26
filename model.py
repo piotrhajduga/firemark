@@ -20,6 +20,7 @@ class User(Base):
         self.login = login
         self.email = email
         self.password = password
+        self.roles = ''
 
     def __repr__(self):
         return '<User %s (%s)>' % (self.login, self.email)
