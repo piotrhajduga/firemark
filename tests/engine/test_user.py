@@ -3,7 +3,7 @@ from md5 import md5
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from model import Base, User, Player
-from engine.userservice import UserService, AlreadyRegistered
+from engine.user import UserService, AlreadyRegistered
 
 
 class TestUserService(TestCase):
