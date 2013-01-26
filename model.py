@@ -78,8 +78,8 @@ class Player(Base):
     user_id = Column(Integer, ForeignKey('users.user_id'))
     location_id = Column(Integer, ForeignKey('locations.location_id'))
 
-    user = relationship("User", backref=backref('users', order_by=user_id))
-    location = relationship("Location", backref=backref('locations', order_by=location_id))
+    user = relationship("User", backref=backref('users'))
+    location = relationship("Location", backref=backref('locations'))
 
     def __init__(self):
         pass
@@ -92,8 +92,9 @@ class Exit(Base):
     __tablename__ = 'exits'
 
     exit_id = Column(Integer, Sequence('exit_id_seq'), primary_key=True)
+    location_id = Column(Integer, ForeignKey('locations.location_id'),
+                         primary_key=True)
     name = Column(String(100))
-    location_id = Column(Integer, ForeignKey('locations.location_id'))
     dest_location_id = Column(Integer, ForeignKey('locations.location_id'))
 
     def __init__(self, name):
