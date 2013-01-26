@@ -2,8 +2,6 @@
 
 ## Contents of the repository
 
-* **/py2.7** - virtualenv configured to run the project
-
 * **/static** - directory containing all the static content for the website
     * **/static/desktop** - desktop page static files
         * **/static/desktop/js** - javascripts
@@ -13,8 +11,6 @@
 
 * **/templates** - page templates written using Mako
     * **/templates/desktop** - desktop page templates
-
-* **/bricks** - directory containing bricks - building blocks of every location
 
 * **/actions** - python package with controllers
     * **/actions/json** - JSON API controllers (package)
