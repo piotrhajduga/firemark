@@ -1,11 +1,6 @@
 from twisted.web.resource import Resource
 from engine.user import UserService
 from engine.location import LocationService
-from mako.lookup import TemplateLookup
-
-
-tpl_lookup = TemplateLookup(directories=['templates/desktop'],
-        output_encoding='utf-8', encoding_errors='replace')
 
 
 # controllers for this package

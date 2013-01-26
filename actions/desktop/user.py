@@ -1,12 +1,8 @@
 import logging
 from twisted.web.resource import Resource
 from twisted.web.util import redirectTo, Redirect
-from actions.desktop import tpl_lookup
+from meta import tpl_lookup
 from util import Session
-
-
-class PasswordMismatch(Exception):
-    pass
 
 
 class SignIn(Resource):
@@ -40,7 +36,7 @@ class Logout(Resource):
 
     def render_POST(self, request):
         request.getSession().expire()
-        sessiot = util.Session(request.getSession())
+        session = Session(request.getSession())
         session.user = None
         return redirectTo('/', request)
 
@@ -61,26 +57,16 @@ class SignUp(Resource):
         return self.template_HTML.render(session=session)
 
     def render_POST(self, request):
-        type_key = util.get_output_type_from_request(request)
         session = Session(request.getSession())
-        errinfo = {'errno': 0, 'error': None}
-        try:
-            email = str(request.args['email'][0])
-            password = str(request.args['password'][0])
-            password2 = str(request.args['password2'][0])
-            if password2 != password:
-                raise PasswordMismatch()
-            login = str(request.args['login'][0])
-            self.usrs.register(email, login, password)
-        except PasswordMismatch:
+        email = str(request.args['email'][0])
+        password = str(request.args['password'][0])
+        password2 = str(request.args['password2'][0])
+        if password2 != password:
             logging.warn('Passwords don\'t match')
-            errinfo['errno'], errinfo['error'] = 15, 'Passwords don\'t match'
-        if type_key == 'JSON':
-            request.setHeader("Content-Type", "text/html; charset=utf-8")
-            return json.dumps(errinfo)
-        if errinfo['errno']:
-            session.errno, session.error = errinfo['errno'], errinfo['error']
+            session.errno, session.error = 15, 'Passwords don\'t match'
             return redirectTo('/', request)
+        login = str(request.args['login'][0])
+        self.usrs.register(email, login, password)
         return redirectTo('/user/signup', request)
 
 

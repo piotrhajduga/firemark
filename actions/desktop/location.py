@@ -2,7 +2,7 @@ import logging
 from twisted.web.resource import Resource
 from twisted.web.util import redirectTo
 from engine.location import PlayerNotInLocation, LocationNotFound
-from actions.desktop import tpl_lookup
+from meta import tpl_lookup
 from util import Session
 
 

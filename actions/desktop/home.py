@@ -1,5 +1,5 @@
 from twisted.web.resource import Resource
-from actions.desktop import tpl_lookup
+from meta import tpl_lookup
 from util import Session
 
 
