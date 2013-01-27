@@ -47,7 +47,7 @@ class Brick(object):
 
 
 class SimpleExit(Brick):
-    def get_looks(self, brick, player):
+    def get_looks(self, brick, player=None):
         data = json.loads(brick.data)
         return data['description']
 
@@ -79,28 +79,28 @@ class Description(Brick):
         self.db.commit()
 
 
-class RegexpInput(Brick):
+class RegexInput(Brick):
     def get_looks(self, brick, player):
         data = self.get_config(brick)
         return data['label']
 
-    def process_and_exit(self, brick, player, input_data):
-        data = self.get_config()
-        exit_id = data['match'] if re.match(data['regex'], input_data['input']) else data['else']
-        query = self.db.query(Exit.dest_location_id)
+    def process_input(self, brick, player, input_data):
+        data = self.get_config(brick)
+        match = re.match(data['regex'], input_data['input'])
+        exit_id = data['match'] if match else data['nomatch']
+        query = self.db.query(Exit)
         query = query.filter_by(location_id=brick.location_id)
         query = query.filter_by(id=exit_id)
-        dest_location_id = query.one()
-        player.location_id = dest_location_id
+        player.location_id = query.one().dest_location_id
         self.db.commit()
 
     def set_config(self, brick, **kwargs):
-        data = self.get_config()
+        data = self.get_config(brick)
         data['label'] = kwargs['label']
         data['regex'] = kwargs['regex']
         data['match'] = kwargs['match']
-        data['else'] = kwargs['else']
-        brick.data = data
+        data['nomatch'] = kwargs['nomatch']
+        brick.data = json.dumps(data)
         self.db.commit()
 
 
@@ -110,6 +110,7 @@ class BrickService(object):
     def __init__(self, db):
         self.bricks['simple_exit'] = SimpleExit(db)
         self.bricks['description'] = Description(db)
+        self.bricks['regex_input'] = RegexInput(db)
 
     def get_brick_types(self):
         return self.bricks.keys()

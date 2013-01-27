@@ -47,12 +47,26 @@ class User(Base):
         self.roles = ','.join(roles)
 
 
+class Exit(Base):
+    __tablename__ = 'exit'
+
+    id = Column(Integer, Sequence('exit_id_seq'), primary_key=True)
+    location_id = Column(Integer, ForeignKey('location.id'))
+    dest_location_id = Column(Integer, ForeignKey('location.id'))
+
+    def __repr__(self):
+        return '<Exit %x -> %x (id: %x)>' % (self.location_id,
+                                             self.dest_location_id, self.id)
+
+
 class Location(Base):
     __tablename__ = 'location'
 
     id = Column(Integer, Sequence('location_id_seq'), primary_key=True)
     name = Column(String(100), nullable=False)
-    namespaces = relationship("Namespace", secondary=loc2ns)
+    namespaces = relationship('Namespace', secondary=loc2ns)
+    exits = relationship('Exit', backref=backref('exit'),
+                         foreign_keys=[Exit.location_id])
 
     def __init__(self, name):
         self.name = name
@@ -67,7 +81,7 @@ class Namespace(Base):
     id = Column(Integer, Sequence('namespace_id_seq'), primary_key=True)
     name = Column(String(100), nullable=False)
     starting = Column(Boolean, nullable=False, default=False)
-    locations = relationship("Location", secondary=loc2ns)
+    locations = relationship('Location', secondary=loc2ns)
 
     def __init__(self, name, starting=False):
         self.name = name
@@ -84,25 +98,13 @@ class Player(Base):
     user_id = Column(Integer, ForeignKey('user.id'))
     location_id = Column(Integer, ForeignKey('location.id'))
 
-    user = relationship("User", backref=backref('user', uselist=False))
-    location = relationship("Location",
+    user = relationship('User', backref=backref('user', uselist=False))
+    location = relationship('Location',
                             backref=backref('location', uselist=False))
 
     def __repr__(self):
         return '<Player %x (for user %s (id: %x))>' % (self.id, self.user.login,
                                                        self.user_id)
-
-
-class Exit(Base):
-    __tablename__ = 'exit'
-
-    id = Column(Integer, Sequence('exit_id_seq'), primary_key=True)
-    location_id = Column(Integer, ForeignKey('location.id'))
-    dest_location_id = Column(Integer, ForeignKey('location.id'))
-
-    def __repr__(self):
-        return '<Exit %x -> %x (id: %x)>' % (self.location_id,
-                                             self.dest_location_id, self.id)
 
 
 class Brick(Base):
