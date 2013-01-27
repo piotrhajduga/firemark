@@ -1,4 +1,5 @@
-from model import Exit, Player, Location
+from model import Exit, Player, Location, Namespace
+import random
 
 
 class PlayerNotInLocation(Exception):
@@ -15,16 +16,16 @@ class LocationService(object):
     def __init__(self, db):
         self.db = db
 
-    def add_exit_to(self, location_id, exit_name, destination_id):
-        exit = Exit(exit_name)
-        exit.location_id = location_id
-        exit.dest_location_id = destination_id
+    def add_exit_to(self, source_loc_id, dest_loc_id):
+        exit = Exit()
+        exit.location_id = source_loc_id
+        exit.dest_location_id = dest_loc_id
         self.db.add(exit)
         self.db.commit()
         return exit
 
-    def get_for_user(self, user_id):
-        player = self.db.query(Player).filter(Player.user_id == user_id).one()
+    def get_for_player(self, player_id):
+        player = self.db.query(Player).get(player_id)
         if not player.location_id:
             raise PlayerNotInLocation()
         if player.location:
@@ -33,13 +34,21 @@ class LocationService(object):
             raise LocationNotFound()
 
     def get_starting_location(self):
-        query = self.db.query(Location).filter(Location.tags.like('%starting%'))
-        return query.one()
+        locations = self.db.query(Location).filter(
+            Location.namespaces.any(Namespace.starting)).all()
+        return random.choice(locations)
 
     def get_exit_for_user(self, exit_name, user_id):
         loc = self.get_for_user(user_id)
         return loc['exits'][exit_name]
 
-    def get_for_tag(self, tag):
-        query = self.db.query(Location).filter(Location.tags.like('%' + tag + '%'))
-        return filter(lambda loc: tag in loc.get_tags(), query.all())
+    def search(self, **kwargs):
+        namespace_id = kwargs.get('namespace_id', None)
+        name_like = kwargs.get('name_like', None)
+        query = self.db.query(Location)
+        if namespace_id:
+            query = query.filter(Location.namespaces.any(
+                Namespace.id == namespace_id))
+        if name_like:
+            query = query.filter(Location.name.like(name_like))
+        return query.all()

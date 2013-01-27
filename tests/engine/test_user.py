@@ -36,34 +36,32 @@ class TestUserService(TestCase):
         self.assertFalse(actual)
 
     def test_register(self):
-        self.service.register(
-                email='test2@gmail.com',
-                login='test2',
-                password='test'
-            )
-        query = self.db.query(User).filter(User.login == 'test2')
+        self.service.register(email='test2@gmail.com',
+                              login='test2',
+                              password='test'
+                              )
+        query = self.db.query(User).filter_by(login='test2')
         user = query.one()
         self.assertIsNotNone(user)
-        query = self.db.query(Player).filter(Player.user_id == user.user_id)
+        query = self.db.query(Player).filter_by(id=user.id)
         player = query.one()
         self.assertIsNotNone(player)
 
     def test_register_unique(self):
-        self.service.register(
-                email='test2@gmail.com',
-                login='test2',
-                password='test'
-            )
+        self.service.register(email='test2@gmail.com',
+                              login='test2',
+                              password='test'
+                              )
         self.assertRaises(AlreadyRegistered, self.service.register,
-                email='test3@gmail.com',
-                login='test2',
-                password='test'
-            )
+                          email='test3@gmail.com',
+                          login='test2',
+                          password='test'
+                          )
         self.assertRaises(AlreadyRegistered, self.service.register,
-                email='test2@gmail.com',
-                login='test3',
-                password='test'
-            )
+                          email='test2@gmail.com',
+                          login='test3',
+                          password='test'
+                          )
 
     def test_get_password_hash(self):
         password = 'test123'

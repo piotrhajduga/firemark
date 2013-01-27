@@ -1,16 +1,22 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy import Column, Integer, String, Sequence, ForeignKey
+from sqlalchemy import Table, Column, Integer, String, Boolean
+from sqlalchemy import ForeignKey, Sequence
 
 
 Base = declarative_base()
 
 
-class User(Base):
-    __tablename__ = 'users'
+loc2ns = Table('location2namespace', Base.metadata,
+               Column('location_id', Integer, ForeignKey('location.id')),
+               Column('namespace_id', Integer, ForeignKey('namespace.id'))
+               )
 
-    user_id = Column(Integer, Sequence('user_id_seq'),
-                     primary_key=True, autoincrement=True)
+
+class User(Base):
+    __tablename__ = 'user'
+
+    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     login = Column(String(30), unique=True, nullable=False)
     email = Column(String(100), unique=True, nullable=False)
     password = Column(String(40), nullable=False)
@@ -23,7 +29,7 @@ class User(Base):
         self.roles = ''
 
     def __repr__(self):
-        return '<User %s (%s)>' % (self.login, self.email)
+        return '<User %s (%x)>' % (self.login, self.id)
 
     def get_roles(self):
         return set(filter(lambda role: role,
@@ -42,73 +48,68 @@ class User(Base):
 
 
 class Location(Base):
-    __tablename__ = 'locations'
+    __tablename__ = 'location'
 
-    location_id = Column(Integer, Sequence('location_id_seq'), primary_key=True)
+    id = Column(Integer, Sequence('location_id_seq'), primary_key=True)
     name = Column(String(100), nullable=False)
-    tags = Column(String(500), default='')
+    namespaces = relationship("Namespace", secondary=loc2ns)
 
-    def __init__(self, name, tags=None):
+    def __init__(self, name):
         self.name = name
-        if tags:
-            self.tags = ','.join(tags)
 
     def __repr__(self):
-        return '<Location %s (%x)>' % (self.name, self.location_id)
+        return '<Location %s (%x)>' % (self.name, self.id)
 
-    def get_tags(self):
-        return set(filter(lambda tag: tag,
-                          map(lambda tag: tag.strip(),
-                              self.tags.split(','))))
 
-    def add_tag(self, tag):
-        tags = self.get_tags()
-        tags.add(tag)
-        self.tags = ','.join(tags)
+class Namespace(Base):
+    __tablename__ = 'namespace'
 
-    def remove_tag(self, tag):
-        tags = self.get_tags()
-        tags.remove(tag)
-        self.tags = ','.join(tags)
+    id = Column(Integer, Sequence('namespace_id_seq'), primary_key=True)
+    name = Column(String(100), nullable=False)
+    starting = Column(Boolean, nullable=False, default=False)
+    locations = relationship("Location", secondary=loc2ns)
+
+    def __init__(self, name, starting=False):
+        self.name = name
+        self.starting = starting
+
+    def __repr__(self):
+        return '<Namespace %s (%x)>' % (self.name, self.id)
 
 
 class Player(Base):
-    __tablename__ = 'players'
+    __tablename__ = 'player'
 
-    player_id = Column(Integer, Sequence('player_id_seq'), primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.user_id'))
-    location_id = Column(Integer, ForeignKey('locations.location_id'))
+    id = Column(Integer, Sequence('player_id_seq'), primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    location_id = Column(Integer, ForeignKey('location.id'))
 
-    user = relationship("User", backref=backref('users'))
-    location = relationship("Location", backref=backref('locations'))
+    user = relationship("User", backref=backref('user'))
+    location = relationship("Location", backref=backref('location'))
 
     def __init__(self):
         pass
 
     def __repr__(self):
-        return '<Player %x (%x)>' % (self.player_id, self.user_id)
+        return '<Player %x (%x)>' % (self.player_id, self.id)
 
 
 class Exit(Base):
-    __tablename__ = 'exits'
+    __tablename__ = 'exit'
 
-    exit_id = Column(Integer, Sequence('exit_id_seq'), primary_key=True)
-    location_id = Column(Integer, ForeignKey('locations.location_id'),
-                         primary_key=True)
-    dest_location_id = Column(Integer, ForeignKey('locations.location_id'))
-
-    def __init__(self, name):
-        self.name = name
+    id = Column(Integer, Sequence('exit_id_seq'), primary_key=True)
+    location_id = Column(Integer, ForeignKey('location.id'))
+    dest_location_id = Column(Integer, ForeignKey('location.id'))
 
     def __repr__(self):
         return '<Exit %s (%x)>' % (self.name, self.id)
 
 
 class Brick(Base):
-    __tablename__ = 'bricks'
+    __tablename__ = 'brick'
 
-    brick_id = Column(Integer, Sequence('brick_id_seq'), primary_key=True)
-    location_id = Column(Integer, ForeignKey('locations.location_id'))
+    id = Column(Integer, Sequence('brick_id_seq'), primary_key=True)
+    location_id = Column(Integer, ForeignKey('location.id'))
     type = Column(String(50))
     data = Column(String(3000))
 

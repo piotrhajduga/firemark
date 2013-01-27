@@ -25,7 +25,7 @@ class UserService(object):
             self.db.add(user)
             self.db.commit()
             player = Player()
-            player.user_id = user.user_id
+            player.user_id = user.id
             self.db.add(player)
             self.db.commit()
         except IntegrityError:
@@ -36,7 +36,7 @@ class UserService(object):
         try:
             query = self.db.query(User)
             query = query.filter(or_(User.email == login, User.login == login))
-            query = query.filter(User.password == self.get_password_hash(password))
+            query = query.filter_by(password=self.get_password_hash(password))
             return query.one()
         except NoResultFound:
             return None
