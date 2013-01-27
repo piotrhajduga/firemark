@@ -29,7 +29,7 @@ class User(Base):
         self.roles = ''
 
     def __repr__(self):
-        return '<User %s (%x)>' % (self.login, self.id)
+        return '<User %s (id: %x)>' % (self.login, self.id)
 
     def get_roles(self):
         return set(filter(lambda role: role,
@@ -58,7 +58,7 @@ class Location(Base):
         self.name = name
 
     def __repr__(self):
-        return '<Location %s (%x)>' % (self.name, self.id)
+        return '<Location %s (id: %x)>' % (self.name, self.id)
 
 
 class Namespace(Base):
@@ -74,7 +74,7 @@ class Namespace(Base):
         self.starting = starting
 
     def __repr__(self):
-        return '<Namespace %s (%x)>' % (self.name, self.id)
+        return '<Namespace %s (id: %x)>' % (self.name, self.id)
 
 
 class Player(Base):
@@ -91,7 +91,8 @@ class Player(Base):
         pass
 
     def __repr__(self):
-        return '<Player %x (%x)>' % (self.player_id, self.id)
+        return '<Player %x (for user %s (id: %x))>' % (self.id, self.user.login,
+                                                       self.user_id)
 
 
 class Exit(Base):
@@ -102,7 +103,8 @@ class Exit(Base):
     dest_location_id = Column(Integer, ForeignKey('location.id'))
 
     def __repr__(self):
-        return '<Exit %s (%x)>' % (self.name, self.id)
+        return '<Exit %x -> %x (id: %x)>' % (self.location_id,
+                                             self.dest_location_id, self.id)
 
 
 class Brick(Base):
@@ -117,4 +119,4 @@ class Brick(Base):
         pass
 
     def __repr__(self):
-        return '<Brick %s (%h)>' % (self.type, self.id)
+        return '<Brick %s (id: %x)>' % (self.type, self.id)
