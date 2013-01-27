@@ -110,8 +110,12 @@ class Brick(Base):
 
     id = Column(Integer, Sequence('brick_id_seq'), primary_key=True)
     location_id = Column(Integer, ForeignKey('location.id'))
-    type = Column(String(50))
+    type = Column(String(50), nullable=False)
     data = Column(String(3000))
+
+    def __init__(self, type):
+        self.type = type
+        self.data = '{}'
 
     def __repr__(self):
         return '<Brick %s (id: %x)>' % (self.type, self.id)

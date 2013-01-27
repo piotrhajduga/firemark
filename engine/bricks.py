@@ -13,9 +13,9 @@ class Brick(object):
         brick -- model.Brick instance that is shown
         player -- model.Player instance for current player
         """
-        raise NotImplemented()
+        raise NotImplementedError()
 
-    def process_and_exit(self, brick, player, input_data):
+    def process_input(self, brick, player, input_data):
         """Process input data from the user and set player's new location.
 
         The implementation of this method should call SQLAlchemy's
@@ -25,7 +25,7 @@ class Brick(object):
         player -- model.Player instance for current player
         input_data -- input data taken from user
         """
-        raise NotImplemented()
+        raise NotImplementedError()
 
     def set_config(self, brick, **kwargs):
         """Apply configuration to brick model.
@@ -36,7 +36,7 @@ class Brick(object):
         brick -- model.Brick instance to change
         **kwargs -- configuration parameters for the brick
         """
-        raise NotImplemented()
+        raise NotImplementedError()
 
     def get_config(self, brick):
         """Get the configuration data for brick as a dict.
@@ -53,11 +53,10 @@ class SimpleExit(Brick):
 
     def process_input(self, brick, player, input_data):
         data = self.get_config(brick)
-        query = self.db.query(Exit.dest_location_id)
+        query = self.db.query(Exit)
         query = query.filter_by(location_id=brick.location_id)
         query = query.filter_by(id=data['exit_id'])
-        dest_location_id = query.one()
-        player.location_id = dest_location_id
+        player.location_id = query.one().dest_location_id
         self.db.commit()
 
     def set_config(self, brick, **kwargs):
@@ -90,7 +89,7 @@ class RegexpInput(Brick):
         exit_id = data['match'] if re.match(data['regex'], input_data['input']) else data['else']
         query = self.db.query(Exit.dest_location_id)
         query = query.filter_by(location_id=brick.location_id)
-        query = query.filter_by(exit_id=exit_id)
+        query = query.filter_by(id=exit_id)
         dest_location_id = query.one()
         player.location_id = dest_location_id
         self.db.commit()
