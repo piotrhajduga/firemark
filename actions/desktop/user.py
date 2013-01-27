@@ -67,7 +67,7 @@ class SignUp(Resource):
             return redirectTo('/', request)
         login = str(request.args['login'][0])
         self.usrs.register(email, login, password)
-        return redirectTo('/user/signup', request)
+        return redirectTo('/user/signin', request)
 
 
 class User(Resource):

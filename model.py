@@ -84,11 +84,9 @@ class Player(Base):
     user_id = Column(Integer, ForeignKey('user.id'))
     location_id = Column(Integer, ForeignKey('location.id'))
 
-    user = relationship("User", backref=backref('user'))
-    location = relationship("Location", backref=backref('location'))
-
-    def __init__(self):
-        pass
+    user = relationship("User", backref=backref('user', uselist=False))
+    location = relationship("Location",
+                            backref=backref('location', uselist=False))
 
     def __repr__(self):
         return '<Player %x (for user %s (id: %x))>' % (self.id, self.user.login,
@@ -114,9 +112,6 @@ class Brick(Base):
     location_id = Column(Integer, ForeignKey('location.id'))
     type = Column(String(50))
     data = Column(String(3000))
-
-    def __init__(self):
-        pass
 
     def __repr__(self):
         return '<Brick %s (id: %x)>' % (self.type, self.id)

@@ -1,4 +1,5 @@
 import json
+import re
 from model import Exit
 
 
@@ -54,8 +55,9 @@ class SimpleExit(Brick):
         data = self.get_config(brick)
         query = self.db.query(Exit.dest_location_id)
         query = query.filter_by(location_id=brick.location_id)
-        query = query.filter_by(exit_id=data['exit_id'])
-        player.location_id = exit.dest_location_id
+        query = query.filter_by(id=data['exit_id'])
+        dest_location_id = query.one()
+        player.location_id = dest_location_id
         self.db.commit()
 
     def set_config(self, brick, **kwargs):
@@ -75,6 +77,31 @@ class Description(Brick):
         data = self.get_config(brick)
         data['content'] = kwargs['content']
         brick.data = json.dumps(data)
+        self.db.commit()
+
+
+class RegexpInput(Brick):
+    def get_looks(self, brick, player):
+        data = self.get_config(brick)
+        return data['label']
+
+    def process_and_exit(self, brick, player, input_data):
+        data = self.get_config()
+        exit_id = data['match'] if re.match(data['regex'], input_data['input']) else data['else']
+        query = self.db.query(Exit.dest_location_id)
+        query = query.filter_by(location_id=brick.location_id)
+        query = query.filter_by(exit_id=exit_id)
+        dest_location_id = query.one()
+        player.location_id = dest_location_id
+        self.db.commit()
+
+    def set_config(self, brick, **kwargs):
+        data = self.get_config()
+        data['label'] = kwargs['label']
+        data['regex'] = kwargs['regex']
+        data['match'] = kwargs['match']
+        data['else'] = kwargs['else']
+        brick.data = data
         self.db.commit()
 
 
