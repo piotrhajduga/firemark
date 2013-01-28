@@ -1,0 +1,213 @@
+// colors
+@body_bg: #12141b; @body_fg: #000;
+@content_bg: #a0a5b9; @content_fg: #010209;
+@light_border: #f0f4ff; @dark_border: #19224a;
+@normal_button: #8a90a2; @special_button: #4C90D7;
+// mixins
+.box-shadow (@x: 0, @y: 0, @blur: 1px, @color: #000) {
+    box-shadow: @arguments;
+    -moz-box-shadow: @arguments;
+    -webkit-box-shadow: @arguments;
+}
+.box-shadow-inset (@x: 0, @y: 0, @blur: 1px, @color: #000) {
+    box-shadow: inset @arguments;
+    -moz-box-shadow: inset @arguments;
+    -webkit-box-shadow: inset @arguments;
+}
+.roundish_border (@border_color) {
+    border:1px solid @border_color;
+    -moz-border-radius: 0 .5em 0 1em;
+    -webkit-border-radius: 0 .5em 0 1em;
+    border-radius: 0 .5em 0 1em;
+}
+.clear { clear:both; }
+
+html {
+    background: @body_bg;
+    font-size:normal;
+}
+body {
+    background: @body_bg;
+}
+h1.page_header {
+    text-align:center;
+}
+h1.page_header img.logo {
+    margin:.5em auto;
+}
+#ActionIndicator{
+    position:absolute;
+    display:none;
+    top:0;
+    right:0;
+    width:auto;
+    height:auto;
+    cursor:pointer;
+    background: @content_bg;
+    color: @content_fg;
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 2px 5px;
+}
+#TwoColumnWrapper {
+    display:inline-block;
+    float:left;
+    width:100%;
+    #MainContent {
+        margin-right:250px;
+    }
+}
+#MainContent {
+    background: @content_bg;
+    color: @content_fg;
+    padding: 8px;
+    margin-bottom: .8em;
+    .roundish_border(@light_border);
+    .box-shadow(4px, 4px, 4px, @content_fg);
+}
+#SidebarContent {
+    display:inline-block;
+    float:left;
+    width:240px;
+    margin-left:-240px;
+}
+h2.title {
+    margin-top:0;
+}
+.img {
+    .roundish_border(@light_border);
+    .box-shadow(2px, 2px, 2px, @content_fg);
+}
+input, textarea {
+    /*background: #d6e9f9;*/
+    background:none;
+    color: #010209;
+    padding:.1em .4em .1em .7em;
+    .roundish_border(@light_border);
+    .box-shadow-inset(2px, 2px, 2px, @content_fg);
+}
+.button {
+    outline: none;
+    background: @normal_button;
+    color: @content_fg;
+    font-weight: bold;
+    text-decoration:none;
+    font-size: 1.1em;
+    padding: .1em 2em;
+    text-align:center;
+    .roundish_border(@light_border);
+    .box-shadow(2px, 2px, 2px, @content_fg);
+    &:hover {
+        cursor:pointer;
+        background: #f0f4ff;
+        color: #12141f;
+    }
+    &:active {
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+}
+.special_button {
+    .button;
+    background: @special_button;
+    font-size: 1.5em;
+    padding: .5em 3em;
+    clear: both;
+}
+#SidebarContent * { display:block; clear:both; }
+
+div#MainContent .header {
+    display: block;
+    margin:1em 0;
+    h2, h3, h4, h5, h6 {
+        margin:0; padding:0;
+    }
+    .left {
+        display: inline;
+        float: left;
+    }
+    .right {
+        display: inline;
+        float: right;
+    }
+}
+.listholder {
+    display:block;
+    max-height:15em;
+    overflow:auto;
+    .roundish_border(@dark_border);
+    .box-shadow-inset(2px, 2px, 2px, @content_fg);
+}
+.listholder .listitem {
+    display:block;
+    background: @content_bg;
+    color:@content_fg;
+    padding:.1em .4em .1em .7em;
+    .roundish_border(@light_border);
+    .box-shadow(2px, 2px, 2px, @content_fg);
+}
+.listholder .listitem .actions {
+    display:inline;
+    float:right;
+    text-align:right;
+    font-size:1em;
+}
+.listholder .location .name {
+    display:inline;
+    float:left;
+    width:50%;
+    font-weight:bold;
+    font-size:1.1em;
+}
+#LocationEditorTabs .tab {
+    display:inline-block;
+    color: @content_fg;
+    font-size:1.1em;
+    padding:.2em 3em;
+    .roundish_border(@light_border);
+    .box-shadow(2px, 2px, 2px, @content_fg);
+    &:hover {
+        cursor:pointer;
+        background:@light_border;
+    }
+    &:active {
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+}
+#LocationEditorTabs .active {
+    background:@light_border;
+    .box-shadow(2px, 2px, 2px, @content_fg);
+}
+#LocationEditor .tabpage {
+    margin-bottom:1em;
+}
+.listholder .exit .id {
+    display:inline;
+    float:left;
+    font-size:1em;
+    width:3em;
+}
+.listholder .exit .name {
+    display:inline;
+    float:left;
+    font-weight:bold;
+    font-size:1.1em;
+    padding-right:2em;
+}
+.listholder .exit .destination {
+    display:inline;
+    float:left;
+    font-size:1em;
+}
+.listholder .brick .order {
+    display:inline;
+    float:left;
+    font-size:1em;
+}
+.listholder .brick .brick_content {
+    display:block;
+    margin:.1em .2em;
+}
