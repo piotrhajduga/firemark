@@ -22,13 +22,8 @@
 }
 .clear { clear:both; }
 // declarations
-html {
-    background: @body_bg;
-    font-size:normal;
-}
-body {
-    background: @body_bg;
-}
+html { background: @body_bg; font-size:normal; }
+body { background: @body_bg; }
 h1.page_header {
     text-align:center;
     img.logo {
@@ -114,53 +109,14 @@ input, textarea {
     padding: .5em 3em;
     clear: both;
 }
-#MainContent .special_button {
-    margin-bottom:2px;
-}
+#MainContent .special_button { margin-bottom:2px; }
 #SidebarContent * { display:block; clear:both; }
-
 div#MainContent .header {
     display: block;
     margin:1em 0;
-    h2, h3, h4, h5, h6 {
-        margin:0; padding:0;
-    }
-    .left {
-        display: inline;
-        float: left;
-    }
-    .right {
-        display: inline;
-        float: right;
-    }
-}
-.listholder {
-    display:block;
-    max-height:15em;
-    overflow:auto;
-    .roundish_border(@dark_border);
-    .box-shadow-inset(2px, 2px, 2px, @content_fg);
-}
-.listholder .listitem {
-    display:block;
-    background: @content_bg;
-    color:@content_fg;
-    padding:.1em .4em .1em .7em;
-    .roundish_border(@light_border);
-    .box-shadow(2px, 2px, 2px, @content_fg);
-}
-.listholder .listitem .actions {
-    display:inline;
-    float:right;
-    text-align:right;
-    font-size:1em;
-}
-.listholder .location .name {
-    display:inline;
-    float:left;
-    width:50%;
-    font-weight:bold;
-    font-size:1.1em;
+    h2, h3, h4, h5, h6 { margin:0; padding:0; }
+    .left { display: inline; float: left; }
+    .right { display: inline; float: right; }
 }
 #LocationEditorTabs .tab {
     display:inline-block;
@@ -186,30 +142,64 @@ div#MainContent .header {
 #LocationEditor .tabpage {
     margin-bottom:1em;
 }
-.listholder .exit .id {
-    display:inline;
-    float:left;
-    font-size:1em;
-    width:3em;
-}
-.listholder .exit .name {
-    display:inline;
-    float:left;
-    font-weight:bold;
-    font-size:1.1em;
-    padding-right:2em;
-}
-.listholder .exit .destination {
-    display:inline;
-    float:left;
-    font-size:1em;
-}
-.listholder .brick .order {
-    display:inline;
-    float:left;
-    font-size:1em;
-}
-.listholder .brick .brick_content {
+.listholder {
     display:block;
-    margin:.1em .2em;
+    max-height:15em;
+    overflow:auto;
+    .roundish_border(@dark_border);
+    .box-shadow-inset(2px, 2px, 2px, @content_fg);
+    .listitem {
+        display:block;
+        background: @content_bg;
+        color:@content_fg;
+        padding:.1em .4em .1em .7em;
+        .roundish_border(@light_border);
+        .box-shadow(2px, 2px, 2px, @content_fg);
+        .actions {
+            display:inline;
+            float:right;
+            text-align:right;
+            font-size:1em;
+        }
+    }
+    .location {
+        .name {
+            display:inline;
+            float:left;
+            width:50%;
+            font-weight:bold;
+            font-size:1.1em;
+        }
+    }
+    .exit {
+        .id {
+            display:inline;
+            float:left;
+            font-size:1em;
+            width:3em;
+        }
+        .name {
+            display:inline;
+            float:left;
+            font-weight:bold;
+            font-size:1.1em;
+            padding-right:2em;
+        }
+        .destination {
+            display:inline;
+            float:left;
+            font-size:1em;
+        }
+    }
+    .brick {
+        .order {
+            display:inline;
+            float:left;
+            font-size:1em;
+        }
+        .brick_content {
+            display:block;
+            margin:.1em .2em;
+        }
+    }
 }
