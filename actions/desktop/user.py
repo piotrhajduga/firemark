@@ -34,6 +34,9 @@ class SignIn(Resource):
 class Logout(Resource):
     isLeaf = True
 
+    def render_GET(self, request):
+        return self.render_POST(request)
+
     def render_POST(self, request):
         request.getSession().expire()
         session = Session(request.getSession())

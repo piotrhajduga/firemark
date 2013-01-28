@@ -1,4 +1,4 @@
-<%inherit file="base_twocolumn.html"/>
+<%inherit file="base_onecolumn.html"/>
 
 <%block name="page_title">Firemark - home</%block>
 
@@ -8,7 +8,7 @@
     <p>Thanks for logging in! :)</p>
     <a href="/play" name="Play now" class="button special_button">Play now!</a></p>
         % if 'builder' in session.user.get_roles():
-    <a href="/builder" name="Location builder" class="button">Location builder</a></p>
+        <a href="/builder" name="Location builder" class="button">Location builder</a></p>
         % endif
     % else:
     <h2>Sign in</h2>
@@ -16,10 +16,10 @@
     <table>
         <tr><td><label for="email">E-mail</label></td><td><input type="text" value="" name="email" id="email" /></td></tr>
         <tr><td><label for="password">Password</label></td><td><input type="password" value="" name="password" id="password" /></td></tr>
-        <tr><td colspan="2"><input type="submit" value="Sign in" /></td></tr>
+        <tr><td colspan="2"><input type="submit" value="Sign in" class="button" /></td></tr>
     </table>
     </form>
     <p>Don't have an account?
-    <a href="/user/signup" name="Free registration">Sign up for free!</a></p>
+    <a href="/user/signup" name="Free registration" class="button">Sign up for free!</a></p>
     % endif
 </%block>

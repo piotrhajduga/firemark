@@ -1,4 +1,4 @@
-<%inherit file="base_onecolumn.html"/>
+<%inherit file="base_twocolumn.html"/>
 
 <%block name="page_title">Firemark - location builder</%block>
 
@@ -36,11 +36,14 @@
         </div>
     </div>
     <div id="LocationEditor" style="display:none;">
-        <h2 id="LocationEditorAction">Edit location</h2>
-        <div id="LocationEditorTabs">
-            <div class="tab active" id="LocationEditorTab_Data">Location data</div>
-            <div class="tab" id="LocationEditorTab_Exits">Exits</div>
-            <div class="tab" id="LocationEditorTab_Bricks">Bricks</div>
+        <div class="header">
+            <div class="left"><h2 id="LocationEditorAction">Edit location</h2></div>
+            <div class="right" id="LocationEditorTabs">
+                <div class="tab active" id="LocationEditorTab_Data">Location data</div>
+                <div class="tab" id="LocationEditorTab_Exits">Exits</div>
+                <div class="tab" id="LocationEditorTab_Bricks">Bricks</div>
+                <div class="clear"></div>
+            </div>
             <div class="clear"></div>
         </div>
         <form action="#" method="POST" id="LocationEditorForm">
@@ -186,4 +189,8 @@
             });
         });
     </script>
+</%block>
+<%block name="sidebar_content">
+    <a href="/play" name="Play now" class="button special_button">Play now!</a></p>
+    <a href="/user/logout" name="Lod out" class="button">Logout</a></p>
 </%block>
