@@ -1,6 +1,6 @@
 import json
 import re
-from model import Exit
+from model import Exit, Brick
 
 
 class BrickBase(object):
@@ -53,9 +53,9 @@ class SimpleExit(BrickBase):
 
     def process_input(self, brick, player, input_data):
         data = self.get_config(brick)
-        query = self.db.query(Exit)
-        query = query.filter_by(brick_id=brick.id)
-        query = query.filter_by(id=data['exit_id'])
+        query = self.db.query(Exit).select_from(Brick).join(Brick.exits)
+        query = query.filter(Brick.id == brick.id)
+        query = query.filter(Exit.id == data['exit_id'])
         player.location_id = query.one().dest_location_id
         self.db.commit()
 
@@ -88,9 +88,9 @@ class RegexInput(BrickBase):
         data = self.get_config(brick)
         match = re.match(data['regex'], input_data['input'])
         exit_id = data['match'] if match else data['nomatch']
-        query = self.db.query(Exit)
-        query = query.filter_by(brick_id=brick.id)
-        query = query.filter_by(id=exit_id)
+        query = self.db.query(Exit).select_from(Brick).join(Brick.exits)
+        query = query.filter(Brick.id == brick.id)
+        query = query.filter(Exit.id == exit_id)
         player.location_id = query.one().dest_location_id
         self.db.commit()
 
