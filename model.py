@@ -2,6 +2,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Table, Column, Integer, String, Boolean
 from sqlalchemy import ForeignKey, Sequence
+import json
 
 
 Base = declarative_base()
@@ -46,6 +47,15 @@ class User(Base):
         roles.remove(role)
         self.roles = ','.join(roles)
 
+    def get_dict(self):
+        data = {
+            'id': self.id,
+            'login': self.login,
+            'email': self.email,
+            'roles': self.get_roles()
+        }
+        return data
+
 
 class Namespace(Base):
     __tablename__ = 'namespace'
@@ -65,6 +75,15 @@ class Namespace(Base):
     def __repr__(self):
         return '<Namespace %s (id: %x)>' % (self.name, self.id)
 
+    def get_dict(self):
+        data = {
+            'id': self.id,
+            'name': self.name,
+            'starting': self.starting,
+            'owner_user_id': self.owner_user_id
+        }
+        return data
+
 
 class Player(Base):
     __tablename__ = 'player'
@@ -81,6 +100,14 @@ class Player(Base):
         return '<Player %x (for user %s (id: %x))>' % (self.id, self.user.login,
                                                        self.user_id)
 
+    def get_dict(self):
+        data = {
+            'id': self.id,
+            'user_id': self.user_id,
+            'location_id': self.location_id
+        }
+        return data
+
 
 class Exit(Base):
     __tablename__ = 'exit'
@@ -91,6 +118,14 @@ class Exit(Base):
 
     def __repr__(self):
         return '<Exit %x (id:%x)>' % (self.dest_location_id, self.id)
+
+    def get_dict(self):
+        data = {
+            'id': self.id,
+            'brick_id': self.brick_id,
+            'dest_location_id': self.destlocation_id
+        }
+        return data
 
 
 class Brick(Base):
@@ -112,6 +147,15 @@ class Brick(Base):
     def __repr__(self):
         return '<Brick %s (id: %x)>' % (self.type, self.id)
 
+    def get_dict(self):
+        data = {
+            'id': self.id,
+            'location_id': self.location_id,
+            'type': self.type,
+            'data': json.loads(self.data)
+        }
+        return data
+
 
 class Location(Base):
     __tablename__ = 'location'
@@ -129,3 +173,11 @@ class Location(Base):
 
     def __repr__(self):
         return '<Location %s (id: %x)>' % (self.name, self.id)
+
+    def get_dict(self):
+        data = {
+            'id': self.id,
+            'name': self.name,
+            'owner_user_id': self.owner_user_id
+        }
+        return data

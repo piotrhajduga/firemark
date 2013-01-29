@@ -16,6 +16,9 @@ class LocationSearch(Resource):
     def __init__(self, location_service):
         self.locs = location_service
 
+    def render_GET(self, request):
+        return self.render_POST(request)
+
     def render_POST(self, request):
         try:
             session = util.Session(request.getSession())
@@ -27,15 +30,6 @@ class LocationSearch(Resource):
         except UserWarning as exc:
             logging.exception('Exception during location search')
             return json.dumps({'errno': exc.errno, 'error': ''})
-
-
-class LocationEdit(Resource):
-    def __init__(self, location_service):
-        self.locs = location_service
-
-    def render_POST(self, request):
-        session = util.Session(request.getSession())
-        checkBuilderPriviledges(session.user)
 
 
 class Builder(Resource):

@@ -7,9 +7,21 @@ class LocationBuilderService(object):
     def __init__(self, db):
         self.db = db
 
-    def new_location(self, name, user):
+    def create_location(self, name, user):
         loc = Location(name)
         loc.owner_user_id = user.id
         self.db.add(loc)
         self.db.commit()
-        return loc
+        return loc.get_dict()
+
+    def get_location_data(self, loc_id):
+        raise NotImplementedError()
+
+    def get_location_namespaces(self, loc_id):
+        raise NotImplementedError()
+
+    def get_location_bricks(self, loc_id):
+        raise NotImplementedError()
+
+    def set_name(self, loc_id, name):
+        raise NotImplementedError()
