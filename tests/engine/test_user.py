@@ -22,17 +22,30 @@ class TestUserService(TestCase):
         self.db.close()
 
     def test_sign_in_good(self):
-        self.service.register('test1', 'test1@test.com', 'bandooo')
-        actual = self.service.sign_in('test1@test.com', 'bandooo')
-        self.assertTrue(actual)
-        actual = self.service.sign_in('test1', 'bandooo')
-        self.assertTrue(actual)
+        email = 't@t.com'
+        login = 'test'
+        password = 'abuabuabu'
+        user = User(login, email, md5(password + self.salt).hexdigest())
+        self.db.add(user)
+        self.db.commit()
+        actual = self.service.sign_in(email, password)
+        self.assertEquals(actual['login'], login)
+        self.assertEquals(actual['email'], email)
+        actual = self.service.sign_in(login, password)
+        self.assertEquals(actual['login'], login)
+        self.assertEquals(actual['email'], email)
 
     def test_sign_in_bad(self):
-        self.service.register('test1', 'test1@test.com', 'bandooo')
-        actual = self.service.sign_in('test1', 'asd')
+        email = 't@t.com'
+        login = 'test'
+        password = 'abuabuabu'
+        test_password = 'asdf'
+        user = User(login, email, md5(password + self.salt).hexdigest())
+        self.db.add(user)
+        self.db.commit()
+        actual = self.service.sign_in(email, test_password)
         self.assertFalse(actual)
-        actual = self.service.sign_in('test1@test.com', 'ha')
+        actual = self.service.sign_in(login, test_password)
         self.assertFalse(actual)
 
     def test_register(self):
@@ -43,9 +56,10 @@ class TestUserService(TestCase):
         query = self.db.query(User).filter_by(login='test2')
         user = query.one()
         self.assertIsNotNone(user)
-        query = self.db.query(Player).filter_by(id=user.id)
-        player = query.one()
-        self.assertIsNotNone(player)
+        user_count = self.db.query(User).filter_by(id=user.id).count()
+        self.assertEquals(user_count, 1)
+        player_count = self.db.query(Player).filter_by(user_id=user.id).count()
+        self.assertEquals(player_count, 1)
 
     def test_register_unique(self):
         self.service.register(email='test2@gmail.com',
