@@ -1,7 +1,7 @@
 from unittest import TestCase
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from model import Base, Location, Exit, User, Player, Namespace
+from model import Base, Location, User, Player, Namespace
 from engine.location import LocationService, PlayerNotInLocation, LocationNotFound
 
 
