@@ -26,6 +26,6 @@ class LocationSearch(Resource):
             errno, error = 18, 'Access denied!'
         if not errno:
             word = str(request.args['LocationSearch'][0])
-            locations = self.locs.get_for_tag(word)
+            locations = self.locs.search(name_like=word)
         return json.dumps({'locations': locations,
                            'errno': errno, 'error': error})

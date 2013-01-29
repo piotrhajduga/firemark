@@ -1,9 +1,17 @@
+// imports
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700|Monda:400,700|Titillium+Web:400,600,700&subset=latin,cyrillic-ext,latin-ext,cyrillic);
 // colors
-@body_bg: #12141b; @body_fg: #000;
+@body_bg: #12141b; @body_fg: #d9dce0;
 @content_bg: #a0a5b9; @content_fg: #010209;
 @light_border: #f0f4ff; @dark_border: #19224a;
 @normal_button: #8a90a2; @special_button: #4C90D7;
 // mixins
+.awesome_font { font-family: 'Titillium Web', sans-serif; }
+.no_box-shadow {
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
 .box-shadow (@x: 0, @y: 0, @blur: 1px, @color: #000) {
     box-shadow: @arguments;
     -moz-box-shadow: @arguments;
@@ -14,12 +22,18 @@
     -moz-box-shadow: inset @arguments;
     -webkit-box-shadow: inset @arguments;
 }
-.roundish_border (@border_color) {
-    border:1px solid @border_color;
+.roundish_no_border {
     -moz-border-radius: 0 .5em 0 1em;
     -webkit-border-radius: 0 .5em 0 1em;
     border-radius: 0 .5em 0 1em;
 }
+.roundish_border (@border_color) {
+    border:1px solid @border_color;
+    .roundish_no_border;
+}
+.align_left { text-align:left; }
+.align_right { text-align:right; }
+.align_center { text-align:center; }
 .clear { clear:both; }
 // declarations
 html { background: @body_bg; font-size:normal; }
@@ -29,6 +43,12 @@ h1.page_header {
     img.logo {
         margin:.5em auto;
     }
+}
+h1,h2,h3,h4 {
+    font-family: 'Monda', sans-serif;
+}
+h5,h6 {
+    .awesome_font;
 }
 #ActionIndicator {
     position:absolute;
@@ -49,6 +69,7 @@ h1.page_header {
     float:left;
     width:100%;
     #MainContent {
+        width: auto;
         margin-right:250px;
     }
 }
@@ -56,9 +77,10 @@ h1.page_header {
     background: @content_bg;
     color: @content_fg;
     padding: 8px;
-    margin-bottom: .8em;
+    width: 60%;
+    margin: 0 auto .8em;
     .roundish_border(@light_border);
-    .box-shadow(4px, 4px, 4px, @content_fg);
+    .box-shadow(4px, 4px, 5px, @content_fg);
 }
 #SidebarContent {
     display:inline-block;
@@ -66,12 +88,9 @@ h1.page_header {
     width:240px;
     margin-left:-240px;
 }
-h2.title {
-    margin-top:0;
-}
 .img {
     .roundish_border(@light_border);
-    .box-shadow(2px, 2px, 2px, @content_fg);
+    .box-shadow-inset(2px, 2px, 2px, @content_fg);
 }
 input, textarea {
     /*background: #d6e9f9;*/
@@ -85,66 +104,92 @@ input, textarea {
     outline: none;
     background: @normal_button;
     color: @content_fg;
+    font-family: 'Roboto Condensed', sans-serif;
     font-weight: bold;
     text-decoration:none;
     font-size: 1.1em;
-    padding: .1em 2em;
+    padding: .1em 2em .2em;
     text-align:center;
     .roundish_border(@light_border);
-    .box-shadow(2px, 2px, 2px, @content_fg);
+    .box-shadow(2px, 2px, 3px, @content_fg);
     &:hover {
         cursor:pointer;
         background: @light_border;
     }
     &:active {
-        -moz-box-shadow: none;
-        -webkit-box-shadow: none;
-        box-shadow: none;
+        .no_box-shadow;
     }
 }
 .special_button {
     .button;
     background: @special_button;
-    font-size: 1.5em;
-    padding: .5em 3em;
+    font-size: 1.7em;
     clear: both;
 }
 #MainContent .special_button { margin-bottom:2px; }
+#MainContent table {
+    margin:0 auto;
+}
 #SidebarContent * { display:block; clear:both; }
-div#MainContent .header {
+#MainContent h2 {
+    .roundish_no_border;
+    background:@body_bg;
+    color:@body_fg;
+    padding:.2em .8em .3em;
+    margin:0 auto .5em;
+}
+#MainContent .header {
     display: block;
+    .roundish_no_border;
+    background:@body_bg;
+    color:@body_fg;
+    padding:.1em .8em .2em;
     margin:1em 0;
-    h2, h3, h4, h5, h6 { margin:0; padding:0; }
-    .left { display: inline; float: left; }
-    .right { display: inline; float: right; }
-}
-#LocationEditorTabs .tab {
-    display:inline-block;
-    color: @content_fg;
-    font-size:1.1em;
-    padding:.2em 3em;
-    .roundish_border(@light_border);
-    .box-shadow(2px, 2px, 2px, @content_fg);
-    &:hover {
-        cursor:pointer;
-        background:@light_border;
+    h2, h3, h4, h5, h6 { background:none; margin:0; padding:0; }
+    .left {
+        display: inline;
+        float: left;
+        margin: .2em 0 .3em
     }
-    &:active {
-        -moz-box-shadow: none;
-        -webkit-box-shadow: none;
-        box-shadow: none;
+    .right {
+        display: inline;
+        float: right;
+        margin:.4em 0 0;
+        .tab {
+            display:inline-block;
+            color: @body_fg;
+            .awesome_font;
+            font-size:1.1em;
+            font-weight: bold;
+            padding:.2em 1em;
+            .roundish_border(@light_border);
+            .box-shadow(2px, 2px, 3px, @content_fg);
+            &:hover {
+                cursor:pointer;
+                border:none;
+                margin:1px;
+                background:@light_border;
+                color: @content_fg;
+            }
+            &:active {
+                .no_box-shadow;
+            }
+            &.active {
+                background:@light_border;
+                color: @content_fg;
+                .box-shadow(2px, 2px, 3px, @content_fg);
+            }
+        }
     }
 }
-#LocationEditorTabs .active {
-    background:@light_border;
-    .box-shadow(2px, 2px, 2px, @content_fg);
-}
+
 #LocationEditor .tabpage {
     margin-bottom:1em;
 }
 .listholder {
     display:block;
-    max-height:15em;
+    min-height:5em;
+    max-height:20em;
     overflow:auto;
     .roundish_border(@dark_border);
     .box-shadow-inset(2px, 2px, 2px, @content_fg);
@@ -152,14 +197,25 @@ div#MainContent .header {
         display:block;
         background: @content_bg;
         color:@content_fg;
-        padding:.1em .4em .1em .7em;
+        padding:.3em .3em .3em 1em;
         .roundish_border(@light_border);
-        .box-shadow(2px, 2px, 2px, @content_fg);
+        .box-shadow(2px, 2px, 3px, @content_fg);
         .actions {
             display:inline;
             float:right;
             text-align:right;
             font-size:1em;
+            a {
+                .button;
+                .box-shadow(1px, 1px, 2px, @content_fg);
+                padding:.03em .8em .07em;
+                margin-left:2px;
+                &.img_button {
+                    background-repeat:no-repeat;
+                    background-position:center center;
+                    padding:.05em 1em;
+                }
+            }
         }
     }
     .location {

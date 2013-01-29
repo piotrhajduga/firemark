@@ -16,31 +16,23 @@
         <div class="clear"></div>
     </div>
     <div class="listholder" id="Locations">
+        % for i in range(1, 20):
         <div class="listitem location">
             <span class="name">Location name</span>
             <span class="actions">
                 <a href="#">Entrance2Exit</a>
-                <a href="#">Edit</a>
-                <a href="#">Delete</a>
+                <a href="#" class="img_button" style="background-image:url('/static/img/icon_edit.png')" /></a>
+                <a href="#" class="img_button" style="background-image:url('/static/img/icon_delete.png')" /></a>
             </span>
             <div class="clear"></div>
         </div>
-        <div class="listitem location">
-            <span class="name">Location name</span>
-            <span class="actions">
-                <a href="#">Entrance2Exit</a>
-                <a href="#">Edit</a>
-                <a href="#">Delete</a>
-            </span>
-            <div class="clear"></div>
-        </div>
+        % endfor
     </div>
     <div id="LocationEditor" style="display:none;">
         <div class="header">
             <div class="left"><h2 id="LocationEditorAction">Edit location</h2></div>
             <div class="right" id="LocationEditorTabs">
                 <div class="tab active" id="LocationEditorTab_Data">Location data</div>
-                <div class="tab" id="LocationEditorTab_Exits">Exits</div>
                 <div class="tab" id="LocationEditorTab_Bricks">Bricks</div>
                 <div class="clear"></div>
             </div>
@@ -58,46 +50,18 @@
                 <div class="clear"></div>
             </div>
             <div class="listholder">
+                % for i in range(1, 7):
                 <div class="listitem namespace">
-                    <span class="id">Id</span>
+                    <span class="id">${i}</span>
                     <span class="name">Name</span>
+                    <span class="actions">
+                        <a href="#" class="img_button" style="background-image:url('/static/img/icon_delete.png')" /></a>
+                    </span>
                     <div class="clear"></div>
                 </div>
-                <div class="listitem namespace">
-                    <span class="id">Id</span>
-                    <span class="name">Name</span>
-                    <div class="clear"></div>
-                </div>
-                <div class="listitem namespace">
-                    <span class="id">Id</span>
-                    <span class="name">Name</span>
-                    <div class="clear"></div>
-                </div>
+                % endfor
             </div>
             </form>
-        </div>
-        <div class="tabpage" id="LocationEditorExits" style="display:none;">
-            <div class="header">
-                <div class="left"><h3>Exits</h3></div>
-                <div class="right"><a href="#" class="button" id="AddExit">Add exit</a></div>
-                <div class="clear"></div>
-            </div>
-            <div class="listholder">
-                <div class="listitem exit">
-                    <span class="id">Id</span>
-                    <span class="name">Name</span>
-                    <span class="destination">Destination location</span>
-                    <span class="actions">actions</span>
-                    <div class="clear"></div>
-                </div>
-                <div class="listitem exit">
-                    <span class="id">Id</span>
-                    <span class="name">Name</span>
-                    <span class="destination">Destination location</span>
-                    <span class="actions">actions</span>
-                    <div class="clear"></div>
-                </div>
-            </div>
         </div>
         <div class="tabpage" id="LocationEditorBricks" style="display:none;">
             <div class="header">
@@ -106,45 +70,23 @@
                 <div class="clear"></div>
             </div>
             <div class="listholder">
+                % for i in range(1, 20):
                 <div class="listitem brick">
-                    <span class="order">1.</span>
-                    <span class="actions">actions</span>
+                    <span class="order">${i}</span>
+                    <span class="actions">
+                        <a href="#" class="img_button" style="background-image:url('/static/img/icon_edit.png')" /></a>
+                        <a href="#" class="img_button" style="background-image:url('/static/img/icon_delete.png')" /></a>
+                    </span>
                     <div class="clear"></div>
                     <div class="brick_content">Brick</div>
                 </div>
-                <div class="listitem brick">
-                    <span class="order">2.</span>
-                    <span class="actions">actions</span>
-                    <div class="clear"></div>
-                    <div class="brick_content">Brick</div>
-                </div>
-                <div class="listitem brick">
-                    <span class="order">3.</span>
-                    <span class="actions">actions</span>
-                    <div class="clear"></div>
-                    <div class="brick_content">Brick</div>
-                </div>
-                <div class="listitem brick">
-                    <span class="order">4.</span>
-                    <span class="actions">actions</span>
-                    <div class="clear"></div>
-                    <div class="brick_content">Brick</div>
-                </div>
-                <div class="listitem brick">
-                    <span class="order">5.</span>
-                    <span class="actions">actions</span>
-                    <div class="clear"></div>
-                    <div class="brick_content">Brick</div>
-                </div>
-                <div class="listitem brick">
-                    <span class="order">6.</span>
-                    <span class="actions">actions</span>
-                    <div class="clear"></div>
-                    <div class="brick_content">Brick</div>
-                </div>
+                % endfor
             </div>
         </div>
-        <input type="submit" id="LocationEditorSubmit" class="button" value="Save location"/>
+        <div class="align_right">
+            <input type="submit" id="LocationEditorSubmit" class="button" value="Save location"/>
+            <input type="button" id="LocationEditorCancel" class="button" value="Cancel"/>
+        </div>
         </form>
     </div>
 </%block>
@@ -172,7 +114,7 @@
                 evt.preventDefault();
                 var searchword = $('input#LocationSearchInput').val();
                 $.post('/json/builder/searchlocation', {LocationSearch: searchword}, function(data) {
-                    $('#Locations').html('');
+                    $('#Locations').empty();
                     if (data.locations) {
                         data.locations.each(function(item) {
                             $('#Locations').append('<div class="listitem location">' +
