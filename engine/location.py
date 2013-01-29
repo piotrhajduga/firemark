@@ -1,13 +1,6 @@
-from model import Exit, Player, Location, Namespace
+from model import Player, Location, Namespace
+from exc import PlayerNotInLocation, LocationNotFound
 import random
-
-
-class PlayerNotInLocation(Exception):
-    pass
-
-
-class LocationNotFound(Exception):
-    pass
 
 
 class LocationService(object):
@@ -28,6 +21,8 @@ class LocationService(object):
     def get_starting_location(self):
         locations = self.db.query(Location).filter(
             Location.namespaces.any(Namespace.starting)).all()
+        if not locations:
+            raise LocationNotFound()
         return random.choice(locations)
 
     def get_exit_for_user(self, exit_name, user_id):

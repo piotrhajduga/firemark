@@ -21,13 +21,3 @@ class SessionImpl(object):
 
 
 registerAdapter(SessionImpl, TwistedSession, Session)
-
-# errors
-#NOT_LOGGED_IN = {'errno': 11}
-#WRONG_PASSWORD = {'errno': 12}
-#EMAIL_REGISTERED = {'errno': 13}
-#LOGIN_REGISTERED = {'errno': 14}
-#PASSWORD_MISMATCH = {'errno': 15}
-#USER_NOT_IN_LOCATION = {'errno': 16}
-#LOCATION_NOT_FOUND = {'errno': 17}
-#ACCESS_DENIED = {'errno': 18}
