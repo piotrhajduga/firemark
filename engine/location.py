@@ -14,7 +14,7 @@ class LocationService(object):
         if not player.location_id:
             raise PlayerNotInLocation()
         if player.location:
-            return player.location
+            return player.location.get_dict()
         else:
             raise LocationNotFound()
 
@@ -23,7 +23,7 @@ class LocationService(object):
             Location.namespaces.any(Namespace.starting)).all()
         if not locations:
             raise LocationNotFound()
-        return random.choice(locations)
+        return random.choice(locations).get_dict()
 
     def get_exit_for_user(self, exit_name, user_id):
         loc = self.get_for_user(user_id)
@@ -38,4 +38,4 @@ class LocationService(object):
                 Namespace.id == namespace_id))
         if name_like:
             query = query.filter(Location.name.like(name_like))
-        return query.all()
+        return map(lambda loc: loc.get_dict(), query.all())

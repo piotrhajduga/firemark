@@ -72,8 +72,8 @@ class TestLocationService(TestCase):
         namespace.locations = locations_expected
         self.db.commit()
         location_actual = self.service.get_starting_location()
-        self.assertIn(location_actual['id'], locations[1].id)
-        self.assertIn(location_actual['name'], locations[1].name)
+        self.assertEquals(location_actual['id'], locations[1].id)
+        self.assertEquals(location_actual['name'], locations[1].name)
 
     def test_search_name_like(self):
         locations_expected = [Location('Test'),
@@ -86,5 +86,5 @@ class TestLocationService(TestCase):
         self.db.add(Location('zosi'))
         self.db.commit()
         locations_actual = self.service.search(name_like='test')
-        self.assertEqual(map(lambda loc: loc['id'], locations_actual),
+        self.assertEquals(map(lambda loc: loc['id'], locations_actual),
                          map(lambda loc: loc.id, locations_expected))
