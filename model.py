@@ -47,34 +47,6 @@ class User(Base):
         self.roles = ','.join(roles)
 
 
-class Exit(Base):
-    __tablename__ = 'exit'
-
-    id = Column(Integer, Sequence('exit_id_seq'), primary_key=True)
-    location_id = Column(Integer, ForeignKey('location.id'))
-    dest_location_id = Column(Integer, ForeignKey('location.id'))
-
-    def __repr__(self):
-        return '<Exit %x -> %x (id: %x)>' % (self.location_id,
-                                             self.dest_location_id, self.id)
-
-
-class Location(Base):
-    __tablename__ = 'location'
-
-    id = Column(Integer, Sequence('location_id_seq'), primary_key=True)
-    name = Column(String(100), nullable=False)
-    namespaces = relationship('Namespace', secondary=loc2ns)
-    exits = relationship('Exit', backref=backref('exit'),
-                         foreign_keys=[Exit.location_id])
-
-    def __init__(self, name):
-        self.name = name
-
-    def __repr__(self):
-        return '<Location %s (id: %x)>' % (self.name, self.id)
-
-
 class Namespace(Base):
     __tablename__ = 'namespace'
 
@@ -107,6 +79,17 @@ class Player(Base):
                                                        self.user_id)
 
 
+class Exit(Base):
+    __tablename__ = 'exit'
+
+    id = Column(Integer, Sequence('exit_id_seq'), primary_key=True)
+    brick_id = Column(Integer, ForeignKey('brick.id'))
+    dest_location_id = Column(Integer, ForeignKey('location.id'))
+
+    def __repr__(self):
+        return '<Exit %x (id:%x)>' % (self.dest_location_id, self.id)
+
+
 class Brick(Base):
     __tablename__ = 'brick'
 
@@ -115,9 +98,29 @@ class Brick(Base):
     type = Column(String(50), nullable=False)
     data = Column(String(3000))
 
+    exits = relationship('Exit', backref=backref('exit'),
+                         foreign_keys=[Exit.brick_id])
+
     def __init__(self, type):
         self.type = type
         self.data = '{}'
 
     def __repr__(self):
         return '<Brick %s (id: %x)>' % (self.type, self.id)
+
+
+class Location(Base):
+    __tablename__ = 'location'
+
+    id = Column(Integer, Sequence('location_id_seq'), primary_key=True)
+    name = Column(String(100), nullable=False)
+    namespaces = relationship('Namespace', secondary=loc2ns)
+
+    bricks = relationship('Brick', backref=backref('brick'),
+                          foreign_keys=[Brick.location_id])
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return '<Location %s (id: %x)>' % (self.name, self.id)
