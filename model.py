@@ -54,6 +54,9 @@ class Namespace(Base):
     name = Column(String(100), nullable=False)
     starting = Column(Boolean, nullable=False, default=False)
     locations = relationship('Location', secondary=loc2ns)
+    owner_user_id = Column(Integer, ForeignKey('user.id'))
+
+    owner = relationship('User', backref=backref('owner_ns_user', uselist=False))
 
     def __init__(self, name, starting=False):
         self.name = name
@@ -116,9 +119,10 @@ class Location(Base):
     id = Column(Integer, Sequence('location_id_seq'), primary_key=True)
     name = Column(String(100), nullable=False)
     namespaces = relationship('Namespace', secondary=loc2ns)
+    owner_user_id = Column(Integer, ForeignKey('user.id'))
 
-    bricks = relationship('Brick', backref=backref('brick'),
-                          foreign_keys=[Brick.location_id])
+    bricks = relationship('Brick', backref=backref('brick'))
+    owner = relationship('User', backref=backref('owner_loc_user', uselist=False))
 
     def __init__(self, name):
         self.name = name
