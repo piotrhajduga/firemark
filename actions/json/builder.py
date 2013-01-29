@@ -1,13 +1,15 @@
 import logging
 from twisted.web.resource import Resource
+from exc import NotLoggedIn, InsufficientPriviledges
 import json
 import util
 
 
-class Builder(Resource):
-    def __init__(self, location_service):
-        Resource.__init__(self)
-        self.putChild('searchlocation', LocationSearch(location_service))
+def checkBuilderPriviledges(user):
+    if user is None:
+        raise NotLoggedIn()
+    elif 'builder' not in user.get_roles():
+        raise InsufficientPriviledges()
 
 
 class LocationSearch(Resource):
@@ -15,17 +17,28 @@ class LocationSearch(Resource):
         self.locs = location_service
 
     def render_POST(self, request):
-        session = util.Session(request.getSession())
-        errno, error = 0, 'OK'
-        locations = []
-        if session.user is None:
-            logging.warn('User not logged in!')
-            errno, error = 11, 'Not logged in!'
-        elif 'builder' not in session.user.get_roles():
-            logging.warn('User is not a builder!')
-            errno, error = 18, 'Access denied!'
-        if not errno:
+        try:
+            session = util.Session(request.getSession())
+            checkBuilderPriviledges(session.user)
             word = str(request.args['LocationSearch'][0])
             locations = self.locs.search(name_like=word)
-        return json.dumps({'locations': locations,
-                           'errno': errno, 'error': error})
+            return json.dumps({'locations': locations,
+                               'errno': 0, 'error': 'OK'})
+        except UserWarning as exc:
+            logging.exception('Exception during location search')
+            return json.dumps({'errno': exc.errno, 'error': ''})
+
+
+class LocationEdit(Resource):
+    def __init__(self, location_service):
+        self.locs = location_service
+
+    def render_POST(self, request):
+        session = util.Session(request.getSession())
+        checkBuilderPriviledges(session.user)
+
+
+class Builder(Resource):
+    def __init__(self, location_service):
+        Resource.__init__(self)
+        self.putChild('searchlocation', LocationSearch(location_service))
