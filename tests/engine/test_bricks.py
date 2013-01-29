@@ -15,7 +15,7 @@ class TestBrickService(TestCase):
         Base.metadata.create_all(db_engine)
         Session = sessionmaker(bind=db_engine)
         self.db = Session()
-        self.service = BrickService(Session())
+        self.service = BrickService(self.db)
 
     def tearDown(self):
         self.db.close()
@@ -40,6 +40,8 @@ class TestSimpleExit(TestBrickService):
         description = 'test brick'
         brick = Brick(self.type)
         brick.data = json.dumps({'description': description})
+        self.db.add(brick)
+        self.db.commit()
         looks = self.service.get_looks(brick_id=brick.id, player_id=2)
         self.assertEquals(looks, description)
 
@@ -83,11 +85,15 @@ class TestDescription(TestBrickService):
         content = 'test brick'
         brick = Brick(self.type)
         brick.data = json.dumps({'content': content})
+        self.db.add(brick)
+        self.db.commit()
         looks = self.service.get_looks(brick_id=brick.id, player_id=2)
         self.assertEquals(looks, content)
 
     def test_process_input(self):
         brick = Brick(self.type)
+        self.db.add(brick)
+        self.db.commit()
         self.assertRaises(NotImplementedError, self.service.process_input,
                           brick_id=brick.id, player_id=2, input_data={})
 
@@ -113,6 +119,8 @@ class TestRegexInput(TestBrickService):
         label = 'test brick'
         brick = Brick(self.type)
         brick.data = json.dumps({'label': label})
+        self.db.add(brick)
+        self.db.commit()
         looks = self.service.get_looks(brick_id=brick.id, player_id=2)
         self.assertEquals(looks, label)
 

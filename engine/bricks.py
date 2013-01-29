@@ -1,6 +1,6 @@
 import json
 import re
-from model import Exit, Brick
+from model import Exit, Brick, Player
 
 
 class BrickBase(object):
@@ -64,7 +64,7 @@ class SimpleExit(BrickBase):
         data['description'] = kwargs['description']
         data['exit_id'] = kwargs['exit_id']
         brick.data = json.dumps(data)
-        self.db.commit()
+        self.db.merge(brick)
 
 
 class Description(BrickBase):
@@ -108,6 +108,7 @@ class BrickService(object):
     bricks = {}
 
     def __init__(self, db):
+        self.db = db
         self.bricks['simple_exit'] = SimpleExit(db)
         self.bricks['description'] = Description(db)
         self.bricks['regex_input'] = RegexInput(db)
@@ -115,37 +116,43 @@ class BrickService(object):
     def get_brick_types(self):
         return self.bricks.keys()
 
-    def get_looks(self, brick, player):
+    def get_looks(self, brick_id, player_id):
         """Get initial data to display brick.
 
-        brick -- model.Brick instance that is shown
-        player -- model.Player instance for current player
+        brick_id -- brick's id
+        player_id -- current player's id
         """
+        brick = self.db.query(Brick).get(brick_id)
+        player = self.db.query(Player).get(player_id)
         return self.bricks[brick.type].get_looks(brick, player)
 
-    def process_input(self, brick, player, input_data):
+    def process_input(self, brick_id, player_id, input_data):
         """Process input data from the user and set player's new location.
 
         The implementation should call SQLAlchemy's session.commit() itself
         if it's needed.
 
-        brick -- model.Brick instance that performs the processing
-        player -- model.Player instance for current player
+        brick_id -- brick's id
+        player_id -- current player's id
         input_data -- input data taken from user
         """
+        brick = self.db.query(Brick).get(brick_id)
+        player = self.db.query(Player).get(player_id)
         return self.bricks[brick.type].process_input(brick, player, input_data)
 
-    def set_config(self, brick, **kwargs):
+    def set_config(self, brick_id, **kwargs):
         """Apply configuration to brick model.
 
-        brick -- model.Brick instance to change
+        brick_id -- brick's id
         **kwargs -- configuration parameters for the brick
         """
-        return self.bricks[brick.type].set_config(brick, **kwargs)
+        brick = self.db.query(Brick).get(brick_id)
+        self.bricks[brick.type].set_config(brick, **kwargs)
 
-    def get_config(self, brick, **kwargs):
+    def get_config(self, brick_id, **kwargs):
         """Get the configuration data for brick as a dict.
 
-        brick -- model.Brick instance to change
+        brick_id -- brick's id
         """
+        brick = self.db.query(Brick).get(brick_id)
         return self.bricks[brick.type].get_config(brick)

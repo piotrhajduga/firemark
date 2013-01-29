@@ -37,7 +37,7 @@ class UserService(object):
             query = self.db.query(User)
             query = query.filter(or_(User.email == login, User.login == login))
             query = query.filter_by(password=self.get_password_hash(password))
-            return query.one()
+            return query.one().get_dict()
         except NoResultFound:
             return None
 
