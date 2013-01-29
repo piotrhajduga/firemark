@@ -25,10 +25,6 @@ class LocationService(object):
             raise LocationNotFound()
         return random.choice(locations).get_dict()
 
-    def get_exit_for_user(self, exit_name, user_id):
-        loc = self.get_for_user(user_id)
-        return loc['exits'][exit_name]
-
     def search(self, **kwargs):
         namespace_id = kwargs.get('namespace_id', None)
         name_like = kwargs.get('name_like', None)
