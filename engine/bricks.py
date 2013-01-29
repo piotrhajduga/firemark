@@ -3,7 +3,7 @@ import re
 from model import Exit
 
 
-class Brick(object):
+class BrickBase(object):
     def __init__(self, db):
         self.db = db
 
@@ -46,7 +46,7 @@ class Brick(object):
         return json.loads(brick.data) if brick.data else {}
 
 
-class SimpleExit(Brick):
+class SimpleExit(BrickBase):
     def get_looks(self, brick, player=None):
         data = json.loads(brick.data)
         return data['description']
@@ -67,7 +67,7 @@ class SimpleExit(Brick):
         self.db.commit()
 
 
-class Description(Brick):
+class Description(BrickBase):
     def get_looks(self, brick, player):
         data = self.get_config(brick)
         return data['content']
@@ -79,7 +79,7 @@ class Description(Brick):
         self.db.commit()
 
 
-class RegexInput(Brick):
+class RegexInput(BrickBase):
     def get_looks(self, brick, player):
         data = self.get_config(brick)
         return data['label']
