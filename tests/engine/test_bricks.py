@@ -46,18 +46,19 @@ class TestSimpleExit(TestBrickService):
         locs = [Location('src'), Location('dest')]
         self.db.add_all(locs)
         self.db.commit()
-        exit_ = Exit()
-        exit_.location_id = locs[0].id
-        exit_.dest_location_id = locs[1].id
-        self.db.add(exit_)
-        self.db.commit()
         brick = Brick(self.type)
         brick.location_id = locs[0].id
-        brick.data = json.dumps({'exit_id': exit_.id})
+        self.db.add(brick)
+        self.db.commit()
+        exit_ = Exit()
+        exit_.brick_id = brick.id
+        exit_.dest_location_id = locs[1].id
         player = Player()
         player.location_id = locs[0].id
-        self.db.add(brick)
+        self.db.add(exit_)
         self.db.add(player)
+        self.db.commit()
+        brick.data = json.dumps({'exit_id': exit_.id})
         self.db.commit()
         self.assertEquals(player.location_id, locs[0].id)
         self.service.process_input(brick, player, input_data={})
@@ -122,10 +123,11 @@ class TestRegexInput(TestBrickService):
         brick = Brick(self.type)
         brick.location_id = locs[0].id
         self.db.add(brick)
+        self.db.commit()
         exits = [Exit(), Exit()]
-        exits[0].location_id = locs[0].id
+        exits[0].brick_id = brick.id
         exits[0].dest_location_id = locs[1].id
-        exits[1].location_id = locs[0].id
+        exits[1].brick_id = brick.id
         exits[1].dest_location_id = locs[2].id
         self.db.add_all(exits)
         self.db.commit()
