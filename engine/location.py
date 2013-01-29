@@ -16,14 +16,6 @@ class LocationService(object):
     def __init__(self, db):
         self.db = db
 
-    def add_exit_to(self, source_loc_id, dest_loc_id):
-        exit = Exit()
-        exit.location_id = source_loc_id
-        exit.dest_location_id = dest_loc_id
-        self.db.add(exit)
-        self.db.commit()
-        return exit
-
     def get_for_player(self, player_id):
         player = self.db.query(Player).get(player_id)
         if not player.location_id:

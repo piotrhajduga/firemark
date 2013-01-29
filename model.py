@@ -95,6 +95,7 @@ class Brick(Base):
 
     id = Column(Integer, Sequence('brick_id_seq'), primary_key=True)
     location_id = Column(Integer, ForeignKey('location.id'))
+    order = Column(Integer)
     type = Column(String(50), nullable=False)
     data = Column(String(3000))
 

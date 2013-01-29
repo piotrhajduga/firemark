@@ -19,16 +19,6 @@ class TestLocationService(TestCase):
     def tearDown(self):
         self.db.close()
 
-    def test_add_exit_to(self):
-        loc = Location('TestLoc')
-        self.db.add(loc)
-        self.db.commit()
-        exit = self.service.add_exit_to(loc.id, loc.id)
-        self.assertIsNotNone(exit)
-        query = self.db.query(Exit).filter_by(
-            location_id=loc.id, dest_location_id=loc.id)
-        self.assertIsNotNone(query.one())
-
     def test_get_for_player(self):
         location = Location('test')
         self.db.add(location)
