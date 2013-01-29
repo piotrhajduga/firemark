@@ -7,9 +7,9 @@ class LocationBuilderService(object):
     def __init__(self, db):
         self.db = db
 
-    def create_location(self, name, user):
+    def create_location(self, name, user_id):
         loc = Location(name)
-        loc.owner_user_id = user.id
+        loc.owner_user_id = user_id
         self.db.add(loc)
         self.db.commit()
         return loc.get_dict()

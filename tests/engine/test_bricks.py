@@ -31,7 +31,8 @@ class TestSimpleExit(TestBrickService):
         brick = Brick(self.type)
         self.db.add(brick)
         self.db.commit()
-        self.service.set_config(brick, exit_id=2, description='test')
+        self.service.set_config(brick_id=brick.id, exit_id=2,
+                                description='test')
         self.assertEquals(json.loads(brick.data)['exit_id'], 2)
         self.assertEquals(json.loads(brick.data)['description'], 'test')
 
@@ -39,8 +40,8 @@ class TestSimpleExit(TestBrickService):
         description = 'test brick'
         brick = Brick(self.type)
         brick.data = json.dumps({'description': description})
-        self.assertEquals(self.service.get_looks(brick, player=Player()),
-                          description)
+        looks = self.service.get_looks(brick_id=brick.id, player_id=2)
+        self.assertEquals(looks, description)
 
     def test_process_input(self):
         locs = [Location('src'), Location('dest')]
@@ -61,7 +62,8 @@ class TestSimpleExit(TestBrickService):
         brick.data = json.dumps({'exit_id': exit_.id})
         self.db.commit()
         self.assertEquals(player.location_id, locs[0].id)
-        self.service.process_input(brick, player, input_data={})
+        self.service.process_input(brick_id=brick.id, player_id=player.id,
+                                   input_data={})
         self.assertEquals(player.location_id, locs[1].id)
 
 
@@ -75,18 +77,19 @@ class TestDescription(TestBrickService):
         brick = Brick(self.type)
         self.db.add(brick)
         self.db.commit()
-        self.service.set_config(brick, content='test')
+        self.service.set_config(brick_id=brick.id, content='test')
 
     def test_get_looks(self):
         content = 'test brick'
         brick = Brick(self.type)
         brick.data = json.dumps({'content': content})
-        self.assertEquals(self.service.get_looks(brick, Player()), content)
+        looks = self.service.get_looks(brick_id=brick.id, player_id=2)
+        self.assertEquals(looks, content)
 
     def test_process_input(self):
         brick = Brick(self.type)
         self.assertRaises(NotImplementedError, self.service.process_input,
-                          brick=brick, player=Player(), input_data={})
+                          brick_id=brick.id, player_id=2, input_data={})
 
 
 class TestRegexInput(TestBrickService):
@@ -99,7 +102,7 @@ class TestRegexInput(TestBrickService):
         brick = Brick(self.type)
         self.db.add(brick)
         self.db.commit()
-        self.service.set_config(brick, label='test', regex='test',
+        self.service.set_config(brick_id=brick.id, label='test', regex='test',
                                 match=2, nomatch=3)
         self.assertEquals(json.loads(brick.data)['label'], 'test')
         self.assertEquals(json.loads(brick.data)['regex'], 'test')
@@ -110,8 +113,8 @@ class TestRegexInput(TestBrickService):
         label = 'test brick'
         brick = Brick(self.type)
         brick.data = json.dumps({'label': label})
-        self.assertEquals(self.service.get_looks(brick, player=Player()),
-                          label)
+        looks = self.service.get_looks(brick_id=brick.id, player_id=2)
+        self.assertEquals(looks, label)
 
     def test_process_input(self):
         locs = [Location('source'), Location('match'), Location('nomatch')]
@@ -131,11 +134,14 @@ class TestRegexInput(TestBrickService):
         exits[1].dest_location_id = locs[2].id
         self.db.add_all(exits)
         self.db.commit()
-        self.service.set_config(brick, label='test', regex='^ugab[aueo]+ga$',
+        self.service.set_config(brick_id=brick.id, label='test',
+                                regex='^ugab[aueo]+ga$',
                                 match=exits[0].id, nomatch=exits[1].id)
-        self.service.process_input(brick, player, {'input': 'ugabaga'})
+        self.service.process_input(brick_id=brick.id, player_id=player.id,
+                                   input_data={'input': 'ugabaga'})
         self.assertEquals(player.location_id, locs[1].id)
         player.location_id = locs[0].id
         self.db.commit()
-        self.service.process_input(brick, player, {'input': 'ugabxga'})
+        self.service.process_input(brick_id=brick.id, player_id=player.id,
+                                   input_data={'input': 'ugabxga'})
         self.assertEquals(player.location_id, locs[2].id)
