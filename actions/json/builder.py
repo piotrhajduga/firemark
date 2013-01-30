@@ -8,7 +8,7 @@ import util
 def checkBuilderPriviledges(user):
     if user is None:
         raise NotLoggedIn()
-    elif 'builder' not in user.get_roles():
+    elif 'builder' not in user['roles']:
         raise InsufficientPriviledges()
 
 

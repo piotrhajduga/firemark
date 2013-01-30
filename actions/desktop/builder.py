@@ -18,7 +18,7 @@ class Builder(Resource):
         if session.user is None:
             logging.warn('User not logged in!')
             errno, error = 11, 'Not logged in!'
-        elif 'builder' not in session.user.get_roles():
+        elif 'builder' not in session.user['roles']:
             logging.warn('User is not a builder!')
             errno, error = 18, 'Access denied!'
         if errno:

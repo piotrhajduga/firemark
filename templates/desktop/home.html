@@ -8,7 +8,7 @@
     <div class="align_center">
         <p>Thanks for logging in! :)</p>
         <a href="/play" name="Play now" class="button special_button">Play now!</a></p>
-        % if 'builder' in session.user.get_roles():
+        % if 'builder' in session.user['roles']:
         <a href="/builder" name="Location builder" class="button">Location builder</a></p>
         % endif
     </div>
