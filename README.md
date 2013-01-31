@@ -22,11 +22,8 @@
 
 ## Dependencies
 
-* **SQLAlchemy** 0.8.0b2
-
-* **Mako** 0.7.3
-
-* **Twisted Web** 12.1.0
+For virtualenv requirements consult requirements.txt in the project's root
+directory.
 
 ## Running
 
