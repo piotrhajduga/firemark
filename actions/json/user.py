@@ -25,7 +25,7 @@ class Logout(Resource):
 
     def render_POST(self, request):
         request.getSession().expire()
-        sessiot = util.Session(request.getSession())
+        session = util.Session(request.getSession())
         session.user = None
         request.setHeader("Content-Type", "text/html; charset=utf-8")
         return json.dumps({'error': 0})
