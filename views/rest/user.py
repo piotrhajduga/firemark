@@ -30,6 +30,7 @@ class Logout(Resource):
         request.setHeader("Content-Type", "text/html; charset=utf-8")
         return json.dumps({'error': 0})
 
+
 class User(Resource):
     def __init__(self, user_service):
         Resource.__init__(self)

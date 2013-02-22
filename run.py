@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from model import Base
 import config as cfg
-import actions
+import views
 
 
 logging.basicConfig(level=cfg.log_level, format=cfg.log_format)
@@ -18,7 +18,7 @@ db_engine = create_engine(cfg.db_url, echo=cfg.db_echo,
 Base.metadata.create_all(db_engine)
 Session = sessionmaker(bind=db_engine)
 
-root = actions.get_app_resource(Session(), cfg)
+root = views.get_app_resource(Session(), cfg)
 
 logging.info('Listening on the port %d', cfg.http_port)
 reactor.listenTCP(cfg.http_port, Site(root))

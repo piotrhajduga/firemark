@@ -1,7 +1,7 @@
 from twisted.web.resource import Resource
-from actions.json.user import User
-from actions.json.location import Location
-from actions.json.builder import Builder
+from views.rest.user import User
+from views.rest.location import Location
+from views.rest.builder import Builder
 from engine.user import UserService
 from engine.location import LocationService
 
