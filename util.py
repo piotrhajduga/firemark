@@ -20,4 +20,26 @@ class SessionImpl(object):
         self.data = None
 
 
+class Service(object):
+    #TODO: services should extend this class!!!
+    def __init__(self, db, config):
+        self.db = db
+        self.config = config
+
+
+class ServicesFactory(object):
+    services = {}
+
+    def __init__(self, database):
+        self.database = database
+
+    def inject(self, service_name):
+        try:
+            return self.services[service_name]
+        except KeyError:
+            service_class = __import__(service_name)
+            self.services[service_name] = service_class(self.database)
+            return self.services[service_name]
+
+
 registerAdapter(SessionImpl, TwistedSession, Session)
