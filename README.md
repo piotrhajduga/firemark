@@ -18,7 +18,7 @@
 
 * **/engine** - utilities used by controllers
 
-* **/tests** - tests invoked using trial, e.g.: `$ trial tests`
+* **/tests** - unittests
 
 ## Dependencies
 
@@ -27,10 +27,19 @@ directory.
 
 ## Running
 
+### Development server
+
 For now if all dependencies are met development app server can be started by
 getting into virtual environment and running `$ ./run.py`
 
 And everything should go smoothly.
+
+### Tests
+
+To run all the tests just run `$ nosetests`
+
+## Issues
+
 Report any issues on a
 [bugtracker at Bitbucket](https://bitbucket.org/kosarock/firemark/issues)
 

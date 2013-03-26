@@ -4,6 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from model import Base, User, Player
 from engine.user import UserService, AlreadyRegistered
+from exc import InvalidLoginCredentials
 
 
 class TestUserService(TestCase):
@@ -43,10 +44,10 @@ class TestUserService(TestCase):
         user = User(login, email, md5(password + self.salt).hexdigest())
         self.db.add(user)
         self.db.commit()
-        actual = self.service.sign_in(email, test_password)
-        self.assertFalse(actual)
-        actual = self.service.sign_in(login, test_password)
-        self.assertFalse(actual)
+        self.assertRaises(InvalidLoginCredentials,
+                          self.service.sign_in, email, test_password)
+        self.assertRaises(InvalidLoginCredentials,
+                          self.service.sign_in, login, test_password)
 
     def test_register(self):
         self.service.register(email='test2@gmail.com',

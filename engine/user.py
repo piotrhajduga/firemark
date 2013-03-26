@@ -3,10 +3,7 @@ from model import User, Player
 from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
-
-
-class AlreadyRegistered(Exception):
-    pass
+from exc import AlreadyRegistered, InvalidLoginCredentials
 
 
 class UserService(object):
@@ -39,7 +36,7 @@ class UserService(object):
             query = query.filter_by(password=self.get_password_hash(password))
             return query.one().get_dict()
         except NoResultFound:
-            return None
+            raise InvalidLoginCredentials
 
     def get_password_hash(self, password):
         return md5(password + self.salt).hexdigest()

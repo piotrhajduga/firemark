@@ -3,6 +3,7 @@ from twisted.web.resource import Resource
 from twisted.web.util import redirectTo, Redirect
 from meta import tpl_lookup
 from util import Session
+from exc import InvalidLoginCredentials
 
 
 class SignIn(Resource):
@@ -25,10 +26,13 @@ class SignIn(Resource):
         session = Session(request.getSession())
         email = str(request.args['email'][0])
         password = str(request.args['password'][0])
-        user = self.usrs.sign_in(email, password)
-        session.user = user
-        logging.info('Logged user: %s', session.user)
-        return redirectTo('/', request)
+        try:
+            session.user = self.usrs.sign_in(email, password)
+            logging.info('Logged user: %s', session.user)
+            return redirectTo('/', request)
+        except InvalidLoginCredentials as exc:
+            session.errno, session.error = exc.errno, exc.msg
+            return redirectTo('/user/signin', request)
 
 
 class Logout(Resource):
