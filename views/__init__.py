@@ -4,7 +4,6 @@ import views.desktop
 
 
 def get_app_resource(db, config):
-    resource = views.desktop.get_app_resource(db, config)
-    resource.putChild('static', File('static/desktop'))
-    resource.putChild('json', views.rest.get_app_resource(db, config))
+    resource = File('webapp/desktop')
+    resource.putChild('api', views.rest.get_app_resource(db, config))
     return resource

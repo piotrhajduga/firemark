@@ -2,12 +2,12 @@
 
 ## Contents of the repository
 
-* **/static** - directory containing all the static content for the website
-    * **/static/desktop** - desktop page static files
-        * **/static/desktop/js** - javascripts
-        * **/static/desktop/img** - images
-        * **/static/desktop/css** - css stylesheets
-    * **/static/common** - common static files
+* **/webapp** - directory containing all the static content for the website
+    * **/webapp/desktop** - desktop page static files
+        * **/webapp/desktop/js** - javascripts
+        * **/webapp/desktop/img** - images
+        * **/webapp/desktop/css** - css stylesheets
+    * **/webapp/common** - common static files
 
 * **/templates** - page templates written using Mako
     * **/templates/desktop** - desktop page templates
