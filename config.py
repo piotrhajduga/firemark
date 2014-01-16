@@ -1,11 +1,13 @@
+from pyramid.config import Configurator
 from md5 import md5
 
-log_format = '%(asctime)s %(levelname)7s [%(module)s %(lineno)d %(funcName)s] %(message)s'
+log_format = '%(module)s:%(lineno)d %(levelname)s %(message)s'
 log_level = 'DEBUG'
-http_port = 8880
 
-db_url = 'sqlite:///devel.sqlite/'
-db_encoding = 'utf-8'
-db_echo = False
+http_port = 8880
+http_address = '0.0.0.0'
 
 password_salt = md5('firemark to dupa').hexdigest()
+
+config = Configurator()
+config.add_static_view('/', 'webapp')

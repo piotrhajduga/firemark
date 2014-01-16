@@ -1,0 +1,15 @@
+#!/usr/bin/env python
+import logging
+from wsgiref.simple_server import make_server
+import config as cfg
+
+logging.basicConfig(level=cfg.log_level, format=cfg.log_format)
+log = logging.getLogger(__file__)
+
+app = cfg.config.make_wsgi_app()
+log.info('Initializing server instance at {0}:{1}'.format(
+    cfg.http_address, cfg.http_port
+))
+server = make_server(cfg.http_address, cfg.http_port, app)
+log.info('Starting the server')
+server.serve_forever()
