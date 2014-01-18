@@ -5,3 +5,4 @@ build/
 _trial_temp/
 .ropeproject/
 devel.sqlite
+virtualenv/

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+command="$1"
+case $command in
+    'init' )
+        virtualenv virtualenv --python=python2.7
+        . ./virtualenv/bin/activate
+        pip install -r requirements.txt
+        ;;
+    'run' )
+        . ./virtualenv/bin/activate
+        python server
+        ;;
+esac
+deactivate
