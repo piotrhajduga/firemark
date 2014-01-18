@@ -6,7 +6,8 @@ require.config({
         underscore: 'vendor/underscore',
         jquery: 'vendor/jquery-1.8.0',
         backbone: 'vendor/backbone',
-        marionette: 'vendor/backbone.marionette'
+        marionette: 'vendor/backbone.marionette',
+        'faux-server': 'vendor/backbone-faux-server',
     },
     //map: {
         //'*': {'jquery': 'vendor/jquery-private'},
@@ -30,8 +31,11 @@ require.config({
     }
 });
 
-require(['jquery', 'app'], function ($, App) {
+require(['jquery', 'app', 'config'], function ($, App, config) {
     $(function () {
+        if (config.useFauxServer) {
+            require(['mocks/server']);
+        }
         App.start();
     });
 });

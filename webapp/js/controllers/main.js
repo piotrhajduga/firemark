@@ -5,18 +5,18 @@ define([
 
     return Marionette.Controller.extend({
         initialize: function (options) {
-            console.log(['controllers/main', 'initialize']);
+            console.log('controllers/main', 'initialize');
             this.region = options.region;
         },
         createMode: function () {
-            console.log(['create-mode']);
+            console.log('create-mode');
             var self = this;
             require(['views/create-mode/content'], function (View) {
                 self.region.show(new View());
             });
         },
         gameMode: function () {
-            console.log(['game-mode']);
+            console.log('game-mode');
             this.region.close();
         }
     });

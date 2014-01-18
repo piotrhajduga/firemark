@@ -13,12 +13,18 @@ define([
     });
 
     app.addInitializer(function (options) {
-        console.log(['app', options]);
+        console.log('app', options);
 
         app.router = new Router({
             controller: new Controller({region: app.main})
         });
-        Backbone.history.start();
+    });
+
+
+    app.on("initialize:after", function(options){
+        if (Backbone.history){
+            Backbone.history.start();
+        }
     });
 
     return app; 

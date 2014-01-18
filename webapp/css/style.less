@@ -38,11 +38,8 @@
 // declarations
 html { background: @body_bg; font-size:normal; }
 body { background: @body_bg; }
-h1.page_header {
-    text-align:center;
-    img.logo {
-        margin:.5em auto;
-    }
+h1 {
+    color: @body_fg;
 }
 h1,h2,h3,h4 {
     font-family: 'Monda', sans-serif;
@@ -50,43 +47,22 @@ h1,h2,h3,h4 {
 h5,h6 {
     .awesome_font;
 }
-#ActionIndicator {
-    position:absolute;
-    display:none;
-    top:0;
-    right:0;
-    width:auto;
-    height:auto;
-    cursor:pointer;
-    background: @content_bg;
-    color: @content_fg;
-    font-weight: bold;
-    font-size: 1.1em;
-    padding: 2px 5px;
-}
-#TwoColumnWrapper {
+.half {
     display:inline-block;
-    float:left;
-    width:100%;
-    #MainContent {
-        width: auto;
-        margin-right:250px;
-    }
+    padding:0;
+    margin:0;
+    width:50%;
+    border:0;
 }
-#MainContent {
+.half.left { float:left; }
+.half.right { float:right; }
+.box {
     background: @content_bg;
     color: @content_fg;
     padding: 8px;
-    width: 60%;
-    margin: 0 auto .8em;
+    margin: 0 5px .8em;
     .roundish_border(@light_border);
     .box-shadow(4px, 4px, 5px, @content_fg);
-}
-#SidebarContent {
-    display:inline-block;
-    float:left;
-    width:240px;
-    margin-left:-240px;
 }
 .img {
     .roundish_border(@light_border);
@@ -106,14 +82,14 @@ input, textarea {
     color: @content_fg;
     font-family: 'Roboto Condensed', sans-serif;
     font-weight: bold;
-    text-decoration:none;
+    text-decoration: none;
     font-size: 1.1em;
     padding: .1em 2em .2em;
-    text-align:center;
+    text-align: center;
     .roundish_border(@light_border);
     .box-shadow(2px, 2px, 3px, @content_fg);
     &:hover {
-        cursor:pointer;
+        cursor: pointer;
         background: @light_border;
     }
     &:active {
@@ -126,136 +102,18 @@ input, textarea {
     font-size: 1.7em;
     clear: both;
 }
-#MainContent .special_button { margin-bottom:2px; }
-#MainContent table {
-    margin:0 auto;
-}
-#SidebarContent * { display:block; clear:both; }
-#MainContent h2 {
-    .roundish_no_border;
-    background:@body_bg;
-    color:@body_fg;
-    padding:.2em .8em .3em;
-    margin:0 auto .5em;
-}
-#MainContent .header {
+#creator-mode {
     display: block;
-    .roundish_no_border;
-    background:@body_bg;
-    color:@body_fg;
-    padding:.1em .8em .2em;
-    margin:1em 0;
-    h2, h3, h4, h5, h6 { background:none; margin:0; padding:0; }
-    .left {
-        display: inline;
-        float: left;
-        margin: .2em 0 .3em
-    }
-    .right {
-        display: inline;
-        float: right;
-        margin:.4em 0 0;
-        .tab {
-            display:inline-block;
-            color: @body_fg;
-            .awesome_font;
-            font-size:1.1em;
-            font-weight: bold;
-            padding:.2em 1em;
-            .roundish_border(@light_border);
-            .box-shadow(2px, 2px, 3px, @content_fg);
-            &:hover {
-                cursor:pointer;
-                border:none;
-                margin:1px;
-                background:@light_border;
-                color: @content_fg;
-            }
-            &:active {
-                .no_box-shadow;
-            }
-            &.active {
-                background:@light_border;
-                color: @content_fg;
-                .box-shadow(2px, 2px, 3px, @content_fg);
-            }
-        }
-    }
 }
-
-#LocationEditor .tabpage {
-    margin-bottom:1em;
-}
-.listholder {
-    display:block;
-    min-height:5em;
-    max-height:20em;
-    overflow:auto;
-    .roundish_border(@dark_border);
-    .box-shadow-inset(2px, 2px, 2px, @content_fg);
-    .listitem {
-        display:block;
-        background: @content_bg;
-        color:@content_fg;
-        padding:.3em .3em .3em 1em;
-        .roundish_border(@light_border);
-        .box-shadow(2px, 2px, 3px, @content_fg);
-        .actions {
-            display:inline;
-            float:right;
-            text-align:right;
-            font-size:1em;
-            a {
-                .button;
-                .box-shadow(1px, 1px, 2px, @content_fg);
-                padding:.03em .8em .07em;
-                margin-left:2px;
-                &.img_button {
-                    background-repeat:no-repeat;
-                    background-position:center center;
-                    padding:.05em 1em;
-                }
-            }
-        }
+ul.form {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li {
+        display: block;
     }
-    .location {
-        .name {
-            display:inline;
-            float:left;
-            width:50%;
-            font-weight:bold;
-            font-size:1.1em;
-        }
-    }
-    .exit {
-        .id {
-            display:inline;
-            float:left;
-            font-size:1em;
-            width:3em;
-        }
-        .name {
-            display:inline;
-            float:left;
-            font-weight:bold;
-            font-size:1.1em;
-            padding-right:2em;
-        }
-        .destination {
-            display:inline;
-            float:left;
-            font-size:1em;
-        }
-    }
-    .brick {
-        .order {
-            display:inline;
-            float:left;
-            font-size:1em;
-        }
-        .brick_content {
-            display:block;
-            margin:.1em .2em;
-        }
+    li.label {
+        .awesome_font;
+        margin: 1em auto .2em;
     }
 }
