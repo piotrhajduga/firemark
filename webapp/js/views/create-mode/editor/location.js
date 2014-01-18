@@ -10,6 +10,7 @@ define([
         template: _.template(tpl),
         events: {
             'click .t-save': 'save',
+            'click .t-save-new': 'saveAsNew',
             'click .t-close': 'close'
         },
         subViews: {
@@ -34,6 +35,11 @@ define([
             console.log('save model', this.model.toJSON());
             // saving logic here
             this.model.save(this.getData());
+        },
+        saveAsNew: function () {
+            console.log('save new model');
+            // saving logic here
+            this.model.clear({silent: true}).save(this.getData());
         },
         getData: function () {
             return {

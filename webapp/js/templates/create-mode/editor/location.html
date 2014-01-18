@@ -1,4 +1,4 @@
-<div class="location">
+<div class="window location">
   <ul class="form">
     <% if (!_.isUndefined(location.id)) { %>
     <li class="label">ID</label></li>
@@ -11,8 +11,12 @@
     <li class="label">Logic bricks</li>
     <li class="value r-logic-bricks"></li>
   </ul>
+  <div class="clear"></div>
   <div class="buttons">
-    <a class="button t-save">Save</a>
-    <a class="button t-close">Close</a>
+    <a class="button t-save">save</a>
+    <% if (!_.isUndefined(location.id)) { %>
+    <a class="button t-save-new">save as new</a>
+    <% } %>
+    <a class="button t-close">close</a>
   </div>
 </div>

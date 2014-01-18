@@ -11,10 +11,15 @@ define([
             newLocation: {
                 className: 't-new-location',
                 text: '+location'
+            },
+            browse: {
+                className: 't-browse',
+                text: 'browse'
             }
         },
         triggers: {
-            'click .t-new-location': 'newLocation'
+            'click .t-new-location': 'locations:new',
+            'click .t-browse': 'locations:browse'
         },
         serializeData: function () {
             return {tools: this.tools};
