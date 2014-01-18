@@ -1,6 +1,3 @@
-<div class="window toolbar">
-  <% _.each(tools, function (tool) { %>
-    <a class="button <%= tool.className %>"><%= tool.text %></a>
-  <% }); %>
-  <div class="clear"></div>
-</div>
+<% _.each(tools, function (tool) { %>
+  <a class="button <%= tool.className %>"><%= tool.text %></a>
+<% }); %>

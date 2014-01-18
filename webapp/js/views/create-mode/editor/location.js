@@ -25,10 +25,13 @@ define([
             codename: 'input[name=codename]'
         },
         initialize: function (options) {
-            this.model = options.locationModel;
+            this.model = options.model;
         },
         modelEvents: {
-            'change': 'render',
+            'change': function () {
+                this.trigger('locations:preview', {model: this.model});
+                this.render();
+            },
             'invalid': 'validationError'
         },
         save: function () {
