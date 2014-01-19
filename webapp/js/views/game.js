@@ -3,8 +3,9 @@ define([
     'marionette',
     'vendor/Marionette.BossView',
     'views/game/location',
-    'text!templates/game.html',
-], function (_, Marionette, BossView, LocationView, tpl) {
+    'views/game/hud',
+    'text!templates/game.html'
+], function (_, Marionette, BossView, LocationView, HUDView, tpl) {
     'use strict';
 
     return BossView.extend({
@@ -14,16 +15,19 @@ define([
                 return new LocationView({
                     model: Marionette.getOption(this, 'model')
                 });
+            },
+            hud: function () {
+                return new HUDView({
+                    model: Marionette.getOption(this, 'model')
+                });
             }
         },
         subViewContainers: {
-            location: '.r-location'
+            location: '.r-location',
+            hud: '.r-hud'
         },
         modelEvents: {
             'change': 'render'
-        },
-        initialize: function (options) {
-            this.model = options.model;
         }
     });
 });

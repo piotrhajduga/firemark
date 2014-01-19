@@ -11,12 +11,26 @@ define([
 ], function (_, Marionette, GameView, ToolbarView, LocationView, BrowserView, GameModel, LocationModel, tpl) {
     'use strict';
 
+    var HidingRegion = Marionette.Region.extend({
+        open: function (view) {
+            this.$el.hide();
+            this.$el.html(view.el);
+            this.$el.slideDown("fast");
+        }
+    });
+
     return Marionette.Layout.extend({
         template: _.template(tpl),
         regions: {
             toolbar: '.r-toolbar',
-            game: '.r-game',
-            editor: '.r-editor'
+            game: {
+                selector: '.r-game',
+                regionType: HidingRegion
+            },
+            editor: {
+                selector: '.r-editor',
+                regionType: HidingRegion
+            }
         },
         initialize: function (options) {
             console.log('views/create-mode/content', 'initialize');
@@ -44,7 +58,26 @@ define([
             this.editor.show(editorView);
         },
         previewLocation: function (args) {
-            this.game.show(new GameView(_.pick(args, 'model')));
+            var locationId = args.model.get('id'),
+                gameModel = new GameModel(),
+                options;
+            if (_.isUndefined(locationId)) {
+                options = {
+                    mode: 'creator'
+                }
+            } else {
+                options = {
+                    mode: 'creator',
+                    locationId: locationId
+                }
+            }
+            gameModel.save(options).done(_.bind(function () {
+                this.game.show(new GameView({
+                    model: gameModel
+                }));
+            }, this)).fail(function () {
+                console.log('gameModel sync error');
+            });
         }
     });
 });

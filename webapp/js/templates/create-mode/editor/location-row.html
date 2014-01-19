@@ -2,7 +2,9 @@
   <td><%= id %></td>
   <td><%= codename %></td>
   <td>
-    <a href="javascript:void(0)" class="button t-edit">edit</a>
+    <% if (id!='current') { %>
+      <a href="javascript:void(0)" class="button t-edit">edit</a>
+    <% } %>
     <a href="javascript:void(0)" class="button t-preview">preview</a>
   </td>
 </tr>

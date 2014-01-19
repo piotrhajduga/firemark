@@ -20,11 +20,14 @@ define([
         events: {
             'click .t-close': 'close'
         },
+        collectionEvents: {
+            'reset': 'render'
+        },
         itemView: LocationRowView,
         itemViewContainer: 'tbody',
         itemViewEventPrefix: 'locations',
         initialize: function () {
-            this.collection = new Locations();
+            this.collection = new Locations(),
             this.collection.fetch();
         }
     });

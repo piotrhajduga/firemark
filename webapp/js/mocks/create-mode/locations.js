@@ -45,4 +45,6 @@ define([
             }
         }
     });
+
+    return locations;
 });

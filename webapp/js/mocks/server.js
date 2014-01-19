@@ -1,6 +1,7 @@
 define([
     'faux-server',
-    'mocks/create-mode/locations'
+    'mocks/create-mode/locations',
+    'mocks/game'
 ], function (server) {
     'use strict';
 

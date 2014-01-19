@@ -8,6 +8,9 @@ define([
     return Backbone.Model.extend({
         urlRoot: '/api/game',
         validate: function (attrs, options) {
+            if (attrs.mode === 'creator') {
+                return;
+            }
             var eb = new ErrorBuilder({
                 validators: {
                     loginNotSet: {

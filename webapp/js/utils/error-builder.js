@@ -4,7 +4,7 @@ define(['underscore'], function (_) {
         this.options = options;
     }
 
-    _.extend(ErrorBuilder, {
+    _.extend(ErrorBuilder.prototype, {
         getOption: function (name) {
             if (_.has(this.options, name)) {
                 return this.options[name];
