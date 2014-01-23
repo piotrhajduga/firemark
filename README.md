@@ -12,28 +12,14 @@
 
 * **/tests** - unittests TBD
 
-## Dependencies
+## Running
 
-For virtualenv requirements consult requirements.txt in the project's root
-directory.
-
-You can also automate the process of setting up virtualenv by running
+### Initialization
 
     $ ./firemark init
 
-## Running
-
 ### Development server
 
-For now if all dependencies are met development app server can be started by
-getting into virtual environment and running
+To run the development server at localhost:8880:
 
     $ ./firemark run
-
-### Tests
-
-TODO
-
-## Issues
-
-TODO
