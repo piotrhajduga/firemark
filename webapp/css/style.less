@@ -103,7 +103,7 @@ input, textarea {
         .no_box-shadow;
     }
 }
-.list-button {
+.small-button {
     font-size: .9em;
     padding: .1em;
     margin: .1em;
@@ -124,9 +124,28 @@ ul.form {
         margin: 1em auto .2em;
     }
 }
-.window table {
-    margin: 5px auto 10px;
-    padding: 0;
-    display: block;
-    width:100%;
+table {
+    width:90%;
+    margin: .3em auto 1em;
+
+    .roundish_border(@light_border);
+    .box-shadow(2px, 2px, 3px, @content_fg);
+
+    thead {
+        border-collapse: collapse;
+        th, td {
+            border-bottom: solid 2px @content_fg;
+            padding: .1em .5em;
+            /*background: @body_bg;*/
+            /*color: @body_fg;*/
+        }
+    }
+
+    tbody {
+        border-collapse: collapse;
+        td, th {
+            text-align: center;
+            padding: .5em 2em;
+        }
+    }
 }

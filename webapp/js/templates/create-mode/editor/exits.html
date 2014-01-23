@@ -1,6 +1,6 @@
 <table>
   <thead>
-    <tr><th>Id</th><th>Exit location</th><th>Actions</th></tr>
+    <tr><th>Id</th><th>Exit location</th><th>&nbsp;</th></tr>
   </thead>
   <tbody>
     <% _.each(exits, function (item) { %>
@@ -8,7 +8,7 @@
       <td><%= item.id %></td>
       <td><%= item.location %></td>
       <td>
-        <a class="button small-button t-delete-exit" href="#">Delete</a>
+        <a class="button small-button t-delete-exit" href="#">delete</a>
       </td>
     </tr>
     <% }) %>
@@ -24,7 +24,7 @@
         </select>
       </td>
       <td>
-        <a class="button small-button t-add-exit">Add exit</a>
+        <a class="button small-button t-add-exit">add</a>
       </td>
   </tfoot>
 </table>

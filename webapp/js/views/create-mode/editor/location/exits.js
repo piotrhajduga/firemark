@@ -9,7 +9,7 @@ define([
     return Marionette.ItemView.extend({
         template: _.template(tpl),
         initialize: function (options) {
-            this.exits = options.exits || [];
+            this.exits = _.has(options, 'exits') ? _.map(options.exits, _.identity) : [];
             this.locations = new Locations();
         },
         serializeData: function () {
@@ -30,10 +30,10 @@ define([
             var val = this.ui.location.val();
             console.log('exits.addExit');
             if (!_.findWhere(this.exits, {location: val})) {
-                this.exits.push({
+                this.exits = _.union([{
                     id: _.uniqueId(),
                     location: val
-                });
+                }], this.exits);
                 this.render();
             }
         },

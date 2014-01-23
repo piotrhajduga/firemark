@@ -19,23 +19,13 @@ define([
             exitsView: function () {
                 console.log('new ExitsView');
                 return new ExitsView({
-                    exits: this.model.get('exits')
+                    exits: _.clone(this.model.get('exits'))
                 });
             }
         },
         subViewContainers: {
             exitsView: '.r-exits',
             logicBricksView: '.r-logic-bricks'
-        },
-        subViewEvents: {
-            exitsView: {
-                'exits:reset': function () {
-                    this.model.set(
-                        'exits',
-                        this.exitsView.collection.toJSON()
-                    ).save();
-                }
-            }
         },
         ui: {
             codename: 'input[name=codename]'

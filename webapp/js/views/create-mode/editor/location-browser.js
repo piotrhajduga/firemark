@@ -8,6 +8,7 @@ define([
     'use strict';
 
     var LocationRowView = Marionette.ItemView.extend({
+        tagName: 'tr',
         template: _.template(tplRow),
         triggers: {
             'click .t-edit': 'edit',
