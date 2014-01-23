@@ -1,0 +1,30 @@
+<table>
+  <thead>
+    <tr><th>Id</th><th>Exit location</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+    <% _.each(exits, function (item) { %>
+    <tr>
+      <td><%= item.id %></td>
+      <td><%= item.location %></td>
+      <td>
+        <a class="button small-button t-delete-exit" href="#">Delete</a>
+      </td>
+    </tr>
+    <% }) %>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th>New exit to:</th>
+      <td>
+        <select class="f-location">
+          <% _.each(locations, function (item) { %>
+            <option value="<%= item.id %>"><%= item.codename %></option>
+          <% }) %>
+        </select>
+      </td>
+      <td>
+        <a class="button small-button t-add-exit">Add exit</a>
+      </td>
+  </tfoot>
+</table>
