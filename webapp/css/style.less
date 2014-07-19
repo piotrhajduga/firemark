@@ -5,6 +5,11 @@
 @content_bg: #a0a5b9; @content_fg: #010209;
 @light_border: #f0f4ff; @dark_border: #19224a;
 @normal_button: #8a90a2; @special_button: #4C90D7;
+@buttonBoxWidth: 200;
+@buttonGreen: #73A834;
+@buttonBlue: #6DB3DA;
+@buttonRed: #E72D24;
+@buttonInactive: #C4C4CC;
 // mixins
 .awesome_font { font-family: 'Titillium Web', sans-serif; }
 .no_box-shadow {
@@ -28,7 +33,7 @@
     border-radius: 0 .5em 0 1em;
 }
 .roundish_border (@border_color) {
-    border:1px solid @border_color;
+    border:2px solid @border_color;
     .roundish_no_border;
 }
 .align_left { text-align:left; }
@@ -85,7 +90,7 @@ input, textarea {
 }
 .button {
     outline: none;
-    background: @normal_button;
+    background: @buttonInactive;
     color: @content_fg;
     font-family: 'Roboto Condensed', sans-serif;
     font-weight: bold;
@@ -109,6 +114,33 @@ input, textarea {
     margin: .1em;
     .box-shadow(1px, 1px, 1px, @content_fg);
 }
+div.buttons {
+    display: inline-block;
+    float: right;
+    width: @buttonBoxWidth;
+
+    .button {
+        .button;
+        display: block;
+        width: @buttonBoxWidth - 10;
+
+        &.green {
+            background: @buttonGreen;
+        }
+        &.red {
+            background: @buttonRed;
+        }
+        &.blue {
+            background: @buttonBlue;
+        }
+        &.inactive {
+            background: @buttonInactive;
+        }
+        &:hover {
+            background: @light_border;
+        }
+    }
+}
 #creator-mode {
     display: block;
 }
@@ -130,9 +162,6 @@ ul.form {
         height: 20px;
         font-size: 1.2em;
         float: left;
-    }
-    .clear {
-        clear: both;
     }
 }
 table {
@@ -159,4 +188,7 @@ table {
             padding: .5em 2em;
         }
     }
+}
+div.location {
+    display: block;
 }
