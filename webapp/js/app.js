@@ -21,7 +21,7 @@ define([
     });
 
 
-    app.on("initialize:after", function(options){
+    app.on("start", function(options){
         if (Backbone.history){
             Backbone.history.start();
         }

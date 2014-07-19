@@ -2,59 +2,51 @@ define([
     'underscore',
     'marionette',
     'vendor/Marionette.BossView',
-    'views/create-mode/editor/location/exits',
     'text!templates/create-mode/editor/location.html'
-], function (_, Marionette, BossView, ExitsView, tpl) {
+], function (_, Marionette, BossView, tpl) {
     'use strict';
 
     return BossView.extend({
         template: _.template(tpl),
         events: {
             'click .t-save': 'save',
+            'submit form': 'save',
             'click .t-save-new': 'saveAsNew',
-            'click .t-close': 'close'
+            'click .t-close': 'destroy'
         },
         subViews: {
             //logicBricksView: LogicBricksView
-            exitsView: function () {
-                console.log('new ExitsView');
-                return new ExitsView({
-                    exits: _.clone(this.model.get('exits'))
-                });
-            }
         },
         subViewContainers: {
-            exitsView: '.r-exits',
             logicBricksView: '.r-logic-bricks'
         },
         ui: {
             codename: 'input[name=codename]'
         },
         initialize: function (options) {
-            console.log('BossView.initialize');
             this.model = options.model;
         },
         modelEvents: {
-            'change': function () {
-                this.trigger('locations:preview', {model: this.model});
-                this.render();
-            },
+            'change': 'render',
             'invalid': 'validationError'
         },
-        save: function () {
-            console.log('save model', this.model.toJSON());
-            // saving logic here
-            this.model.save(this.getData());
+        refreshLocations: function () {
+            this.trigger('locations:preview', {model: this.model});
+            this.trigger('locations:refresh');
         },
-        saveAsNew: function () {
-            console.log('save new model');
+        save: function (evt) {
+            evt.preventDefault();
             // saving logic here
-            this.model.clear({silent: true}).save(this.getData());
+            this.model.save(this.getData()).done(_.bind(this.refreshLocations, this));
+        },
+        saveAsNew: function (evt) {
+            evt.preventDefault();
+            // saving logic here
+            this.model.clear({silent: true}).save(this.getData()).done(_.bind(this.refreshLocations, this));
         },
         getData: function () {
             return {
-                exits: this.exitsView.getData(),
-                //logicBricks: this.logicBricksView.getData()
+                //logicBricks: this.logicBricksView.getData(),
                 codename: this.ui.codename.val()
             };
         },

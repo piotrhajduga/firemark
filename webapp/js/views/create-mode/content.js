@@ -7,54 +7,54 @@ define([
     'views/create-mode/editor/location-browser',
     'models/game',
     'models/create-mode/location',
+    'models/create-mode/locations',
     'text!templates/create-mode/content.html'
-], function (_, Marionette, GameView, ToolbarView, LocationView, BrowserView, GameModel, LocationModel, tpl) {
+], function (_, Marionette, GameView, ToolbarView, LocationView, BrowserView, GameModel, LocationModel, LocationsCollection, tpl) {
     'use strict';
 
-    var HidingRegion = Marionette.Region.extend({
-        open: function (view) {
-            this.$el.hide();
-            this.$el.html(view.el);
-            this.$el.slideDown("fast");
-        }
-    });
-
-    return Marionette.Layout.extend({
+    return Marionette.LayoutView.extend({
         template: _.template(tpl),
         regions: {
             toolbar: '.r-toolbar',
-            game: {
-                selector: '.r-game',
-                regionType: HidingRegion
-            },
-            editor: {
-                selector: '.r-editor',
-                regionType: HidingRegion
-            }
+            game: '.r-game',
+            editor: '.r-editor',
+            browser: '.r-browser'
         },
         initialize: function (options) {
-            console.log('views/create-mode/content', 'initialize');
-            this.toolbarView = new ToolbarView();
-            this.listenTo(this.toolbarView, 'locations:new', this.newLocation);
-            this.listenTo(this.toolbarView, 'locations:browse', this.browse);
+            this.ctx = {
+                locations: new LocationsCollection()
+            };
         },
         onShow: function () {
-            this.toolbar.show(this.toolbarView);
+            this.showToolbar();
+            this.showBrowser();
+        },
+        refreshLocations: function () {
+            return this.ctx.locations.fetch({reset: true});
         },
         newLocation: function () {
             this.editLocation({
                 model: new LocationModel()
             });
         },
-        browse: function () {
-            var browserView = new BrowserView();
-            this.listenTo(browserView, 'locations:edit', this.editLocation);
-            this.listenTo(browserView, 'locations:preview', this.previewLocation);
-            this.editor.show(browserView);
+        showToolbar: function () {
+            this.toolbarView = new ToolbarView();
+            this.listenTo(this.toolbarView, 'locations:new', this.newLocation);
+            this.listenTo(this.toolbarView, 'locations:browse', this.browse);
+            this.toolbar.show(this.toolbarView);
+        },
+        showBrowser: function () {
+            this.refreshLocations().done(_.bind(function () {
+                var browserView = new BrowserView({collection: this.ctx.locations});
+                this.listenTo(browserView, 'locations:edit', this.editLocation);
+                this.listenTo(browserView, 'locations:preview', this.previewLocation);
+                this.browser.show(browserView);
+            }, this));
         },
         editLocation: function (args) {
             var editorView = new LocationView(_.pick(args, 'model'));
             this.listenTo(editorView, 'locations:preview', this.previewLocation);
+            this.listenTo(editorView, 'locations:refresh', this.refreshLocations);
             this.editor.show(editorView);
         },
         previewLocation: function (args) {
@@ -76,7 +76,7 @@ define([
                     model: gameModel
                 }));
             }, this)).fail(function () {
-                console.log('gameModel sync error');
+                console.error('gameModel sync error');
             });
         }
     });

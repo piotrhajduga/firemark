@@ -3,10 +3,13 @@ define([
 ], function (server) {
     'use strict';
 
-    var locations = [];
+    var locations = [
+        {id: '2134', codename: 'testowa 1'},
+        {id: '2135', codename: 'testowa 2'}
+    ];
 
     server.addRoutes({
-        getLocations: {
+        list: {
             urlExp: '/api/create-mode/locations',
             httpMethod: 'GET',
             handler: function (context) {
@@ -14,29 +17,29 @@ define([
                 return locations;
             }
         },
-        createLocation: {
+        create: {
             urlExp: '/api/create-mode/locations',
             httpMethod: 'POST',
             handler: function (context) {
                 console.log('fauxServer in', context);
                 var loc = _.extend({
-                    id: _.uniqueId()
+                    id: _.uniqueId()+''
                 }, context.data);
                 locations.push(loc);
                 return loc;
             }
         },
-        updateLocation: {
+        update: {
             urlExp: '/api/create-mode/locations/:id',
             httpMethod: 'PUT',
             handler: function (context, id) {
                 console.log('fauxServer in', context, id);
-                var loc = _.findWhere(locations, {id: id});
+                var loc = _.findWhere(locations, {id: id+''});
                 _.extend(loc, _.omit(context.data, 'id'));
                 return loc;
             }
         },
-        getLocation: {
+        get: {
             urlExp: '/api/create-mode/locations/:id',
             httpMethod: 'GET',
             handler: function (context, id) {
@@ -44,7 +47,7 @@ define([
                 return _.findWhere(locations, {id: id});
             }
         }
-    });
+    }, 'locations');
 
     return locations;
 });

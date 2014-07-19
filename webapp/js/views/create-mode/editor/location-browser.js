@@ -10,6 +10,9 @@ define([
     var LocationRowView = Marionette.ItemView.extend({
         tagName: 'tr',
         template: _.template(tplRow),
+        modelEvents: {
+            'change': 'render'
+        },
         triggers: {
             'click .t-edit': 'edit',
             'click .t-preview': 'preview'
@@ -18,18 +21,11 @@ define([
 
     return Marionette.CompositeView.extend({
         template: _.template(tpl),
-        events: {
-            'click .t-close': 'close'
-        },
         collectionEvents: {
             'reset': 'render'
         },
-        itemView: LocationRowView,
-        itemViewContainer: 'tbody',
-        itemViewEventPrefix: 'locations',
-        initialize: function () {
-            this.collection = new Locations(),
-            this.collection.fetch();
-        }
+        childView: LocationRowView,
+        childViewContainer: 'div.browser',
+        childViewEventPrefix: 'locations'
     });
 });

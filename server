@@ -24,4 +24,7 @@ server = make_server(
     app
 )
 log.info('Starting the server')
-server.serve_forever()
+try:
+    server.serve_forever()
+except KeyboardInterrupt:
+    log.info('Exitting on demand')

@@ -6,13 +6,11 @@ define([
 ], function (_, Marionette, ToolbarView, LocationModel, tpl) {
     'use strict';
 
-    return Marionette.Layout.extend({
+    return Marionette.LayoutView.extend({
         template: _.template(tpl),
         regions: {
             locationBrowser: '.r-location-browser',
             location: '.r-location'
-        },
-        initialize: function (options) {
         },
         onShow: function () {
             this.toolbar.show(this.toolbarView);

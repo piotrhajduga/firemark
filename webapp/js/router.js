@@ -6,8 +6,8 @@ define([
     return Marionette.AppRouter.extend({
         appRoutes: {
             '': 'createMode',
-            '/creator': 'createMode',
-            '/game': 'gameMode'
+            'creator': 'createMode',
+            'game': 'gameMode'
         }
     });
 });

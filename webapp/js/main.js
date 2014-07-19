@@ -2,12 +2,14 @@
 
 require.config({
     baseUrl: 'js',
+    urlArgs: 'bust=' +  (new Date()).getTime(),
     paths: {
         underscore: 'vendor/underscore',
         jquery: 'vendor/jquery-1.8.0',
         backbone: 'vendor/backbone',
         marionette: 'vendor/backbone.marionette',
         'faux-server': 'vendor/backbone-faux-server',
+        templates: '../templates'
     },
     //map: {
         //'*': {'jquery': 'vendor/jquery-private'},
@@ -31,11 +33,11 @@ require.config({
     }
 });
 
-require(['jquery', 'app', 'config'], function ($, App, config) {
+require(['jquery', 'app', 'config'], function ($, app, config) {
     $(function () {
         if (config.useFauxServer) {
             require(['mocks/server']);
         }
-        App.start();
+        app.start();
     });
 });
