@@ -1,5 +1,13 @@
 <div class="box location">
   <form>
+  <div class="buttons big-buttons">
+    <div class="big-buttons">
+      <a class="button green big t-save">save</a>
+      <a class="button blue more t-save-as-new">+</a>
+      <div class="clear"></div>
+    </div>
+    <a class="button blue more t-close">close</a>
+  </div>
   <ul class="form">
     <% if (!_.isUndefined(location.id)) { %>
     <li class="label">ID</li>
@@ -13,14 +21,6 @@
     <li class="value r-logic-bricks"></li>
     <div class="clear"></div>
   </ul>
-  <div class="buttons">
-    <a class="button green t-save">save</a>
-    <% if (!_.isUndefined(location.id)) { %>
-    <a class="button blue t-save-new">save as new</a>
-    <% } %>
-    <a class="button t-close">close</a>
-    <div class="clear"></div>
-  </div>
   </form>
   <div class="clear"></div>
 </div>

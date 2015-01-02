@@ -45,6 +45,20 @@ html { background: @body_bg; font-size:normal; }
 body { background: @body_bg; }
 h1 {
     color: @body_fg;
+    padding-left: 20px;
+
+    .logo {
+      display: inline-block;
+      width: 42px;
+      height: 42px;
+      float: left;
+      margin-right: 20px;
+
+      background-image: url("../img/logo.svg");
+      background-size: 100% 100%;
+      background-position: center center;
+      background-repeat: no-repeat;
+    }
 }
 h1,h2,h3,h4 {
     font-family: 'Monda', sans-serif;
@@ -99,7 +113,7 @@ input, textarea {
     padding: .1em 2em .2em;
     text-align: center;
     .roundish_border(@light_border);
-    .box-shadow(2px, 2px, 3px, @content_fg);
+    .box-shadow(.1em, .1em, .1em, @content_fg);
     &:hover {
         cursor: pointer;
         background: @light_border;
@@ -112,7 +126,7 @@ input, textarea {
     font-size: .9em;
     padding: .1em;
     margin: .1em;
-    .box-shadow(1px, 1px, 1px, @content_fg);
+    .box-shadow(.1em, .1em, .1em, @content_fg);
 }
 div.buttons {
     display: inline-block;
@@ -138,6 +152,21 @@ div.buttons {
         }
         &:hover {
             background: @light_border;
+        }
+    }
+
+    &.big-buttons, div.big-buttons {
+        display: block;
+        .button {
+            font-size: 1.3em;
+            display: inline-block;
+            float: left;
+            &.big {
+            }
+            &.more {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
         }
     }
 }

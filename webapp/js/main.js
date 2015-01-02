@@ -6,10 +6,12 @@ require.config({
     paths: {
         underscore: 'vendor/underscore',
         jquery: 'vendor/jquery-1.8.0',
+        'jquery-ui': 'vendor/jquery-ui',
         backbone: 'vendor/backbone',
         marionette: 'vendor/backbone.marionette',
         'faux-server': 'vendor/backbone-faux-server',
-        templates: '../templates'
+        templates: '../templates',
+        'jquery-ui-contextmenu': 'vendor/jquery.ui-contextmenu'
     },
     //map: {
         //'*': {'jquery': 'vendor/jquery-private'},
@@ -18,6 +20,11 @@ require.config({
     shim: {
         jquery: {
             exports: 'jQuery'
+        },
+        'jquery-ui': ['jquery'],
+        'jquery-ui-contextmenu': {
+            deps: ['jquery-ui'],
+            exports: 'jQuery.fn.contextmenu'
         },
         underscore: {
             exports: '_'

@@ -1,19 +1,15 @@
 define([
     'underscore',
+    'jquery',
     'marionette',
     'vendor/Marionette.BossView',
+    'controllers/context-menu',
     'text!templates/create-mode/editor/location.html'
-], function (_, Marionette, BossView, tpl) {
+], function (_, $, Marionette, BossView, ContextMenu, tpl) {
     'use strict';
 
     return BossView.extend({
         template: _.template(tpl),
-        events: {
-            'click .t-save': 'save',
-            'submit form': 'save',
-            'click .t-save-new': 'saveAsNew',
-            'click .t-close': 'destroy'
-        },
         subViews: {
             //logicBricksView: LogicBricksView
         },
@@ -34,15 +30,33 @@ define([
             this.trigger('locations:preview', {model: this.model});
             this.trigger('locations:refresh');
         },
+        events: {
+            'click .t-save': 'save',
+            'submit form': 'save',
+            'click .t-save-as-new': 'saveAsNew',
+            'click .t-close': 'destroy'
+        },
         save: function (evt) {
-            evt.preventDefault();
-            // saving logic here
+            if (evt) { evt.preventDefault(); }
             this.model.save(this.getData()).done(_.bind(this.refreshLocations, this));
         },
         saveAsNew: function (evt) {
+            if (evt) { evt.preventDefault(); }
+            this.model.clear({silent: true});
+            this.save(evt);
+        },
+        more: function (evt) {
+            var $el = $(evt.target),
+                menu;
             evt.preventDefault();
-            // saving logic here
-            this.model.clear({silent: true}).save(this.getData()).done(_.bind(this.refreshLocations, this));
+            menu = this.model.has('id') ? [
+                {title: 'Save as new', cmd: _.bind(this.saveAsNew, this)}
+            ] : [];
+            menu.push({title: 'Close', cmd: _.bind(this.destroy, this)});
+            (new ContextMenu({
+                el: $el,
+                menu: menu
+            })).execute();
         },
         getData: function () {
             return {
