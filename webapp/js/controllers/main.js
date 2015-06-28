@@ -17,7 +17,11 @@ define([
         },
         gameMode: function () {
             console.log('game-mode');
-            this.region.close();
+            var self = this;
+            require(['controllers/game'], function (Game) {
+                var game = new Game({region: self.region});
+                game.run();
+            });
         }
     });
 });
