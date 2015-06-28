@@ -1,3 +1,0 @@
-routes = [
-    ('api', '/api')
-]
