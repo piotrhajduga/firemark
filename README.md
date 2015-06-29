@@ -6,9 +6,9 @@ From Ground-Up
 
 1. Initialize virtualenv
 
-    mkvirtualenv firemark-django
+    mkvirtualenv firemark-django -ppython3
 
-2. ...or enable already existing one
+2. Enable virtualenv
 
     workon firemark-django
 
