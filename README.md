@@ -4,19 +4,19 @@ From Ground-Up
 
 ## Running
 
-1. Initialize virtualenv
+Initialize virtualenv
 
     mkvirtualenv firemark-django -ppython3
 
-2. Enable virtualenv
+Enable virtualenv
 
     workon firemark-django
 
-3. Install python dependencies through pip
+Install python dependencies through pip
 
     pip install -r firemark_django/requirements.txt
 
-4. Migrate database
+Migrate database
 
     cd firemark_django/
     python manage.py migrate
