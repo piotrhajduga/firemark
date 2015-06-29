@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from . import models, serializers
+from . import models, serializers, permissions
 
 # Create your views here.
 
@@ -7,3 +7,4 @@ from . import models, serializers
 class LocationViewSet(viewsets.ModelViewSet):
     queryset = models.Location.objects.all()
     serializer_class = serializers.LocationSerializer
+    permission_classes = (permissions.IsLocationOwner,)
