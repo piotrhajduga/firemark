@@ -2,28 +2,45 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
+LOCATIONS_TABLESPACE = 'locations_ts'
 
 
 class ActorCreator(models.Model):
-    user_id = models.OneToOneField(User)
-    active = models.BooleanField()
-    limit = models.IntegerField()
+    user = models.OneToOneField(User, related_name="creator")
+    active = models.BooleanField(default=False)
+    limit = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return '{0}(creator)'.format(self.user)
 
 
 class Location(models.Model):
-    owner_id = models.ForeignKey(ActorCreator)
-    name = models.CharField(max_length=255)
+    owner = models.ForeignKey(ActorCreator, related_name="locations")
+    codename = models.CharField(max_length=255)
     tags = models.CharField(max_length=255)
-    chmod = models.DecimalField(max_digits=3, decimal_places=0)
-    searchable = models.BooleanField()
+    allow_portals = models.BooleanField(default=False)
+
+    class Meta:
+        db_tablespace = LOCATIONS_TABLESPACE
+
+    def __str__(self):
+        return "{0}({1})".format(self.codename, self.id)
 
 
 class LocationExit(models.Model):
-    source_location_id = models.ForeignKey(
-        Location, related_name="source_location")
-    destination_location_id = models.ForeignKey(
-        Location, related_name="destination_location")
+    source = models.ForeignKey(Location, related_name="exits")
+    destination = models.ForeignKey(Location, related_name="entrances")
     codename = models.CharField(max_length=255)
+
+    class Meta:
+        db_tablespace = LOCATIONS_TABLESPACE
+        unique_together = (
+            ('source', 'destination', 'codename'),
+        )
+        index_together = (
+            ('source', 'destination'),
+            ('source', 'codename'),
+        )
 
 
 class LocationItemType(models.Model):
@@ -32,10 +49,19 @@ class LocationItemType(models.Model):
     enabled = models.BooleanField()
     config_schema = models.TextField()
 
+    class Meta:
+        db_tablespace = LOCATIONS_TABLESPACE
+        unique_together = (
+            ('codename', 'version'),
+        )
+
 
 class LocationItem(models.Model):
-    type_id = models.ForeignKey(LocationItemType)
+    loctype = models.ForeignKey(LocationItemType)
     version = models.CharField(max_length=255, null=True)
-    location_id = models.ForeignKey(Location)
+    location = models.ForeignKey(Location, related_name="items")
     order = models.IntegerField()
     config = models.TextField()
+
+    class Meta:
+        db_tablespace = LOCATIONS_TABLESPACE
