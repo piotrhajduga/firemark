@@ -1,6 +1,16 @@
 # Firemark - web based rpg/adventure/riddle game
 
-From Ground-Up
+Browser riddle game empowering it's players to create new locations/levels
+through a relatively simple interface. The inspiration was an expandable
+adventure/riddle game. However the possibilities are far bigger.
+
+## Nerd talk ahead in this section ;)
+
+Right now after years of experimentations it settled on Django. The main reason
+is the development speed. The aim is, after estabilishing the ERD for the
+database to use as much already available components and libraries as possible.
+
+The author hopes he can create something usable until he gets bored... again.
 
 ## Running
 
