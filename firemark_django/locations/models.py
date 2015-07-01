@@ -18,7 +18,7 @@ class Location(models.Model):
     owner = models.ForeignKey(ActorCreator, related_name="locations")
     codename = models.CharField(max_length=255)
     tags = models.CharField(max_length=255)
-    allow_portals = models.BooleanField(default=False)
+    public = models.BooleanField(default=False)
 
     class Meta:
         db_tablespace = LOCATIONS_TABLESPACE
@@ -57,9 +57,9 @@ class LocationItemType(models.Model):
 
 
 class LocationItem(models.Model):
-    loctype = models.ForeignKey(LocationItemType)
-    version = models.CharField(max_length=255, null=True)
     location = models.ForeignKey(Location, related_name="items")
+    type = models.ForeignKey(LocationItemType, related_name="+")
+    version = models.CharField(max_length=255, null=True)
     order = models.IntegerField()
     config = models.TextField()
 
