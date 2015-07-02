@@ -17,12 +17,9 @@ class LocationExitSerializer(serializers.ModelSerializer):
         model = models.LocationExit
         fields = ('id', 'codename', 'source', 'destination')
 
-    def validate_source(self, location):
-        return self.request.user.creator == location.owner
-
 
 class LocationItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.LocationItem
         fields = ('id', 'location', 'type', 'version', 'order', 'config')
-        read_only_fields = ('type', 'version',)
+        read_only_fields = ('version',)

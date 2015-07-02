@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from jsonfield import JSONField
 
 # Create your models here.
 LOCATIONS_TABLESPACE = 'locations_ts'
@@ -47,7 +48,7 @@ class LocationItemType(models.Model):
     codename = models.CharField(max_length=255)
     version = models.CharField(max_length=255, null=False)
     enabled = models.BooleanField()
-    config_schema = models.TextField()
+    config_schema = JSONField()
 
     class Meta:
         db_tablespace = LOCATIONS_TABLESPACE
@@ -60,8 +61,8 @@ class LocationItem(models.Model):
     location = models.ForeignKey(Location, related_name="items")
     type = models.ForeignKey(LocationItemType, related_name="+")
     version = models.CharField(max_length=255, null=True)
-    order = models.IntegerField()
-    config = models.TextField()
+    order = models.IntegerField(null=True)
+    config = JSONField()
 
     class Meta:
         db_tablespace = LOCATIONS_TABLESPACE
