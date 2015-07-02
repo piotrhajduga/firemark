@@ -48,6 +48,7 @@ class LocationItemType(models.Model):
     codename = models.CharField(max_length=255)
     version = models.CharField(max_length=255, null=False)
     enabled = models.BooleanField()
+    game_schema = JSONField()
     config_schema = JSONField()
 
     class Meta:
