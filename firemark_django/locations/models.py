@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from jsonfield import JSONField
 
 # Create your models here.
 LOCATIONS_TABLESPACE = 'locations_ts'
@@ -36,7 +35,8 @@ class LocationExit(models.Model):
     class Meta:
         db_tablespace = LOCATIONS_TABLESPACE
         unique_together = (
-            ('source', 'destination', 'codename'),
+            ('source', 'destination'),
+            ('source', 'codename'),
         )
         index_together = (
             ('source', 'destination'),
@@ -48,8 +48,8 @@ class LocationItemType(models.Model):
     codename = models.CharField(max_length=255)
     version = models.CharField(max_length=255, null=False)
     enabled = models.BooleanField()
-    game_schema = JSONField()
-    config_schema = JSONField()
+    game_schema = models.TextField()
+    config_schema = models.TextField()
 
     class Meta:
         db_tablespace = LOCATIONS_TABLESPACE
@@ -63,7 +63,7 @@ class LocationItem(models.Model):
     type = models.ForeignKey(LocationItemType, related_name="+")
     version = models.CharField(max_length=255, null=True)
     order = models.IntegerField(null=True)
-    config = JSONField()
+    config = models.TextField()
 
     class Meta:
         db_tablespace = LOCATIONS_TABLESPACE

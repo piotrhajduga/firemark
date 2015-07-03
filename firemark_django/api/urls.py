@@ -1,19 +1,10 @@
 from django.conf.urls import include, url
-from rest_framework import routers
-from locations.views import (
-    LocationViewSet,
-    LocationExitViewSet,
-    LocationItemViewSet,
+from locations.urls import urlpatterns as locations_urls
+from game.views import (
+    GameAPIView,
 )
 
-router = routers.DefaultRouter()
-router.register(r'location', LocationViewSet, base_name="location")
-router.register(r'location_exit', LocationExitViewSet,
-                base_name="location_exit")
-router.register(r'location_item', LocationItemViewSet,
-                base_name="location_item")
-
-urlpatterns = router.urls + [
-    url(r'^api-auth/', include('rest_framework.urls',
-        namespace='rest_framework')),
+urlpatterns = [
+    url(r'^', include(locations_urls)),
+    url(r'^game/', GameAPIView.as_view()),
 ]
