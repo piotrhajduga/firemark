@@ -44,24 +44,9 @@ class LocationExit(models.Model):
         )
 
 
-class LocationItemType(models.Model):
-    codename = models.CharField(max_length=255)
-    version = models.CharField(max_length=255, null=False)
-    enabled = models.BooleanField()
-    game_schema = models.TextField()
-    config_schema = models.TextField()
-
-    class Meta:
-        db_tablespace = LOCATIONS_TABLESPACE
-        unique_together = (
-            ('codename', 'version'),
-        )
-
-
 class LocationItem(models.Model):
     location = models.ForeignKey(Location, related_name="items")
-    type = models.ForeignKey(LocationItemType, related_name="+")
-    version = models.CharField(max_length=255, null=True)
+    type = models.CharField(max_length=255)
     order = models.IntegerField(null=True)
     config = models.TextField()
 

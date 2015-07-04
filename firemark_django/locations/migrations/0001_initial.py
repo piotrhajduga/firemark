@@ -15,19 +15,19 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ActorCreator',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
+                ('id', models.AutoField(auto_created=True, verbose_name='ID', serialize=False, primary_key=True)),
                 ('active', models.BooleanField(default=False)),
                 ('limit', models.IntegerField(blank=True, null=True)),
-                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL, related_name='creator')),
+                ('user', models.OneToOneField(related_name='creator', to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
             name='Location',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
+                ('id', models.AutoField(auto_created=True, verbose_name='ID', serialize=False, primary_key=True)),
                 ('codename', models.CharField(max_length=255)),
                 ('tags', models.CharField(max_length=255)),
-                ('allow_portals', models.BooleanField(default=False)),
+                ('public', models.BooleanField(default=False)),
                 ('owner', models.ForeignKey(to='locations.ActorCreator', related_name='locations')),
             ],
             options={
@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='LocationExit',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
+                ('id', models.AutoField(auto_created=True, verbose_name='ID', serialize=False, primary_key=True)),
                 ('codename', models.CharField(max_length=255)),
                 ('destination', models.ForeignKey(to='locations.Location', related_name='entrances')),
                 ('source', models.ForeignKey(to='locations.Location', related_name='exits')),
@@ -49,9 +49,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='LocationItem',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
-                ('version', models.CharField(null=True, max_length=255)),
-                ('order', models.IntegerField()),
+                ('id', models.AutoField(auto_created=True, verbose_name='ID', serialize=False, primary_key=True)),
+                ('type', models.CharField(max_length=255)),
+                ('order', models.IntegerField(null=True)),
                 ('config', models.TextField()),
                 ('location', models.ForeignKey(to='locations.Location', related_name='items')),
             ],
@@ -59,31 +59,9 @@ class Migration(migrations.Migration):
                 'db_tablespace': 'locations_ts',
             },
         ),
-        migrations.CreateModel(
-            name='LocationItemType',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
-                ('codename', models.CharField(max_length=255)),
-                ('version', models.CharField(max_length=255)),
-                ('enabled', models.BooleanField()),
-                ('config_schema', models.TextField()),
-            ],
-            options={
-                'db_tablespace': 'locations_ts',
-            },
-        ),
-        migrations.AlterUniqueTogether(
-            name='locationitemtype',
-            unique_together=set([('codename', 'version')]),
-        ),
-        migrations.AddField(
-            model_name='locationitem',
-            name='loctype',
-            field=models.ForeignKey(to='locations.LocationItemType'),
-        ),
         migrations.AlterUniqueTogether(
             name='locationexit',
-            unique_together=set([('source', 'destination', 'codename')]),
+            unique_together=set([('source', 'destination'), ('source', 'codename')]),
         ),
         migrations.AlterIndexTogether(
             name='locationexit',

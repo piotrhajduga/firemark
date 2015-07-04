@@ -21,5 +21,5 @@ class LocationExitSerializer(serializers.ModelSerializer):
 class LocationItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.LocationItem
-        fields = ('id', 'location', 'type', 'version', 'order', 'config')
+        fields = ('id', 'location', 'type', 'order', 'config')
         read_only_fields = ('version',)

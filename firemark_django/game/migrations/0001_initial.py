@@ -8,7 +8,7 @@ from django.conf import settings
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('locations', '0003_auto_20150703_2124'),
+        ('locations', '__first__'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
                 ('active', models.BooleanField(default=True)),
                 ('location', models.ForeignKey(to='locations.Location', related_name='+')),
-                ('user', models.OneToOneField(related_name='player', to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL, related_name='player')),
             ],
             options={
                 'db_tablespace': 'game_ts',

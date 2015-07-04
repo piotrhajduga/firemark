@@ -4,7 +4,17 @@ from rest_framework import serializers
 
 class LocationItemSerializer(serializers.Serializer):
     codename = serializers.CharField(read_only=True)
-    schema = serializers.CharField(read_only=True, source='type.game_schema')
+    data = serializers.SerializerMethodField()
+    type = serializers.CharField(read_only=True)
+    schema = serializers.SerializerMethodField()
+
+    def get_data(self, obj):
+        ''' Get data to be displayed based on location item config '''
+        return {}
+
+    def get_schema(self, obj):
+        ''' Get schema for the input based on location item type '''
+        return {}
 
 
 class GameStateSerializer(serializers.Serializer):
