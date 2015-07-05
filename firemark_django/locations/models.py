@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
 LOCATIONS_TABLESPACE = 'locations_ts'
+
+
+# Create your models here.
 
 
 class ActorCreator(models.Model):
@@ -17,14 +19,14 @@ class ActorCreator(models.Model):
 class Location(models.Model):
     owner = models.ForeignKey(ActorCreator, related_name="locations")
     codename = models.CharField(max_length=255)
-    tags = models.CharField(max_length=255)
+    tags = models.CharField(max_length=255, blank=True)
     public = models.BooleanField(default=False)
 
     class Meta:
         db_tablespace = LOCATIONS_TABLESPACE
 
     def __str__(self):
-        return "{0}({1})".format(self.codename, self.id)
+        return str(self.codename)
 
 
 class LocationExit(models.Model):
@@ -43,12 +45,22 @@ class LocationExit(models.Model):
             ('source', 'codename'),
         )
 
+    def __str__(self):
+        return "{0}({1}->{2})".format(
+            self.codename, self.source, self.destination)
+
 
 class LocationItem(models.Model):
     location = models.ForeignKey(Location, related_name="items")
+    codename = models.CharField(max_length=32)
     type = models.CharField(max_length=255)
     order = models.IntegerField(null=True)
     config = models.TextField()
 
     class Meta:
         db_tablespace = LOCATIONS_TABLESPACE
+        unique_together = ('location', 'codename')
+        index_together = ('location', 'codename')
+
+    def __str__(self):
+        return 'Item {0}({1})'.format(self.type, self.location)

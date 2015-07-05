@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ActorCreator',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', serialize=False, primary_key=True)),
+                ('id', models.AutoField(serialize=False, primary_key=True, verbose_name='ID', auto_created=True)),
                 ('active', models.BooleanField(default=False)),
                 ('limit', models.IntegerField(blank=True, null=True)),
                 ('user', models.OneToOneField(related_name='creator', to=settings.AUTH_USER_MODEL)),
@@ -24,11 +24,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Location',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', serialize=False, primary_key=True)),
+                ('id', models.AutoField(serialize=False, primary_key=True, verbose_name='ID', auto_created=True)),
                 ('codename', models.CharField(max_length=255)),
-                ('tags', models.CharField(max_length=255)),
+                ('tags', models.CharField(blank=True, max_length=255)),
                 ('public', models.BooleanField(default=False)),
-                ('owner', models.ForeignKey(to='locations.ActorCreator', related_name='locations')),
+                ('owner', models.ForeignKey(related_name='locations', to='locations.ActorCreator')),
             ],
             options={
                 'db_tablespace': 'locations_ts',
@@ -37,10 +37,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='LocationExit',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', serialize=False, primary_key=True)),
+                ('id', models.AutoField(serialize=False, primary_key=True, verbose_name='ID', auto_created=True)),
                 ('codename', models.CharField(max_length=255)),
-                ('destination', models.ForeignKey(to='locations.Location', related_name='entrances')),
-                ('source', models.ForeignKey(to='locations.Location', related_name='exits')),
+                ('destination', models.ForeignKey(related_name='entrances', to='locations.Location')),
+                ('source', models.ForeignKey(related_name='exits', to='locations.Location')),
             ],
             options={
                 'db_tablespace': 'locations_ts',
@@ -49,15 +49,24 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='LocationItem',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', serialize=False, primary_key=True)),
+                ('id', models.AutoField(serialize=False, primary_key=True, verbose_name='ID', auto_created=True)),
+                ('codename', models.UUIDField(editable=False)),
                 ('type', models.CharField(max_length=255)),
                 ('order', models.IntegerField(null=True)),
                 ('config', models.TextField()),
-                ('location', models.ForeignKey(to='locations.Location', related_name='items')),
+                ('location', models.ForeignKey(related_name='items', to='locations.Location')),
             ],
             options={
                 'db_tablespace': 'locations_ts',
             },
+        ),
+        migrations.AlterUniqueTogether(
+            name='locationitem',
+            unique_together=set([('location', 'codename')]),
+        ),
+        migrations.AlterIndexTogether(
+            name='locationitem',
+            index_together=set([('location', 'codename')]),
         ),
         migrations.AlterUniqueTogether(
             name='locationexit',
