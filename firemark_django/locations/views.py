@@ -1,4 +1,3 @@
-import uuid
 import logging
 from django.db.models import Q
 from django.core.exceptions import PermissionDenied
@@ -83,10 +82,7 @@ class LocationItemViewSet(viewsets.ModelViewSet):
             raise PermissionDenied(
                 'Only location owner can create items for the location'
             )
-        if not serializer.data['codename']:
-            serializer.save(codename=uuid.uuid4())
-        else:
-            serializer.save()
+        serializer.save()
 
     def perform_update(self, serializer):
         source = models.Location.objects.get(id=serializer.data['location'])

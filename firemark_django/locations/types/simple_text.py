@@ -4,6 +4,7 @@ from locations.item_types import ItemType
 
 
 class SimpleText(ItemType):
+    verbose_name = 'Simple Text'
     config_schema = {
         'title': 'Simple Text',
         'type': 'object',

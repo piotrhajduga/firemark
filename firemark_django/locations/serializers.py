@@ -1,4 +1,5 @@
 import json
+import uuid
 from jsonspec.validators import load, ValidationError
 from rest_framework import serializers
 from . import models, item_types
@@ -15,7 +16,12 @@ class LocationItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.LocationItem
-        fields = ('location', 'codename', 'type', 'order', 'config')
+        fields = ('id', 'location', 'codename', 'type', 'order', 'config')
+        read_only_fields = ('id',)
+
+    def validate_codename(self, value):
+        if not value:
+            return uuid.uuid4()
 
     def validate_config(self, value):
         try:

@@ -52,7 +52,7 @@ class LocationExit(models.Model):
 
 class LocationItem(models.Model):
     location = models.ForeignKey(Location, related_name="items")
-    codename = models.CharField(max_length=32)
+    codename = models.CharField(max_length=32, blank=True)
     type = models.CharField(max_length=255)
     order = models.IntegerField(null=True)
     config = models.TextField()
