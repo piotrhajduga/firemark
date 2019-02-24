@@ -20,8 +20,7 @@ class LocationItemSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
     def validate_codename(self, value):
-        if not value:
-            return uuid.uuid4()
+        return value if value else uuid.uuid4()
 
     def validate_config(self, value):
         try:
@@ -40,24 +39,20 @@ class LocationSerializer(serializers.ModelSerializer):
     owner = serializers.StringRelatedField(source='owner.user')
     items = serializers.SerializerMethodField()
     exits = serializers.SerializerMethodField()
-    entrances = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Location
         fields = (
             'id', 'owner', 'codename', 'tags',
-            'public', 'exits', 'entrances', 'items'
+            'public', 'exits', 'items'
         )
-        read_only_fields = ('owner', 'exits', 'entrances', 'items')
+        read_only_fields = ('owner', 'exits', 'items')
 
     def get_items(self, obj):
         return ROLocationItemSerializer(obj.items, many=True).data
 
     def get_exits(self, obj):
         return ROLocationExitSerializer(obj.exits, many=True).data
-
-    def get_entrances(self, obj):
-        return ROLocationEntranceSerializer(obj.entrances, many=True).data
 
 
 class ROLocationItemSerializer(serializers.Serializer):
@@ -73,8 +68,3 @@ class ROLocationItemSerializer(serializers.Serializer):
 class ROLocationExitSerializer(serializers.Serializer):
     codename = serializers.CharField(read_only=True)
     destination = serializers.StringRelatedField(read_only=True)
-
-
-class ROLocationEntranceSerializer(serializers.Serializer):
-    codename = serializers.CharField(read_only=True)
-    source = serializers.StringRelatedField(read_only=True)

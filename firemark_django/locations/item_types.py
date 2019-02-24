@@ -9,7 +9,7 @@ def get_type_choices():
         return cls.verbose_name or codename
 
     return [
-        get_type_name(item[0]) for item in settings.INSTALLED_TYPES
+        (item[0], get_type_name(item[0])) for item in settings.INSTALLED_TYPES
     ]
 
 
