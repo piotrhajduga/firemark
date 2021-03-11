@@ -6,4 +6,5 @@ _trial_temp/
 .ropeproject/
 devel.sqlite
 virtualenv/
-firemark_django/db.sqlite3
+venv/
+db.sqlite3

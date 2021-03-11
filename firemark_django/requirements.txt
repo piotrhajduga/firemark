@@ -1,6 +1,6 @@
-Django==1.11.18
-django-filter==0.10.0
-djangorestframework==3.9.3
+Django==3.1.7
+django-filter>=2.4.0
+djangorestframework==3.12.2
 jsonfield==1.0.3
 Markdown==2.6.2
 six==1.9.0

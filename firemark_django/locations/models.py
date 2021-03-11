@@ -8,16 +8,14 @@ LOCATIONS_TABLESPACE = 'locations_ts'
 
 
 class ActorCreator(models.Model):
-    user = models.OneToOneField(User, related_name="creator")
-    active = models.BooleanField(default=False)
-    limit = models.IntegerField(null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.DO_NOTHING, related_name="creator")
 
     def __str__(self):
         return '{0}(creator)'.format(self.user)
 
 
 class Location(models.Model):
-    owner = models.ForeignKey(ActorCreator, related_name="locations")
+    owner = models.ForeignKey(ActorCreator, on_delete=models.DO_NOTHING, related_name="locations")
     codename = models.CharField(max_length=255)
     tags = models.CharField(max_length=255, blank=True)
     public = models.BooleanField(default=False)
@@ -30,8 +28,8 @@ class Location(models.Model):
 
 
 class LocationExit(models.Model):
-    source = models.ForeignKey(Location, related_name="exits")
-    destination = models.ForeignKey(Location, related_name="entrances")
+    source = models.ForeignKey(Location, on_delete=models.CASCADE, related_name="exits")
+    destination = models.ForeignKey(Location, on_delete=models.CASCADE, related_name="entrances")
     codename = models.CharField(max_length=255)
 
     class Meta:
@@ -51,7 +49,7 @@ class LocationExit(models.Model):
 
 
 class LocationItem(models.Model):
-    location = models.ForeignKey(Location, related_name="items")
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name="items")
     codename = models.CharField(max_length=32, blank=True)
     type = models.CharField(max_length=255)
     order = models.IntegerField(null=True)

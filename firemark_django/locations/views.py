@@ -1,7 +1,10 @@
 import logging
-from django.db.models import Q
+
 from django.core.exceptions import PermissionDenied
+from django.db.models import Q
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+
 from . import models, serializers, permissions
 
 # Create your views here.
@@ -10,18 +13,12 @@ log = logging.getLogger(__name__)
 
 class LocationViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.LocationSerializer
-    permission_classes = (permissions.HasLocationAccess,)
+    permission_classes = (IsAuthenticated, permissions.HasLocationAccess,)
 
     def get_queryset(self):
-        try:
-            return models.Location.objects.filter(
-                Q(owner=self.request.user.creator) | Q(public=True)
-            )
-        except AttributeError as exc:
-            log.debug(str(exc))
-            raise PermissionDenied(
-                'Only authenticated users can access locations'
-            )
+        return models.Location.objects.filter(
+            Q(owner=self.request.user.creator) | Q(public=True)
+        )
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user.creator)
@@ -29,18 +26,12 @@ class LocationViewSet(viewsets.ModelViewSet):
 
 class LocationExitViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.LocationExitSerializer
-    permission_classes = (permissions.HasLocationExitAccess,)
+    permission_classes = (IsAuthenticated, permissions.HasLocationExitAccess,)
 
     def get_queryset(self):
-        try:
-            return models.LocationExit.objects.filter(
-                source__owner=self.request.user.creator
-            )
-        except AttributeError as exc:
-            log.debug(str(exc))
-            raise PermissionDenied(
-                'Only authenticated users can access location exits'
-            )
+        return models.LocationExit.objects.filter(
+            source__owner=self.request.user.creator
+        )
 
     def perform_create(self, serializer):
         source = models.Location.objects.get(id=serializer.data['source'])
@@ -63,18 +54,12 @@ class LocationExitViewSet(viewsets.ModelViewSet):
 
 class LocationItemViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.LocationItemSerializer
-    permission_classes = (permissions.HasLocationItemAccess,)
+    permission_classes = (IsAuthenticated, permissions.HasLocationItemAccess,)
 
     def get_queryset(self):
-        try:
-            return models.LocationItem.objects.filter(
-                location__owner=self.request.user.creator
-            ).order_by('order')
-        except AttributeError as exc:
-            log.debug(str(exc))
-            raise PermissionDenied(
-                'Only authenticated users can access location items'
-            )
+        return models.LocationItem.objects.filter(
+            location__owner=self.request.user.creator
+        ).order_by('order')
 
     def perform_create(self, serializer):
         source = models.Location.objects.get(id=serializer.data['location'])

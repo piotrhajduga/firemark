@@ -7,9 +7,8 @@ GAME_TABLESPACE = 'game_ts'
 
 
 class ActorPlayer(models.Model):
-    user = models.OneToOneField(User, related_name="player")
-    active = models.BooleanField(default=True)
-    location = models.ForeignKey(Location, related_name="+")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="player")
+    location = models.ForeignKey(Location, on_delete=models.PROTECT, related_name="+")
 
     class Meta:
         db_tablespace = GAME_TABLESPACE
