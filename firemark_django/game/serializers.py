@@ -61,4 +61,4 @@ class GameStateSerializer(serializers.Serializer):
 
     #TODO: set up caching for this method
     def get_location_item(self, codename):
-        return self.instance.location.items.filter(codename=codename).first()
+        return self.instance.location.items.get(codename=codename)
