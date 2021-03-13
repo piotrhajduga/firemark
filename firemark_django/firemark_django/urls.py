@@ -20,6 +20,5 @@ from django.contrib import admin
 urlpatterns = [
     url('admin/', admin.site.urls),
     url('api/', include('api.urls')),
-    url('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url('', include('game.urls')),
+    url('', include('frontend.urls')),
 ]

@@ -40,6 +40,8 @@ INSTALLED_APPS = (
     'rest_framework',
     'locations.apps.LocationsConfig',
     'game.apps.GameConfig',
+    'api.apps.ApiConfig',
+    'frontend.apps.FrontendConfig',
 )
 
 MIDDLEWARE = (

@@ -1,12 +1,10 @@
 from django.conf.urls import include, url
-from django.urls import path
 
+from game.urls import urlpatterns as game_urls
 from locations.urls import urlpatterns as locations_urls
-from game.views import (
-    GameAPIView,
-)
 
 urlpatterns = [
-    path('game/', GameAPIView.as_view()),
-    url(r'', include(locations_urls)),
+    url('auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^', include(game_urls)),
+    url(r'^', include(locations_urls)),
 ]

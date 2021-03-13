@@ -8,3 +8,4 @@ devel.sqlite
 virtualenv/
 venv/
 db.sqlite3
+migrations/
