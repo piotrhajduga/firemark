@@ -55,7 +55,7 @@ export default class GameLocation extends Component {
 
         if (this.state.loading) {
             items = (
-                <Row className="justify-content-center"><Col md="10" lg="4">
+                <Row className="justify-content-center text-center"><Col md="10" lg="4">
                 <Spinner className="mx-auto my-5" animation="border" role="status"></Spinner>
                 </Col></Row>
             );
