@@ -24,7 +24,7 @@ class SimpleExit(ItemType):
         return {}
 
     def get_data(self):
-        return {'label': self.config}
+        return {'label': self.config['label']}
 
     def process(self, game, input_data):
         exit = LocationExit.objects.get(codename=self.config['exit'])
