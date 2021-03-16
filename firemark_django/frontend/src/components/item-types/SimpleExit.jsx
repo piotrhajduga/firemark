@@ -1,21 +1,23 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
 
-export default class SimpleText extends Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <Button onClick={(e)=>this.handleClick(e)}>{ this.props.data.label }</Button>
-        );
-    }
-
-    handleClick(e) {
+export function SimpleExit(props) {
+    function handleClick(e) {
         e.preventDefault();
-        this.props.onAction({});
+        props.onAction({});
     }
+
+    return (
+        <Button onClick={handleClick}>{ props.data.label }</Button>
+    );
+}
+
+export function SimpleExitCreator(props) {
+    return (
+        <Form>
+        <Form.Control type="text" placeholder="Label">{props.item.label}</Form.Control>
+        </Form>
+    );
 }

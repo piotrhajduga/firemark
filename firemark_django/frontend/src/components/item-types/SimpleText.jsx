@@ -1,13 +1,16 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
+import Form from "react-bootstrap/Form";
 
 
-export default class SimpleText extends Component {
+export function SimpleText(props) {
+    return <p>{ props.data.content }</p>;
+}
 
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return <p>{ this.props.data.content }</p>;
-    }
+export function SimpleTextCreator(props) {
+    return (
+        <Form>
+        <Form.Label>Content</Form.Label>
+        <Form.Control as="textarea">{props.item.content}</Form.Control>
+        </Form>
+    );
 }

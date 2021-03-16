@@ -1,12 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 
 
-export default class SignInPrompt extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return <h2>Sign in</h2>;
-    }
+export default function SignInPrompt(props) {
+    return <h2>Sign in</h2>;
 }

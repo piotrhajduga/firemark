@@ -1,26 +1,24 @@
-import React, { Component } from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import React, { useState } from "react";
 import Header from "./Header"
-import GameLocation from "./GameLocation"
+import Game from "./game/Game"
+import Creator from "./creator/Creator"
 
 
-export default class App extends Component {
-    constructor(props) {
-        super(props);
+export default function App(props) {
+    const [mode, handleMode] = useState("creator");
+
+    function renderMainContent() {
+        switch(mode) {
+            case "game": return <Game />;
+            case "creator": return <Creator />;
+            default: return <div/>;
+        }
     }
 
-    render() {
-        return (
-            <Container fluid>
-            <Row><Col>
-            <Header />
-            </Col></Row>
-            <Row><Col>
-            <GameLocation />
-            </Col></Row>
-            </Container>
-        );
-    }
+    return (
+        <div className="bg-dark text-light fixed-top w-100 h-100">
+        <Header onMode={handleMode} />
+        {renderMainContent()}
+        </div>
+    );
 }
