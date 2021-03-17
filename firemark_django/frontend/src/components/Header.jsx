@@ -4,14 +4,13 @@ import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 
 export default function Header(props) {
-    const [mode, handleMode] = useState("game");
+    const onMode = props.onMode;
+    const [mode, handleMode] = useState("creator");
 
-    useEffect(()=>{
-        props.onMode(mode);
-    }, [mode]);
+    useEffect(()=>onMode(mode), [mode]);
 
     return (
-        <Container fluid>
+        <Container fluid className="shadow-bottom-7">
         <Navbar variant="dark">
         <Navbar.Brand><h1 className="display-3">Firemark</h1></Navbar.Brand>
         <Navbar.Toggle aria-controls="header-navbar-nav" />
