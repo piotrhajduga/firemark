@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
@@ -19,23 +19,26 @@ export function SimpleExit(props) {
 
 export function SimpleExitCreator(props) {
     const onConfigChange = props.onConfigChange;
-    const [label, setLabel] = useState(props.config.label);
-    const [destination, setDestination] = useState(null);
+    const label = props.config.label || "";
+    const destination = props.config.destination || "";
 
-    useEffect(
-        ()=>onConfigChange({label:label, destination:destination}),
-        [label, destination]
-    );
+    function changeLabel(newLabel) {
+        onConfigChange({label:newLabel, destination:destination});
+    }
+
+    function changeDestination(newDestination) {
+        onConfigChange({label:label, destination:newDestination});
+    }
 
     return (
         <Form>
         <Form.Group as={Row} className="mb-2">
         <Form.Label column sm="4">Label</Form.Label>
         <Col sm="8">
-        <Form.Control type="text" placeholder="Label" onChange={e=>setLabel(e.target.value)} value={label} />
+        <Form.Control type="text" placeholder="Label" onChange={e=>changeLabel(e.target.value)} value={label} />
         </Col>
         </Form.Group>
-        <CreatorLocationExit destination={destination} onDestination={setDestination}/>
+        <CreatorLocationExit destination={destination} onDestination={changeDestination}/>
         </Form>
     );
 }

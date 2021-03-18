@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
@@ -14,10 +14,15 @@ const typesMap = {
 
 export default function CreatorLocationItem(props) {
     const onUpdate = props.onUpdate;
-    const [type, setType] = useState(props.item.type || "");
-    const [config, setConfig] = useState(props.item.config || {});
+    const type = props.item.type || "";
+    const config = props.item.config || {};
 
-    useEffect(()=>onUpdate({type:type,config:config}),[type,config]);
+    function setType(newType) {
+        onUpdate({type: newType, config: config});
+    }
+    function setConfig(newConfig) {
+        onUpdate({type: type, config: newConfig});
+    }
 
     const ItemComponent = typesMap[type] || Placeholder;
 
@@ -27,7 +32,7 @@ export default function CreatorLocationItem(props) {
             <Form.Group as={Row} className="pb-2 border-bottom shadow-bottom-3">
             <Form.Label column sm="4">Type</Form.Label>
             <Col sm="8">
-            <Form.Control as="select" onChange={e=>setType(e.target.value)}>
+            <Form.Control as="select" onChange={e=>setType(e.target.value)} value={type}>
                 <option>Choose type...</option>
                 {Object.keys(typesMap).map(item => <option value={item}>{item}</option>)}
             </Form.Control>

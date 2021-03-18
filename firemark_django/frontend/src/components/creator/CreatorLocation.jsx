@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -8,10 +8,10 @@ import CreatorLocationItem from "./CreatorLocationItem";
 import Cookies from "js-cookie";
 
 
-function postLocationData(id, location) {
+function postLocationData(location) {
     let gameUrl;
-    if (id) {
-        gameUrl = `/api/locations/${id}/`;
+    if (location.id) {
+        gameUrl = `/api/locations/${location.id}/`;
     } else {
         gameUrl = "/api/locations/";
     }
@@ -35,22 +35,39 @@ function postLocationData(id, location) {
     });
 }
 
+const defaultLocation = {
+    codename: "",
+    items: []
+};
+
 export default function CreatorLocation(props) {
-    const [codename, setCodename] = useState(props.location.codename || "");
-    const [items, setItems] = useState(props.location.items || []);
-    const id = props.location.id;
+    const onLocation = props.onLocation || (()=>{});
+    const location = Object.assign(defaultLocation, props.location);
+
+    function addItem() {
+        const update = Object.assign({}, location, {
+            items: location.items.concat({})
+        });
+        onLocation(update);
+    }
 
     function updateItem(key, data) {
-        setItems(oldItems=>oldItems.map((item, i)=>{
-            return (key==i) ? data : item;
+        onLocation(Object.assign({}, location, {
+            items: location.items.map((item, i)=>{
+                return (key==i) ? data : item;
+            })
         }));
     }
 
-    function save() {
-        postLocationData(id, {codename: codename, items: items});
+    function changeCodename(codename) {
+        onLocation(Object.assign({}, location, {codename: codename}));
     }
 
-    const itemsList = items.map((item, i) => (
+    function save() {
+        onSave(location);
+    }
+
+    const itemsList = location.items.map((item, i) => (
         <CreatorLocationItem key={i} item={item} onUpdate={(data)=>updateItem(i,data)} />
     ));
 
@@ -61,7 +78,7 @@ export default function CreatorLocation(props) {
             <Form.Group controlId="codename" as={Row}>
             <Form.Label column sm="4">Codename</Form.Label>
             <Col sm="8">
-            <Form.Control type="text" placeholder="Location codename" defaultValue={codename} onChange={e=>setCodename(e.target.value)} />
+            <Form.Control type="text" placeholder="Location codename" value={location.codename} onChange={e=>changeCodename(e.target.value)} />
             <Form.Text>If you live this blank the codename will be assigned automatically</Form.Text>
             </Col>
             </Form.Group>
@@ -71,9 +88,7 @@ export default function CreatorLocation(props) {
             {itemsList}
         </Row>
         <Row>
-            <Button block onClick={e=>setItems(oldItems=>{
-                return oldItems.concat({});
-            })} variant="outline-secondary">Add item</Button>
+            <Button block onClick={addItem} variant="outline-secondary">Add item</Button>
         </Row>
         <Row className="mt-3">
             <Button block onClick={save} variant="primary">Save location</Button>

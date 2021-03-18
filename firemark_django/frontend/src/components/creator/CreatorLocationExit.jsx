@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
@@ -7,10 +7,8 @@ import ChooseLocationModal from "./ChooseLocationModal";
 
 export default function CreatorLocationExit(props) {
     const [chooseLocation,setChooseLocation] = useState(false);
-    const [destination,setDestination] = useState(props.destination);
+    const destination = props.destination;
     const onDestination = props.onDestination;
-
-    useEffect(() => {onDestination({destination: destination})}, [destination]);
 
     let destinationSpan;
     if (destination) {
@@ -20,8 +18,8 @@ export default function CreatorLocationExit(props) {
     }
 
     function onTargetLocation(location) {
-        setDestination(location);
         setChooseLocation(false);
+        onDestination(location.codename);
     }
 
     return (

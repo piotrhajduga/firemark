@@ -24,7 +24,7 @@ export default function Creator(props) {
         <Container fluid className="h-100 w-100">
         <Row className="pt-3 gx-2">
         <Col>
-        {location===null?addLocationButtonPlaceholder:<CreatorLocation location={location} />}
+        {location===null?addLocationButtonPlaceholder:<CreatorLocation location={location} onLocation={onTargetLocation} />}
         </Col>
         <Col xs={4} md={3} lg={2}>
             <Button className="w-100" onClick={(e)=>setLocation({})}>Add location</Button>
