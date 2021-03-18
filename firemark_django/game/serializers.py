@@ -1,12 +1,12 @@
 import json
+
 from jsonspec.validators import load, ValidationError
-#from django.core.exceptions import PermissionDenied
 from rest_framework import serializers
+
 from locations.item_types import ItemType
 
 
 class LocationItemSerializer(serializers.Serializer):
-    codename = serializers.CharField(read_only=True)
     data = serializers.SerializerMethodField()
     type = serializers.CharField(read_only=True)
     schema = serializers.SerializerMethodField()
@@ -53,12 +53,8 @@ class GameStateSerializer(serializers.Serializer):
             raise serializers.ValidationError(exc)
 
     def update(self, instance, validated_data):
-        #apply location item logics on validated_data
-        #update the instance based on logics output
+        # apply location item logics on validated_data
+        # update the instance based on logics output
         item_type = validated_data['item_type']
         item_type.process(instance, validated_data['action_data'])
         return instance
-
-    #TODO: set up caching for this method
-    def get_location_item(self, codename):
-        return self.instance.location.items.get(codename=codename)

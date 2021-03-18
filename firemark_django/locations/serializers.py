@@ -29,13 +29,12 @@ def validate_item_config(value, item_type):
 
 class LocationItemSerializer(serializers.ModelSerializer):
     type = serializers.ChoiceField(choices=item_types.get_type_choices())
-    codename = serializers.CharField(allow_null=True, allow_blank=True, required=False)
     order = serializers.IntegerField(allow_null=True, required=False)
     config = LocationItemConfigSerializer()
 
     class Meta:
         model = models.LocationItem
-        fields = ('codename', 'type', 'order', 'config')
+        fields = ('type', 'order', 'config')
         read_only_fields = ('id',)
 
 
@@ -59,3 +58,14 @@ class LocationSerializer(serializers.ModelSerializer):
             validate_item_config(item["config"], item["type"])
             LocationItem.objects.create(location=location, **item)
         return location
+
+    def update(self, instance, validated_data):
+        instance.codename = validated_data["codename"]
+        instance.tags = validated_data["tags"]
+        instance.public = validated_data["public"]
+        instance.save()
+        LocationItem.objects.filter(location=instance).delete()
+        for item in validated_data["items"]:
+            validate_item_config(item["config"], item["type"])
+            LocationItem.objects.create(location=instance, **item)
+        return instance

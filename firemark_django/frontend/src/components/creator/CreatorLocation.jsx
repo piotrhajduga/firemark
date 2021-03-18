@@ -5,35 +5,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import CreatorLocationItem from "./CreatorLocationItem";
-import Cookies from "js-cookie";
-
-
-function postLocationData(location) {
-    let gameUrl;
-    if (location.id) {
-        gameUrl = `/api/locations/${location.id}/`;
-    } else {
-        gameUrl = "/api/locations/";
-    }
-    const csrftoken = Cookies.get('csrftoken');
-    const request = {
-        method: id?"PUT":"POST",
-        headers: {
-            "content-type":"application/json",
-            "X-CSRFToken": csrftoken
-        },
-        body: JSON.stringify({
-            codename: location.codename,
-            tags: "",
-            public: true
-        })
-    };
-
-    return fetch(gameUrl, request).then((response) => {
-        console.log(response);
-        return response.json();
-    });
-}
 
 const defaultLocation = {
     codename: "",
@@ -42,6 +13,7 @@ const defaultLocation = {
 
 export default function CreatorLocation(props) {
     const onLocation = props.onLocation || (()=>{});
+    const onSave = props.onSave || (()=>{});
     const location = Object.assign(defaultLocation, props.location);
 
     function addItem() {
