@@ -22,35 +22,3 @@ class LocationViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user.creator)
-
-
-class LocationExitViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.LocationExitSerializer
-    permission_classes = [IsAuthenticated, permissions.HasLocationExitAccess,]
-
-    def get_queryset(self):
-        return models.LocationExit.objects.filter(
-            source=self.kwargs['location_pk']
-        )
-
-    def perform_create(self, serializer):
-        serializer.save()
-
-    def perform_update(self, serializer):
-        serializer.save()
-
-
-class LocationItemViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.LocationItemSerializer
-    permission_classes = [IsAuthenticated, permissions.HasLocationItemAccess,]
-
-    def get_queryset(self):
-        return models.LocationItem.objects.filter(
-            location=self.kwargs['location_pk']
-        ).order_by('order')
-
-    def perform_create(self, serializer):
-        serializer.save()
-
-    def perform_update(self, serializer):
-        serializer.save()

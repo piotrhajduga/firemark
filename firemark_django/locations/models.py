@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
 
 LOCATIONS_TABLESPACE = 'locations_ts'
 
@@ -15,6 +16,7 @@ class ActorCreator(models.Model):
 
 
 class Location(models.Model):
+    id = models.CharField(max_length=40, primary_key=True, default=uuid.uuid4)
     owner = models.ForeignKey(ActorCreator, on_delete=models.DO_NOTHING, related_name="locations")
     codename = models.CharField(max_length=255)
     tags = models.CharField(max_length=255, blank=True)
@@ -27,32 +29,11 @@ class Location(models.Model):
         return str(self.codename)
 
 
-class LocationExit(models.Model):
-    source = models.ForeignKey(Location, on_delete=models.CASCADE, related_name="exits")
-    destination = models.ForeignKey(Location, on_delete=models.CASCADE, related_name="entrances")
-    codename = models.CharField(max_length=255)
-
-    class Meta:
-        db_tablespace = LOCATIONS_TABLESPACE
-        unique_together = (
-            ('source', 'destination'),
-            ('source', 'codename'),
-        )
-        index_together = (
-            ('source', 'destination'),
-            ('source', 'codename'),
-        )
-
-    def __str__(self):
-        return "{0}({1}->{2})".format(
-            self.codename, self.source, self.destination)
-
-
 class LocationItem(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name="items")
     codename = models.CharField(max_length=32, blank=True)
     type = models.CharField(max_length=255)
-    order = models.IntegerField(null=True)
+    order = models.IntegerField(default=0)
     config = models.TextField()
 
     class Meta:

@@ -2,6 +2,7 @@ import importlib
 import json
 from . import settings
 
+destination_schema = {'type': 'string'}
 
 def get_type_choices():
     def get_type_name(codename):

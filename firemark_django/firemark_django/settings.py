@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'firemark_django.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-SQLITE_DIR = os.getenv("FIREMARK_SQLITE_DIR") or BASE_DIR
+SQLITE_DIR = os.path.abspath(os.getenv("FIREMARK_SQLITE_DIR")) or BASE_DIR
 
 DATABASES = {
     'default': {

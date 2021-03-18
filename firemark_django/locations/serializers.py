@@ -1,70 +1,61 @@
 import json
-import uuid
+
 from jsonspec.validators import load, ValidationError
 from rest_framework import serializers
+
 from . import models, item_types
+from .models import LocationItem, Location
 
 
-class LocationExitSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.LocationExit
-        fields = ('codename', 'source', 'destination')
+class LocationItemConfigSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return json.loads(instance)
+
+    def to_internal_value(self, data):
+        return json.dumps(data)
+
+def validate_item_config(value, item_type):
+    try:
+        value_json = json.loads(value)
+        cls = item_types.ItemType.get_class(item_type)
+        json_validator = load(cls.config_schema)
+        json_validator.validate(value_json)
+        return value
+    except ValueError as exc:
+        raise serializers.ValidationError(exc)
+    except ValidationError as exc:
+        raise serializers.ValidationError("Config value must be valid with item type schema")
 
 
 class LocationItemSerializer(serializers.ModelSerializer):
     type = serializers.ChoiceField(choices=item_types.get_type_choices())
+    codename = serializers.CharField(allow_null=True, allow_blank=True, required=False)
+    order = serializers.IntegerField(allow_null=True, required=False)
+    config = LocationItemConfigSerializer()
 
     class Meta:
         model = models.LocationItem
-        fields = ('id', 'location', 'codename', 'type', 'order', 'config')
+        fields = ('codename', 'type', 'order', 'config')
         read_only_fields = ('id',)
-
-    def validate_codename(self, value):
-        return value if value else uuid.uuid4()
-
-    def validate_config(self, value):
-        try:
-            value_json = json.loads(value)
-            cls = item_types.ItemType.get_class(self.initial_data['type'])
-            json_validator = load(cls.config_schema)
-            json_validator.validate(value_json)
-            return json.dumps(value_json)
-        except ValueError as exc:
-            raise serializers.ValidationError(exc)
-        except ValidationError as exc:
-            raise serializers.ValidationError(exc)
 
 
 class LocationSerializer(serializers.ModelSerializer):
-    owner = serializers.StringRelatedField(source='owner.user')
-    items = serializers.SerializerMethodField()
-    exits = serializers.SerializerMethodField()
+    items = LocationItemSerializer(many=True)
 
     class Meta:
         model = models.Location
-        fields = (
-            'id', 'owner', 'codename', 'tags',
-            'public', 'exits', 'items'
-        )
-        read_only_fields = ('owner', 'exits', 'items')
+        exclude = ['owner']
+        read_only_fields = ['id']
+        depth = 2
 
-    def get_items(self, obj):
-        return ROLocationItemSerializer(obj.items, many=True).data
-
-    def get_exits(self, obj):
-        return ROLocationExitSerializer(obj.exits, many=True).data
-
-
-class ROLocationItemSerializer(serializers.Serializer):
-    type = serializers.CharField(read_only=True)
-    codename = serializers.CharField(read_only=True)
-    order = serializers.IntegerField(read_only=True)
-    config = serializers.SerializerMethodField()
-
-    def get_config(self, obj):
-        return json.loads(obj.config)
-
-
-class ROLocationExitSerializer(serializers.Serializer):
-    codename = serializers.CharField(read_only=True)
-    destination = serializers.StringRelatedField(read_only=True)
+    def create(self, validated_data):
+        data = {
+            k:v for (k,v)
+            in validated_data.items()
+            if k in ["codename", "tags", "public", "owner"]
+        }
+        location = Location.objects.create(**data)
+        for item in validated_data["items"]:
+            validate_item_config(item["config"], item["type"])
+            LocationItem.objects.create(location=location, **item)
+        return location

@@ -1,7 +1,7 @@
 __itemtype__ = 'SimpleExit'
 
-from locations.item_types import ItemType
-from locations.models import LocationExit
+from locations.item_types import ItemType, destination_schema
+from locations.models import Location
 
 
 class SimpleExit(ItemType):
@@ -13,9 +13,7 @@ class SimpleExit(ItemType):
             'label': {
                 'type': 'string',
             },
-            'exit': {
-                'type': 'string',
-            }
+            'destination': destination_schema
         },
         'required': ['label']
     }
@@ -27,6 +25,6 @@ class SimpleExit(ItemType):
         return {'label': self.config['label']}
 
     def process(self, game, input_data):
-        exit = LocationExit.objects.get(codename=self.config['exit'])
-        game.location = exit.destination
+        location = Location.objects.get(id=self.config['destination'])
+        game.location = location
         game.save()
