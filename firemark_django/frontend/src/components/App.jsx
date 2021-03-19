@@ -16,7 +16,7 @@ export default function App(props) {
     }
 
     return (
-        <div className="bg-dark text-light fixed-top w-100 h-100">
+        <div className="bg-dark text-light">
         <Header onMode={handleMode} />
         {renderMainContent()}
         </div>

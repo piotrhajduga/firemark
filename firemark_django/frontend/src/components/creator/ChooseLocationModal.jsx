@@ -3,11 +3,12 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ListGroup from "react-bootstrap/ListGroup";
 import Loader from "../Loader";
+import apiCall from "~/utilities/api-call";
 
 
 function requestLocations(search) {
-    const gameUrl = "/api/locations/";
-    return fetch(gameUrl).then((response) => response.json());
+    const url = "/api/locations/";
+    return apiCall(url).then((response) => response.json());
 }
 
 export default function ChooseLocationModal(props) {

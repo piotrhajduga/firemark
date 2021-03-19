@@ -6,54 +6,23 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 import CreatorLocation from "./CreatorLocation";
 import ChooseLocationModal from "./ChooseLocationModal";
-import Cookies from "js-cookie";
+import apiCall from "~/utilities/api-call";
 
 
 function postLocationData(location) {
-    let gameUrl;
+    let url;
     if (location.id) {
-        gameUrl = `/api/locations/${location.id}/`;
+        url = `/api/locations/${location.id}/`;
     } else {
-        gameUrl = "/api/locations/";
+        url = "/api/locations/";
     }
-    const csrftoken = Cookies.get('csrftoken');
-    const request = {
-        method: location.id?"PUT":"POST",
-        headers: {
-            "content-type":"application/json",
-            "X-CSRFToken": csrftoken
-        },
-        body: JSON.stringify(location)
-    };
 
     return new Promise((resolve, reject) => {
-        fetch(gameUrl, request).then((response) => {
+        apiCall(url, location.id?"PUT":"POST", location).then((response) => {
             if (response.ok) {
                 resolve(response.json());
             } else {
                 reject(response.json());
-            }
-        });
-    });
-}
-
-function deleteLocation(id) {
-    let gameUrl = `/api/locations/${id}/`;
-    const csrftoken = Cookies.get('csrftoken');
-    const request = {
-        method: location.id?"PUT":"POST",
-        headers: {
-            "content-type":"application/json",
-            "X-CSRFToken": csrftoken
-        }
-    };
-
-    return new Promise((resolve, reject) => {
-        fetch(gameUrl, request).then((response) => {
-            if (response.ok) {
-                resolve();
-            } else {
-                reject();
             }
         });
     });
@@ -86,15 +55,11 @@ export default function Creator(props) {
         });
     }
 
-    const addLocationButtonPlaceholder = (
-        <Button onClick={newLocation} variant="outline-light" className="w-100" size="lg">Add location</Button>
-    );
-
     return (
         <Container fluid className="h-100 w-100">
         <Row className="pt-3 gx-2">
         <Col>
-        {location===null?addLocationButtonPlaceholder:<CreatorLocation location={location} onLocation={onTargetLocation} onSave={onSaveLocation} />}
+        {location===null?null:<CreatorLocation location={location} onLocation={onTargetLocation} onSave={onSaveLocation} />}
         </Col>
         <Col xs={4} md={3} lg={2}>
             <ButtonGroup vertical className="w-100">
