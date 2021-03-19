@@ -11,7 +11,7 @@ export default function GameLocationItem(props) {
 
     function handleAction(actionData) {
         const action = {
-            action_item: props.codename,
+            action_item: props.id,
             action_data: JSON.stringify(actionData)
         };
         props.onAction(action);

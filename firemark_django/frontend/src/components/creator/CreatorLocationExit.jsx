@@ -19,7 +19,7 @@ export default function CreatorLocationExit(props) {
 
     function onTargetLocation(location) {
         setChooseLocation(false);
-        onDestination(location.codename);
+        onDestination(location.id);
     }
 
     return (

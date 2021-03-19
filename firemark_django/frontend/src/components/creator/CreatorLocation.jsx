@@ -3,18 +3,14 @@ import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 import CreatorLocationItem from "./CreatorLocationItem";
-
-const defaultLocation = {
-    codename: "",
-    items: []
-};
 
 export default function CreatorLocation(props) {
     const onLocation = props.onLocation || (()=>{});
     const onSave = props.onSave || (()=>{});
-    const location = Object.assign(defaultLocation, props.location);
+    const location = props.location;
 
     function addItem() {
         const update = Object.assign({}, location, {
@@ -37,6 +33,10 @@ export default function CreatorLocation(props) {
 
     function save() {
         onSave(location);
+    }
+
+    function close() {
+        onLocation(null);
     }
 
     const itemsList = location.items.map((item, i) => (
@@ -63,7 +63,10 @@ export default function CreatorLocation(props) {
             <Button block onClick={addItem} variant="outline-secondary">Add item</Button>
         </Row>
         <Row className="mt-3">
+        <ButtonGroup className="px-0">
             <Button block onClick={save} variant="primary">Save location</Button>
+            <Button block onClick={close} variant="secondary">Close without saving</Button>
+        </ButtonGroup>
         </Row>
         </Container>
     );

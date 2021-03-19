@@ -34,7 +34,7 @@ class LocationItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.LocationItem
-        fields = ('type', 'order', 'config')
+        fields = ('id', 'type', 'order', 'config')
         read_only_fields = ('id',)
 
 

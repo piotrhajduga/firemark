@@ -7,6 +7,7 @@ from locations.item_types import ItemType
 
 
 class LocationItemSerializer(serializers.Serializer):
+    id = serializers.CharField(read_only=True)
     data = serializers.SerializerMethodField()
     type = serializers.CharField(read_only=True)
     schema = serializers.SerializerMethodField()
@@ -58,3 +59,7 @@ class GameStateSerializer(serializers.Serializer):
         item_type = validated_data['item_type']
         item_type.process(instance, validated_data['action_data'])
         return instance
+
+    #TODO: set up caching for this method
+    def get_location_item(self, id):
+        return self.instance.location.items.get(id=id)

@@ -14,6 +14,7 @@ function requestGame(action) {
         const csrftoken = Cookies.get('csrftoken');
         const request = {
             method: "PUT",
+            mode: "same-origin",
             headers: {
                 "content-type":"application/json",
                 "X-CSRFToken": csrftoken

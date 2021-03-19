@@ -29,7 +29,7 @@ export default function CreatorLocationItem(props) {
     return (
         <Card className="p-2 mb-2" style={{overflow: "hidden"}}>
             <Form className="mb-2">
-            <Form.Group as={Row} className="pb-2 border-bottom shadow-bottom-3">
+            <Form.Group as={Row} className="pb-2 border-bottom">
             <Form.Label column sm="4">Type</Form.Label>
             <Col sm="8">
             <Form.Control as="select" onChange={e=>setType(e.target.value)} value={type}>

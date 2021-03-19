@@ -30,6 +30,7 @@ class Location(models.Model):
 
 
 class LocationItem(models.Model):
+    id = models.CharField(max_length=40, primary_key=True, default=uuid.uuid4)
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name="items")
     type = models.CharField(max_length=255)
     order = models.IntegerField(default=0)
